@@ -1,0 +1,19 @@
+{
+  "name": "template-project",
+  "version": "1.0.0",
+  "description": "Template Project",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@veo-design.git.beanstalkapp.com:/veo-design/indulge-lsr.git"
+  },
+  "author": "David Anderson",
+  "license": "Commercial",
+  "readmeFilename": "readme.md",
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib": "~0.6.1"
+  }
+}

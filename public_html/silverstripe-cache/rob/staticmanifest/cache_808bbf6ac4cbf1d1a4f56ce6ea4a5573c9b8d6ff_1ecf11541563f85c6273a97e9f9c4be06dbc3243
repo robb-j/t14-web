@@ -1,0 +1,1 @@
+a:1:{s:17:"DestinationHolder";a:3:{s:14:"managed_models";a:2:{s:6:"access";i:345;s:5:"value";a:3:{i:0;s:11:"Destination";i:1;s:5:"Hotel";i:2;s:10:"PackageTag";}}s:11:"url_segment";a:2:{s:6:"access";i:345;s:5:"value";s:12:"destinations";}s:10:"menu_title";a:2:{s:6:"access";i:345;s:5:"value";s:12:"Destinations";}}}

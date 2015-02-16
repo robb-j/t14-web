@@ -1,0 +1,1 @@
+a:1:{s:30:"RESTfulAPI_DefaultQueryHandler";a:3:{s:12:"dependencies";a:2:{s:6:"access";i:345;s:5:"value";a:1:{s:12:"deSerializer";s:30:"%$RESTfulAPI_BasicDeSerializer";}}s:30:"searchFilterModifiersSeparator";a:2:{s:6:"access";i:345;s:5:"value";s:2:"__";}s:17:"max_records_limit";a:2:{s:6:"access";i:345;s:5:"value";i:100;}}}

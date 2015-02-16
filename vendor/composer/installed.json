@@ -1,0 +1,237 @@
+[
+    {
+        "name": "composer/installers",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/composer/installers.git",
+            "reference": "89d77bfbee79e16653f7162c86e602cc188471db"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/composer/installers/zipball/89d77bfbee79e16653f7162c86e602cc188471db",
+            "reference": "89d77bfbee79e16653f7162c86e602cc188471db",
+            "shasum": ""
+        },
+        "replace": {
+            "roundcube/plugin-installer": "*",
+            "shama/baton": "*"
+        },
+        "require-dev": {
+            "composer/composer": "1.0.*@dev",
+            "phpunit/phpunit": "4.1.*"
+        },
+        "time": "2014-11-29 01:29:17",
+        "type": "composer-installer",
+        "extra": {
+            "class": "Composer\\Installers\\Installer",
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Composer\\Installers\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kyle Robinson Young",
+                "email": "kyle@dontkry.com",
+                "homepage": "https://github.com/shama"
+            }
+        ],
+        "description": "A multi-framework Composer library installer",
+        "homepage": "http://composer.github.com/installers/",
+        "keywords": [
+            "Craft",
+            "Dolibarr",
+            "Hurad",
+            "MODX Evo",
+            "OXID",
+            "Thelia",
+            "WolfCMS",
+            "agl",
+            "annotatecms",
+            "bitrix",
+            "cakephp",
+            "chef",
+            "codeigniter",
+            "concrete5",
+            "croogo",
+            "dokuwiki",
+            "drupal",
+            "elgg",
+            "fuelphp",
+            "grav",
+            "installer",
+            "joomla",
+            "kohana",
+            "laravel",
+            "lithium",
+            "magento",
+            "mako",
+            "mediawiki",
+            "modulework",
+            "moodle",
+            "phpbb",
+            "piwik",
+            "ppi",
+            "puppet",
+            "roundcube",
+            "shopware",
+            "silverstripe",
+            "symfony",
+            "typo3",
+            "wordpress",
+            "zend",
+            "zikula"
+        ]
+    },
+    {
+        "name": "silverstripe/framework",
+        "version": "3.1.9",
+        "version_normalized": "3.1.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/silverstripe/silverstripe-framework.git",
+            "reference": "87d6250ea75f5e1c765d9004c51bd5ffd5633185"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/silverstripe/silverstripe-framework/zipball/87d6250ea75f5e1c765d9004c51bd5ffd5633185",
+            "reference": "87d6250ea75f5e1c765d9004c51bd5ffd5633185",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "*",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~3.7@stable"
+        },
+        "time": "2015-01-14 22:56:46",
+        "type": "silverstripe-module",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "tests/behat/features/bootstrap"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "SilverStripe",
+                "homepage": "http://silverstripe.com"
+            },
+            {
+                "name": "The SilverStripe Community",
+                "homepage": "http://silverstripe.org"
+            }
+        ],
+        "description": "The SilverStripe framework",
+        "homepage": "http://silverstripe.org",
+        "keywords": [
+            "framework",
+            "silverstripe"
+        ]
+    },
+    {
+        "name": "colymba/silverstripe-restfulapi",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/colymba/silverstripe-restfulapi.git",
+            "reference": "c4eb7dc33805b2a8e747e91adba2e1083e4928dd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/colymba/silverstripe-restfulapi/zipball/c4eb7dc33805b2a8e747e91adba2e1083e4928dd",
+            "reference": "c4eb7dc33805b2a8e747e91adba2e1083e4928dd",
+            "shasum": ""
+        },
+        "require": {
+            "silverstripe/framework": "~3.1"
+        },
+        "time": "2014-07-03 14:06:22",
+        "type": "silverstripe-module",
+        "installation-source": "source",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD Simplified"
+        ],
+        "authors": [
+            {
+                "name": "Thierry Francois",
+                "homepage": "http://colymba.com"
+            }
+        ],
+        "description": "SilverStripe 3 RESTful API with a default JSON serializer.",
+        "homepage": "https://github.com/colymba/silverstripe-model-serializer",
+        "keywords": [
+            "REST API",
+            "REST server",
+            "RESTful server",
+            "api",
+            "json api",
+            "model serializer",
+            "rest",
+            "restful",
+            "silverstripe"
+        ]
+    },
+    {
+        "name": "i-lateral/silverstripe-siteconfig",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/i-lateral/silverstripe-siteconfig.git",
+            "reference": "9b5e0083063eb81cf93beee7dc36323892786d0d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/i-lateral/silverstripe-siteconfig/zipball/9b5e0083063eb81cf93beee7dc36323892786d0d",
+            "reference": "9b5e0083063eb81cf93beee7dc36323892786d0d",
+            "shasum": ""
+        },
+        "require": {
+            "silverstripe/framework": ">=3.1"
+        },
+        "time": "2014-04-02 19:11:57",
+        "type": "silverstripe-module",
+        "extra": {
+            "installer-name": "siteconfig"
+        },
+        "installation-source": "source",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Morven Lewis-Everley",
+                "email": "morven@i-lateral.com"
+            }
+        ],
+        "description": "Module that allows access to SiteConfig with only core framework (no CMS) installed.",
+        "homepage": "http://github.com/i-lateral/silverstripe-siteconfig",
+        "keywords": [
+            "Settings",
+            "config",
+            "framework",
+            "silverstripe",
+            "siteconfig"
+        ]
+    }
+]

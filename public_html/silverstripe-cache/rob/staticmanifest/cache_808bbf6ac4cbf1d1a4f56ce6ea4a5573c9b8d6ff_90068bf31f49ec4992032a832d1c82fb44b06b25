@@ -1,0 +1,1 @@
+a:1:{s:29:"RESTfulAPI_TokenAuthExtension";a:1:{s:2:"db";a:2:{s:6:"access";i:345;s:5:"value";a:2:{s:8:"ApiToken";s:12:"Varchar(160)";s:14:"ApiTokenExpire";s:3:"Int";}}}}

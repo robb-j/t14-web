@@ -1,0 +1,23 @@
+// this file should be included into all other files, here you can add variables and mixins
+
+@import "compass";
+@import "includes/mixins";
+@import "includes/rem";
+@import "includes/media-queries";
+
+@import "fullscreen-form";
+
+$text-color: #333 !default;
+$link-color: #1122CC !default;
+$font-family: Helvetic, Arial, sans-serif !default;
+$font-size: 16px !default;
+$rem-base: $font-size !default;
+
+$rem-enabled: true !default;
+$ie-8-support: false !default;
+
+
+$color-purple: rgba(181,53,134,1);
+$color-purple-dark: rgba(163,60,159,1);
+$color-yellow: #FFFA56;
+$color-green: #01B8B9;
