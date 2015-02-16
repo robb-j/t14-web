@@ -1,1 +1,0 @@
-a:1:{s:10:"PackageTag";a:3:{s:2:"db";a:2:{s:6:"access";i:345;s:5:"value";a:2:{s:5:"Title";s:12:"Varchar(255)";s:8:"Overview";s:8:"HTMLText";}}s:9:"many_many";a:2:{s:6:"access";i:345;s:5:"value";a:1:{s:8:"Packages";s:7:"Package";}}s:7:"has_one";a:2:{s:6:"access";i:345;s:5:"value";a:2:{s:4:"Icon";s:5:"Image";s:10:"Background";s:5:"Image";}}}}
