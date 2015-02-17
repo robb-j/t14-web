@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "70594111edf61d5906d532eb0f880dfe",
+    "hash": "2b3840d3a4d354d2504c90c174148a7f",
     "packages": [
         {
             "name": "colymba/silverstripe-restfulapi",
