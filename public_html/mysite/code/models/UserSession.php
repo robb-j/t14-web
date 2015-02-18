@@ -1,6 +1,6 @@
 <?php
 
-class Session extends DataObject {
+class UserSession extends DataObject {
 
     private static $db = array(
         'Expiry' => 'Date'
