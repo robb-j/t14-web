@@ -3,11 +3,11 @@
 class Transaction extends DataObject {
 
     private static $db = array(
-        'amount' => 'double',
-		'payee' => 'Varchar(50)'
+        'Amount' => 'Double',
+		'Payee' => 'Varchar(50)'
     );
 	private static $has_one =  array(
-		'account' => 'Account'
+		'Account' => 'Account'
 	);
 }
 

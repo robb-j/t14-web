@@ -3,9 +3,9 @@
 class Account extends DataObject {
 
     private static $db = array(
-        'accountType' => 'Varchar(50)',
-		'overdraftLimit' => 'int',
-		'balance' => 'double'
+        'AccountType' => 'Varchar(50)',
+		'OverdraftLimit' => 'Int',
+		'Balance' => 'Double'
     );
 	private static $has_one =  array(
 		'User' => 'User',

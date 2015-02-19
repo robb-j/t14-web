@@ -3,8 +3,8 @@
 class Product extends DataObject {
 
     private static $db = array(
-        'title' => 'varchar(50)',
-		'content' => 'HTMLText'
+        'Title' => 'Varchar(50)',
+		'Content' => 'HTMLText'
     );
 }
 

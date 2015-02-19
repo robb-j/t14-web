@@ -3,10 +3,10 @@
 class User extends DataObject {
 
     private static $db = array(
-        'firstName' => 'Varchar(30)',
-		'lastName' => 'Varchar(30)',
-		'lastFullCategorise' => 'date',
-		'dob' => 'date'
+        'FirstName' => 'Varchar(30)',
+		'LastName' => 'Varchar(30)',
+		'LastFullCategorise' => 'Date',
+		'DOB' => 'Date'
     );
 	private static $has_many =  array(
 		'Accounts' => 'Account'
