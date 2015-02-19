@@ -10,13 +10,20 @@
 		//The unique token for this session
 		private $token;
 		
+		private $message = null
+		
 		//This constructor takes in these parameters and sets the relevant fields
 		public function _construct( $user, $accounts, $token ){
 		
 			setUser($user);
-			setAccount($accounts)
-			setToken($token)
+			setAccount($accounts);
+			setToken($token);
 
+		}
+		
+		public function _construct( $errMessage ){
+			
+			setMessage($errMessage);
 		}
 		
 		public getUser(){
@@ -37,6 +44,16 @@
 			
 		}
 		
+		public getMessage(){
+		
+			if($message === null){
+				return "successful";
+			}else{
+				return $message;
+			}
+		
+		}
+		
 		//These are private as once they are set we don't want them to be able to change
 		private setUser($user){
 			
@@ -54,6 +71,11 @@
 			
 			$this->token = $token;
 		
+		}
+		
+		private setMessage($errMessage){
+		
+			$message = $errMessage;
 		}
 	}
 ?>
