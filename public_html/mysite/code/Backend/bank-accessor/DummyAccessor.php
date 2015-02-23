@@ -1,50 +1,53 @@
 <?php
 
-class DummyAccessor implements BankAccessor{
-	
-	private static $mockToken = “xl1ff9ndndj3jdmd9dn2nw91nx”;
+class DummyAccessor implements BankInterface {
 
 	public function login($username, $password) {
 
 		$passed = false;
+		$mockToken = "xl1ff9ndndj3jdmd9dn2nw91nx";
 
-		if ( strcmp($username, “testuser”) === 0  && strcmp($password, “password”) === 0) {
+		if ( strcmp($username, "testuser") === 0  && strcmp($password, "password") === 0) {
 
 			// Just get objects from the ORM & create a token
 			$products = Product::get();
 			$user = User::get()->toArray()[0];
+			$accounts = $user->Accounts();
 
-			return new LoginOutput($user, $products, $mockToken);
+			return new LoginOutput($user, $accounts, $products, $mockToken, true);
 		}
 		else {
-			return new LoginOutput(“Failed to Authenticate”);
+			return new LoginOutput(null, null, null, null);
 		}
 	}
 	
-	login( $username, $passwordBits, $indexes ){
+	public function loginFromMobile( $username, $passwordBits, $indexes ){
 	
-		if ( strcmp($username, “testuser”) === 0 ){
+		$mockToken = "xl1ff9ndndj3jdmd9dn2nw91nx";
 	
-		// Just get objects from the ORM & create a token
+		if ( strcmp($username, "testuser") === 0 ){
+	
+			// Just get objects from the ORM & create a token
 			$products = Product::get();
 			$user = User::get()->toArray()[0];
+			$accounts = $user->Accounts();
 
-			return new LoginOutput($user, $products, $mockToken);
+			return new LoginOutput($user, $accounts, $products, $mockToken, true);
 		}
 		else {
-			return new LoginOutput(“Failed to Authenticate”);
+			return new LoginOutput(null, null, null, null);
 		}
 	
 	
 	}
 	
 	
-	loadTransactions( $userID, $month, $token ){
-	
-	
+	public function loadTransactions( $userID, $month, $token ){
+		
+		
 	}
 	
-	makeTransfer( $accountAID, $accountBID, $token ){
+	public function makeTransfer( $accountAID, $accountBID, $token ){
 	
 	
 	}

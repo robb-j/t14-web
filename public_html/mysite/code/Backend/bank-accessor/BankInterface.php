@@ -1,11 +1,11 @@
 <?php
 
-interface BankInterface{
+interface BankInterface {
 	
-	login( $username, $passwordBits, $indexes );
-	login( $username, $password );
-	loadTransactions( $userID, $month, $token );
-	makeTransfer( $accountAID, $accountBID, $token );
+	public function loginFromMobile( $username, $passwordBits, $indexes );
+	public function login( $username, $password );
+	public function loadTransactions( $userID, $month, $token );
+	public function makeTransfer( $accountAID, $accountBID, $token );
 
 }
 ?>

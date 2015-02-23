@@ -3,9 +3,13 @@
 	
 	$MetaTags('false')
 	
-	<!-- CSS -->
-	<link rel="stylesheet" href="{$BaseURL}{$ThemeDir}/css/screen.css" media="screen, projection, print" type="text/css"/>
-	<link rel="stylesheet" href="{$BaseURL}{$ThemeDir}/css/form.css" media="screen, projection, print" type="text/css"/>
+	<% base_tag %>
+	
+	<title> $Title </title>
+	
+	<% require css("mysite/css/screen.css") %>
+	<% require css("mysite/css/form.css") %>
+	<% require css("mysite/css/libs/bootstrap.min.css") %>
 	
 </head>
 
@@ -19,15 +23,30 @@
 		
 		<!-- Display the login form if needed -->
 		<% if Form %>
-			<div class="container">
-				<div class=" offset-md-4 col-md-8">
-				$Content
-				$Form
-				</div>
-			</div>
+		
+			<% include AdminLogin Form=$Form %>
+			
 		<% else %>
 			
-			<div id="app-container"></div>
+			<% include NavigationBar %>
+			
+			<div class="container">
+				<div class="row">
+					
+					<div class="col-xs-3">
+						
+						<% include Sidebar %>
+						
+					</div>
+					
+					<div class="col-xs-9">
+						
+						$Content
+						
+					</div>
+				
+				</div>
+			</div>
 			
 		<% end_if %>
 		

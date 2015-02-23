@@ -8,33 +8,33 @@
 		private $transactions;
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function _construct( $account, $transactions ){
+		public function __construct( $account, $transactions ){
 		
-			setAccount($account)
-			setTransactions($transactions)
+			setAccount($account);
+			setTransactions($transactions);
 
 		}
 		
-		public getAccount(){
+		public function getAccount(){
 			
 			return $account;
 			
 		}
 		
-		public getTransactions(){
+		public function getTransactions(){
 			
 			return $transactions;
 			
 		}
 		
 		//These are private as once they are set we don't want them to be able to change
-		private setAccount($account){
+		private function setAccount($account){
 			
 			$this->account = $account;
 		
 		}
 		
-		private setTransactions($transactions){
+		private function setTransactions($transactions){
 			
 			$this->transactions = $transactions;
 		

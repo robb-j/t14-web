@@ -7,75 +7,86 @@
 		//the accounts for the given user
 		private $accounts;
 		
+		// All the products available
+		private $allProducts;
+		
 		//The unique token for this session
 		private $token;
 		
-		private $message = null
+		// Whether this interaction passed or failed
+		private $didPass;
+		
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function _construct( $user, $accounts, $token ){
+		public function __construct( $user, $accounts, $allProducts, $token, $passed = false){
 		
-			setUser($user);
-			setAccount($accounts);
-			setToken($token);
-
+			$this->setUser($user);
+			$this->setAccounts($accounts);
+			$this->setAllProducts($allProducts);
+			$this->setToken($token);
+			$this->setdidPass($passed);
 		}
 		
-		public function _construct( $errMessage ){
-			
-			setMessage($errMessage);
-		}
 		
-		public getUser(){
-			
-			return $user;
-			
-		}
 		
-		public getAccount(){
+		// Getters
+		public function getUser(){
 			
-			return $account;
+			return $this->user;
 			
 		}
 		
-		public getToken(){
+		public function getAccounts(){
 			
-			return $token;
+			return $this->accounts;
 			
 		}
 		
-		public getMessage(){
+		public function getToken(){
+			
+			return $this->token;
+			
+		}
 		
-			if($message === null){
-				return "successful";
-			}else{
-				return $message;
-			}
+		public function didPass(){
+		
+			return $this->didPass;
 		
 		}
+		
+		public function getAllProducts() {
+			
+			return $this->allProducts;
+		}
+		
 		
 		//These are private as once they are set we don't want them to be able to change
-		private setUser($user){
+		private function setUser($user){
 			
 			$this->user = $user;
 		
 		}
 		
-		private setAccounts($accounts){
+		private function setAccounts($accounts){
 			
 			$this->accounts = $accounts;
 		
 		}
 		
-		private setToken($token){
+		private function setToken($token){
 			
 			$this->token = $token;
 		
 		}
 		
-		private setMessage($errMessage){
+		private function setDidPass($passed){
 		
-			$message = $errMessage;
+			$this->didPass = $passed;
+		}
+		
+		private function setAllProducts($allProducts) {
+			
+			$this->allProducts = $allProducts;
 		}
 	}
 ?>
