@@ -7,6 +7,7 @@
 	
 	<title> $Title </title>
 	
+	<% require css("mysite/css/screen.css") %>
 	<% require css("mysite/css/login.css") %>
 	<% require css("mysite/css/libs/bootstrap.min.css") %>
 	
