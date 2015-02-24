@@ -1,2 +1,4 @@
 [23-Feb-2015 23:57:52] Warning at framework/forms/Form.php line 378: BankSesh:Pass:1 (http://localhost/uni/t14-web/public_html/LoginController/BankLoginForm)
 [23-Feb-2015 23:57:52] Warning at framework/forms/Form.php line 378: BankSesh:Tkn:xl1ff9ndndj3jdmd9dn2nw91nx (http://localhost/uni/t14-web/public_html/LoginController/BankLoginForm)
+[24-Feb-2015 12:05:57] Warning at framework/model/MySQLDatabase.php line 68: mysqli::mysqli(): (HY000/2002): No such file or directory (http://localhost/uni/t14-web/public_html/)
+[24-Feb-2015 12:05:57] Error at framework/model/MySQLDatabase.php line 598: Couldn't connect to MySQL database | No such file or directory (http://localhost/uni/t14-web/public_html/)

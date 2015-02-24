@@ -38,16 +38,15 @@ class DummyAccessor implements BankInterface {
 			return new LoginOutput(null, null, null, null);
 		}
 	
-	
 	}
 	
 	
-	public function loadTransactions( $userID, $month, $token ){
+	public function loadTransactions( $userID, $month, $year, $token ){
 		
 		
 	}
 	
-	public function makeTransfer( $accountAID, $accountBID, $token ){
+	public function makeTransfer( $accountAID, $accountBID, $amount, $token ){
 	
 	
 	}

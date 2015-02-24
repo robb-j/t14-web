@@ -4,8 +4,8 @@ interface BankInterface {
 	
 	public function loginFromMobile( $username, $passwordBits, $indexes );
 	public function login( $username, $password );
-	public function loadTransactions( $userID, $month, $token );
-	public function makeTransfer( $accountAID, $accountBID, $token );
+	public function loadTransactions( $userID, $accountID, $month, $year, $token );
+	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token );
 
 }
 ?>
