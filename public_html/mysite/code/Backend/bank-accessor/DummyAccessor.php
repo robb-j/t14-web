@@ -41,12 +41,12 @@ class DummyAccessor implements BankInterface {
 	}
 	
 	
-	public function loadTransactions( $userID, $month, $year, $token ){
+	public function loadTransactions(  $userID, $accountID, $month, $year, $token ){
 		
 		
 	}
 	
-	public function makeTransfer( $accountAID, $accountBID, $amount, $token ){
+	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token  ){
 	
 	
 	}
