@@ -2,7 +2,7 @@
 
 class DummyAccessor implements BankInterface {
 
-	public function login($username, $password) {
+	public function login($username, $password, $key) {
 
 		$passed = false;
 		$mockToken = "xl1ff9ndndj3jdmd9dn2nw91nx";
@@ -21,7 +21,7 @@ class DummyAccessor implements BankInterface {
 		}
 	}
 	
-	public function loginFromMobile( $username, $passwordBits, $indexes ){
+	public function loginFromMobile( $username, $passwordBits, $indexes, $key ){
 	
 		$mockToken = "xl1ff9ndndj3jdmd9dn2nw91nx";
 	
@@ -41,7 +41,7 @@ class DummyAccessor implements BankInterface {
 	}
 	
 	
-	public function loadTransactions(  $userID, $accountID, $month, $year, $token ){
+	public function loadTransactions(  $userID, $accountID, $month, $year, $token, $key ){
 		
 		
 	}
