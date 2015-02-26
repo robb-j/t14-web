@@ -1,4 +1,4 @@
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\admins\ContentAdmin.php
+No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\backend\bank-accessor\BankAccessor.php
 
 No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\backend\bank-accessor\BankInterface.php
 
@@ -7,24 +7,4 @@ No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\bac
 No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\backend\bank-accessor\LoginOutput.php
 
 No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\backend\bank-accessor\TransactionOutput.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\controllers\ImageController.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\controllers\IndexController.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\controllers\LoginController.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\extensions\mysiteLeftAndMainExtension.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\extensions\mysiteSiteConfigExtension.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\models\Account.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\models\Product.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\models\Transaction.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\models\User.php
-
-No syntax errors detected in A:\xampp\htdocs\t14-web\public_html\mysite\code\models\UserSession.php
 
