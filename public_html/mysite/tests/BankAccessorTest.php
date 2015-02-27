@@ -1,13 +1,35 @@
 <?php
 
+/**
+ * This tests NAME_OF_THING
+ * Martin S A - 27/02/2015
+ */
 class BankAccessorTest extends SapphireTest {
-
-    public function testLoginCorrectUsername() {
-      //  $this->assertEquals('Martin', BankAccessor::Login('Martin','password')->Username());
-	   $accessor = new \code\backend\bank-accessor\BankAccessor();
-	   $expected = "Martin";
+	
+	/**
+	 * @Before
+	 */
+	public function setup() {
+		
+		// Something that happends before EACH test
+	}
+	
+	/**
+	 * @TearDown
+	 */
+	public function tearDown() {
+		
+		// Something that happens after EACH test
+	}
+	
+	
+	
+	
+	public function testLoginCorrectUsername() {
+		
+		$accessor = new BankAccessor();
+		$expected = "Martin";
 	   
-	    $this->assertEquals($expected, $accessor->Login('Martin','password')->Username());
+		$this->assertEquals($expected, $accessor->login('Martin','password')->getUsername());
     }
 }
-?>

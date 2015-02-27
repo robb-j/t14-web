@@ -6,7 +6,7 @@
 	convertNoticesToExceptions = "true"
 	convertWarningsToExceptions = "true"
 	stopOnFailtures ="false"
-	syntaxCheck = "false"
+	syntaxCheck = "true"
 	>
 	<testsuites>
 		<testsuite>

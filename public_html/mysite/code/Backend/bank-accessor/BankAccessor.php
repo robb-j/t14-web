@@ -117,9 +117,9 @@ class BankAccessor implements BankInterface {
 		$plaindatabasePassword = decrypt($databasePassword);
 		// check return with positions
 		
-		if(strcmp($plaindatabasePassword{digits[0]},$givenPassword{0}) ===0 && 
-		   strcmp($plaindatabasePassword{digits[1]},$givenPassword{1})===0 && 
-		   strcmp($plaindatabasePassword{digits[2]},$givenPassword{2})===0){
+		if(strcmp($plaindatabasePassword{$digits[0]},$givenPassword[0]) ===0 && 
+		   strcmp($plaindatabasePassword{$digits[1]},$givenPassword[1])===0 && 
+		   strcmp($plaindatabasePassword{$digits[2]},$givenPassword[2])===0){
 		
 			$plaindatabasePassword = null;
 			return true;

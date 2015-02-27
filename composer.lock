@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "df8017300d460df8988db46aa1235e8f",
+    "hash": "61b2237c671a0f9ac8c77d35c00c7e13",
     "packages": [
         {
             "name": "colymba/silverstripe-restfulapi",
@@ -297,12 +297,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "5a87e6edaa9927e301ed6b16d230d977d14f1386"
+                "reference": "d1da796ba5565789a623052eb9f2cf59d57fec60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/5a87e6edaa9927e301ed6b16d230d977d14f1386",
-                "reference": "5a87e6edaa9927e301ed6b16d230d977d14f1386",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d1da796ba5565789a623052eb9f2cf59d57fec60",
+                "reference": "d1da796ba5565789a623052eb9f2cf59d57fec60",
                 "shasum": ""
             },
             "require": {
@@ -339,7 +339,7 @@
                     "email": "mike.vanriel@naenius.com"
                 }
             ],
-            "time": "2015-02-25 17:26:05"
+            "time": "2015-02-27 09:28:18"
         },
         {
             "name": "phpspec/prophecy",

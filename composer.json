@@ -12,7 +12,8 @@
 			"public_html/{$name}": [
 				"silverstripe/framework",
 				"i-lateral/silverstripe-siteconfig",
-				"colymba/silverstripe-restfulapi"
+				"colymba/silverstripe-restfulapi",
+				"phpunit/phpunit"
 			]
 		}
 	},
