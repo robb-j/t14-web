@@ -1,18 +1,37 @@
 <?php
-	
+
+
+/*
+ * A Page that logs the user in, currently uses DummyAccessor
+ * Created by Rob A - feb 2015
+ */
 class LoginController extends Controller {
 	
+	
+	// This actions is for when the form is submitted
 	private static $allowed_actions = array(
 		"BankLoginForm"
 	);
 	
+	
+	// Called when this pages is loaded
 	public function index() {
+			
+		if (Cookie::get('BankingSession') != null) {
+			
+			// Redirect back if already logged in
+			return $this->redirect("banking");
+		}
+		else {
 		
-		return $this->renderWith("Login");
+			// Otherwise, render with the login template
+			return $this->renderWith("Login");
+		}
 	}
 	
+	
+	// Creates the login form, called from the template
 	public function BankLoginForm() {
-		
 		
 		// Create the fields for the form
 		$fields = new FieldList(
@@ -31,34 +50,34 @@ class LoginController extends Controller {
 		$required = new RequiredFields("Username", "Password");
 		
 		
-		// Return a new form
-		$form = new Form($this, "BankLoginForm", $fields, $actions, $required);
-		
-		return $form;
+		// Return a new form, SS renders it nicely
+		return new Form($this, "BankLoginForm", $fields, $actions, $required);
 	}
 	
 	
-	
+	// Called when the form submits
 	public function submitBankLoginForm($data, Form $form) {
 		
-		
+		// Get the values entered
 		$user = $data["Username"];
 		$pass = $data["Password"];
 		
-		$bankAccessor = new DummyAccessor();
 		
+		// Attempt the login
+		$bankAccessor = new DummyAccessor();
 		$output = $bankAccessor->login($user, $pass);
 		
 		
 		if ($output->didPass() == false) {
 			
+			// If the login failed, inform the user
 			$form->addErrorMessage('Failed', "Failed To Authenticate", 'Unlucky Pal');
 			return $this->redirectBack();
 		}
 		else {
 			
+			// If the login failed, add a cooke and redirect to /banking
 			Cookie::set("BankingSession", $output->getToken(), 0);
-		
 			return $this->redirect("banking/");
 		}
 	}

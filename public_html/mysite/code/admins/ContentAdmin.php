@@ -1,5 +1,8 @@
 <?php
 
+/* A ModelAdmin that adds Users & Products to the admin backend
+ * Created by Rob A - jan 2015
+ */
 class ContentAdmin extends ModelAdmin {
 
 	private static $managed_models = array(

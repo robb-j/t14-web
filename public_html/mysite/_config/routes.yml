@@ -4,7 +4,7 @@ After: 'framework/routes'
 ---
 Director:
   rules:
-    '': 'IndexController'
-    'banking': 'IndexController'
+    '': 'AccountController'
+    'banking': 'AccountController'
     'login': 'LoginController'
     'image/$ImageId/$Width/$Height': 'ImageController'

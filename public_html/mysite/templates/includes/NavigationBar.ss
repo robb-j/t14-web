@@ -1,1 +1,1 @@
-<p> This is the navigation bar and goes along the top </p>
+<p> This is the navigation bar and goes along the top, Current: $Current </p>

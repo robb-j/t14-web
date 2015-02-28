@@ -28,23 +28,32 @@
 			
 		<% else %>
 			
-			<% include NavigationBar %>
 			
+			<!-- Add the navigation bar, using TabTitle form the controller -->
+			<% include NavigationBar Current=$TabTitle%>
+			
+			
+			<!-- The main part of the side, using a bootstrap container http://getbootstrap.com/css/#overview-container -->
 			<div class="container">
 				<div class="row">
 					
+					
+					<!-- Show the sidebar on the left -->
 					<div class="col-xs-3">
-						
-						<% include Sidebar %>
-						
+						<div class="sidebar-container">
+							<% include Sidebar %>
+							</%>
 					</div>
 					
+					
+					<!-- Show the content -->
 					<div class="col-xs-9">
-						
-						$Content
-						
+						<div class="content-container">
+							$Content()
+						</div>
 					</div>
 				
+					
 				</div>
 			</div>
 			

@@ -1,17 +1,14 @@
 <?php
 
 /*
-	ImageController.php 
-	Rob Anderson - robb-j - 2014
+ * ImageController.php 
+ * Rob Anderson - robb-j - 2014
 
-	Provides URL access to Just In Time (JIT) image resizing
-	Setup the appropriate routes in mysite/-config/routes.yml:
-    	'image/$ImageId/$Width/$Height': 'ImageController'
+ * Provides URL access to Just In Time (JIT) image resizing
+ * Setup the appropriate routes in mysite/-config/routes.yml:
+ * 		'image/$ImageId/$Width/$Height': 'ImageController'
 */
-	
 class ImageController extends Controller {
-	
-	private static $allowed_actions = array('index');
 	
 	public $ResizedImage;
 	
