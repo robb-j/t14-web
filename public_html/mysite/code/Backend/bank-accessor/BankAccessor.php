@@ -38,8 +38,17 @@ class BankAccessor implements BankInterface {
 								   
 			
 			
-
-			return new LoginOutput($user, $accounts, $products, $this->generateToken(), true);
+			//set the user session 
+			$token = $this->generateToken();
+			
+			$userSession= UserSession::create();
+			$userSession->UserID = $user->ID;
+			$userSession->Expiry = (Time() + 600);
+			$userSession->Token = $token;
+			$userSession->write();
+			
+			
+			return new LoginOutput($user, $accounts, $products, $token , true);
 		
 		}else{
 			
@@ -92,7 +101,18 @@ class BankAccessor implements BankInterface {
 								   From Product, User, Account
 								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username <> \'' . $sanitisedUsername  . '\' )');
 
-			return new LoginOutput($user, $accounts, $products, $this->generateToken(), true);
+								   
+			//set the user session 
+			$token = $this->generateToken();
+			
+			
+			$userSession= UserSession::create();
+			$userSession->UserID = $user->ID;
+			$userSession->Expiry = (Time() + 600);
+			$userSession->Token = $token;
+			$userSession->write();
+			
+			return new LoginOutput($user, $accounts, $products, $token, true);
 		
 		}else{
 
@@ -116,7 +136,11 @@ class BankAccessor implements BankInterface {
 	
 	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token ){
 	
-	
+		// Check for SQL injection
+		// Check the User is the one with the token
+		// Check the user has avalible funds left in accountA inc overdraft
+		// Transfer the money to the account 
+		// Update the user session
 	
 	
 	}
@@ -181,10 +205,7 @@ class BankAccessor implements BankInterface {
 		for ($i = 0; $i < $length; $i++) {
 			$token .= $characters[mt_rand(0, strlen($characters) - 1)];
 		}
-
-    
-
-		echo"|".$token."|";
+		
 		return $token;
 	}
 }
