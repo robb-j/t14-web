@@ -213,7 +213,7 @@ class BankAccessor implements BankInterface {
 			$expiry = $userSession->Expiry;
 			
 			if($expiry > Time()){
-				return $userSession->UserID;
+				return $userSession;
 			
 			}
 		
