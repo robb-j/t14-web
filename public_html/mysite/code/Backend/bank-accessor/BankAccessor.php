@@ -23,7 +23,7 @@ class BankAccessor extends Object implements BankInterface {
 		if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes) ){
 		
 			$user = User::get()->filter(array(
-			'Username' => $sanitisedUsername
+				'Username' => $sanitisedUsername
 			))[0];
 			
 			$accounts = $user->Accounts();
@@ -42,7 +42,7 @@ class BankAccessor extends Object implements BankInterface {
 				$arrayList->push(Product::get()->byID($theRowID));
 			}
 			
-			$user->NewProducts = $products;
+			$user->NewProducts = $arrayList;
 			
 			//set the user session 
 			$token = $this->generateToken();
