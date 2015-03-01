@@ -1,5 +1,5 @@
 <?php
-	class TransferOutput {
+	class TransferOutput extends Object {
 		
 		// The account that transactions were loaded for
 		private $payerAccount;

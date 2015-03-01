@@ -1,5 +1,5 @@
 <?php
-	class TransactionOutput {
+	class TransactionOutput extends Object {
 		
 		// The account that transactions were loaded for
 		private $account;

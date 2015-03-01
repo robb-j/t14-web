@@ -16,11 +16,11 @@ class LoginController extends Controller {
 	
 	// Called when this pages is loaded
 	public function index() {
-			
-		if (Cookie::get('BankingSession') != null) {
+		
+		if (BankAccessor::create()->getCurrentUser() != null) {
 			
 			// Redirect back if already logged in
-			return $this->redirect("banking");
+			return $this->redirect("banking/");
 		}
 		else {
 		
@@ -64,8 +64,7 @@ class LoginController extends Controller {
 		
 		
 		// Attempt the login
-		$bankAccessor = new DummyAccessor();
-		$output = $bankAccessor->login($user, $pass);
+		$output = BankAccessor::create()->login($user, $pass);
 		
 		
 		if ($output->didPass() == false) {
@@ -77,7 +76,7 @@ class LoginController extends Controller {
 		else {
 			
 			// If the login failed, add a cooke and redirect to /banking
-			Cookie::set("BankingSession", $output->getToken(), 0);
+			Cookie::set("BankingSession", $output->getToken(), 10);
 			return $this->redirect("banking/");
 		}
 	}

@@ -11,19 +11,24 @@ class BankController extends Controller {
 	public $TabTitle = "none";
 	
 	public $CurrentUser = null;
+	public $NewProducts = array();
 	
 	
 	public function index() {
 		
 		// Get the session token, if there is one
-		$session = $this->GetSessionToken();
+		$this->CurrentUser = BankAccessor::create()->getCurrentUser();
 		
-		if ($session == null || strlen($session) == 0) {
+		if ($this->CurrentUser == null) {
 			
 			// If there isn't one, redirect to login
 			return $this->redirect("login/");
 		}
 		else {
+			
+			print_r($this->CurrentUser);
+			exit();
+			
 			
 			// Otherwise, render with page
 			return $this->renderWith("Page");

@@ -1,5 +1,5 @@
 <?php
-	class LoginOutput {
+	class LoginOutput extends Object {
 		
 		//the user that was logged in
 		private $user;

@@ -1,6 +1,6 @@
 <?php
 
-class DummyAccessor implements BankInterface {
+class DummyAccessor extends Object implements BankInterface {
 
 	public function login($username, $password) {
 

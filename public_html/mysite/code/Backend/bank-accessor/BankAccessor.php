@@ -1,6 +1,6 @@
 <?php
 
-class BankAccessor implements BankInterface {
+class BankAccessor extends Object implements BankInterface {
 
 	
 

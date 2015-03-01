@@ -42,7 +42,7 @@
 					<div class="col-xs-3">
 						<div class="sidebar-container">
 							<% include Sidebar %>
-							</%>
+						</div>
 					</div>
 					
 					
@@ -50,6 +50,9 @@
 					<div class="col-xs-9">
 						<div class="content-container">
 							$Content()
+							
+							$CurrentUser(Username)
+							
 						</div>
 					</div>
 				
