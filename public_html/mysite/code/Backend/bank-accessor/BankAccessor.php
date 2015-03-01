@@ -36,7 +36,13 @@ class BankAccessor extends Object implements BankInterface {
 								   Where product.ID = account.ProductID AND user.ID = account.UserID AND user.username <> \'' . Convert::raw2sql($sanitisedUsername)  . '\' )');
 								   
 								   
+			$arrayList = new ArrayList();	
+			foreach($products as $row) {
+				$theRowID =  $row['ID'];
+				$arrayList->push(Product::get()->byID($theRowID));
+			}
 			
+			$user->NewProducts = $products;
 			
 			//set the user session 
 			$token = $this->generateToken();
@@ -96,14 +102,21 @@ class BankAccessor extends Object implements BankInterface {
 			* This is broken not sure how to fix it 
 			*
 			*/
-			$products = DB::query('SELECT P.Title, P.Content 
+			$products = DB::query('SELECT P.ID
 								   FROM Product P 
                                    Where P.ID NOT IN  
 								   (Select Product.ID 
 								   From Product, User, Account
 								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username <> \'' . $sanitisedUsername  . '\' )');
 
-								   
+			$arrayList = new ArrayList();	
+			foreach($products as $row) {
+				$theRowID =  $row['ID'];
+				$arrayList->push(Product::get()->byID($theRowID));
+			}
+			
+			$user->NewProducts = $products;
+			
 			//set the user session 
 			$token = $this->generateToken();
 			
@@ -116,7 +129,7 @@ class BankAccessor extends Object implements BankInterface {
 			
 			Cookie::set('BankingSession', $token, 0);
 			
-			return new LoginOutput($user, $accounts, $products, $token, true);
+			return new LoginOutput($user, $accounts, $arrayList, $token, true);
 		
 		}else{
 
@@ -141,9 +154,34 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedYear = Convert::raw2sql($year);
 		$sanitisedToken = Convert::raw2sql($token);
 		
+		// Check the User is the one with the token		
+		$userSession = UserSession::get()->filter(array(
+			'Token' => $sanitisedToken
+			))[0];
 		
+		if($userSession != null){
+			$actaulUserID = $userSession->UserID;
+
+			if (strcmp($actaulUserID,$sanitisedUserID)===0){
+				
+				$lastDay = cal_days_in_month(CAL_GREGORIAN, $sanitisedMonth, $sanitisedYear);
+				$start = $sanitisedYear . '-' . $sanitisedMonth . '-0 00:00:00';
+				$end = $sanitisedYear . '-' .  $sanitisedMonth . '-' . $lastDay . ' 23:59:59';
+				
+				$transactions = Transaction::get()->filter(
+					array(
+						'Date:GreaterThan' => $start,
+						'Date:LessThan' => $end
+					)
+					);
+				
+				return new TransactionOutput(Account::get()->byID($sanitisedAccountID),$transactions);
+				
+			}
+		}
 		
-		// Check the User is the one with the token
+		return new TranasctionOutput(null,null);
+		
 		// get transactions by month/ year
 		// return a transaction output
 	
