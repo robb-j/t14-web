@@ -135,6 +135,14 @@ class BankAccessor extends Object implements BankInterface {
 	public function loadTransactions( $userID, $accountID, $month, $year, $token ){
 	
 		// Check for SQL injection
+		$sanitisedUserID = Convert::raw2sql($userID);
+		$sanitisedAccountID = Convert::raw2sql($accountID);
+		$sanitisedMonth = Convert::raw2sql($month);
+		$sanitisedYear = Convert::raw2sql($year);
+		$sanitisedToken = Convert::raw2sql($token);
+		
+		
+		
 		// Check the User is the one with the token
 		// get transactions by month/ year
 		// return a transaction output
@@ -213,8 +221,10 @@ class BankAccessor extends Object implements BankInterface {
 			$expiry = $userSession->Expiry;
 			
 			if($expiry > Time()){
-				return $userSession;
-			
+				
+				return $userSession->User();
+				
+				
 			}
 		
 		}
