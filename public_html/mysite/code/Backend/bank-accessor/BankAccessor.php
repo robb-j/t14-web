@@ -42,8 +42,6 @@ class BankAccessor extends Object implements BankInterface {
 				$arrayList->push(Product::get()->byID($theRowID));
 			}
 			
-			$user->NewProducts = $arrayList;
-			
 			//set the user session 
 			$token = $this->generateToken();
 			
@@ -56,7 +54,7 @@ class BankAccessor extends Object implements BankInterface {
 			Cookie::set('BankingSession', $token, 0);
 			
 			
-			return new LoginOutput($user, $accounts, $products, $token , true);
+			return new LoginOutput($user, $accounts, $arrayList, $token , true);
 		
 		}else{
 			
@@ -115,7 +113,6 @@ class BankAccessor extends Object implements BankInterface {
 				$arrayList->push(Product::get()->byID($theRowID));
 			}
 			
-			$user->NewProducts = $products;
 			
 			//set the user session 
 			$token = $this->generateToken();
