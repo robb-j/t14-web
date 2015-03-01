@@ -59,7 +59,15 @@
 		
 		<!-- The table of new products for the given user -->
 		<div class="products-table section">
-			<p> List new products here </p>
+			
+			<% loop $CurrentUser.NewProducts %>
+				
+				<a href="banking/product/$ID">
+					$Title
+				</a>
+				
+			<% end_loop %>
+			
 		</div>
 	</div>
 	
