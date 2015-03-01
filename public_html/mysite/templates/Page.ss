@@ -41,17 +41,16 @@
 					<!-- Show the sidebar on the left -->
 					<div class="col-xs-3">
 						<div class="sidebar-container">
-							<% include Sidebar %>
+							<% include Sidebar CurrentUser=$CurrentUser %>
 						</div>
 					</div>
 					
 					
-					<!-- Show the content -->
+					<!-- Show the content on the right -->
 					<div class="col-xs-9">
 						<div class="content-container">
-							$Content()
 							
-							$CurrentUser(Username)
+							$Content()
 							
 						</div>
 					</div>

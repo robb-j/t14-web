@@ -26,18 +26,8 @@ class BankController extends Controller {
 		}
 		else {
 			
-			print_r($this->CurrentUser);
-			exit();
-			
-			
 			// Otherwise, render with page
 			return $this->renderWith("Page");
 		}
-	}
-	
-	
-	public function GetSessionToken() {
-		
-		return Cookie::get("BankingSession");
 	}
 }
