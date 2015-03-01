@@ -47,6 +47,8 @@ class BankAccessor implements BankInterface {
 			$userSession->Token = $token;
 			$userSession->write();
 			
+			Cookie::set('BankingSession', $token, 0);
+			
 			
 			return new LoginOutput($user, $accounts, $products, $token , true);
 		
@@ -112,6 +114,8 @@ class BankAccessor implements BankInterface {
 			$userSession->Token = $token;
 			$userSession->write();
 			
+			Cookie::set('BankingSession', $token, 0);
+			
 			return new LoginOutput($user, $accounts, $products, $token, true);
 		
 		}else{
@@ -130,6 +134,10 @@ class BankAccessor implements BankInterface {
 	
 	public function loadTransactions( $userID, $accountID, $month, $year, $token ){
 	
+		// Check for SQL injection
+		// Check the User is the one with the token
+		// get transactions by month/ year
+		// return a transaction output
 	
 	
 	}
@@ -137,10 +145,83 @@ class BankAccessor implements BankInterface {
 	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token ){
 	
 		// Check for SQL injection
-		// Check the User is the one with the token
-		// Check the user has avalible funds left in accountA inc overdraft
-		// Transfer the money to the account 
-		// Update the user session
+		$sanitisedUserID = Convert::raw2sql($userID);
+		$sanitisedAccountAID = Convert::raw2sql($accountAID);
+		$sanitisedAccountBID = Convert::raw2sql($accountBID);
+		$sanitisedAmount = Convert::raw2sql($amount);
+		$sanitisedToken = Convert::raw2sql($token);
+
+		// Check the User is the one with the token		
+		$userSession = UserSession::get()->filter(array(
+			'Token' => $sanitisedToken
+			))[0];
+		
+		if($userSession != null){
+			$actaulUserID = $userSession->UserID;
+
+			if (strcmp($actaulUserID,$sanitisedUserID)===0){
+				
+				//Gets the accounts
+				$accountA = Account::get()->byID($sanitisedAccountAID);
+				$accountB = Account::get()->byID($sanitisedAccountBID);
+		
+				//Checks if the accounts are owned by the same person
+				if($accountA != null && $accountA != null){
+					$accountAOwner = $accountA->UserID;
+					$accountBOwner = $accountB->UserID;
+					
+					if( $userID =!($accountAOwner && $accountBOwner)){
+						return new TransferOutput(null,null,null,false);
+					}
+				}
+
+				// Check the user has available funds left in accountA inc overdraft
+				
+				if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
+				
+					// Transfer the money to the account
+					$accountA->Balance = $accountA->Balance - amount;
+					$accountA->write();
+					$accountB->Balance = $accountB->Balance + amount;
+					$accountB->write();
+					
+					// Update the user session
+					$userSession->Expiry = $userSession->Expiry + 600;
+					return new TransferOutput($accountA,$accountB,$sanitisedAmount,true);
+				
+				}
+			}
+
+		}
+		return new TransferOutput(null,null,null,false);
+
+	}
+	
+	
+	//This function gets the current user cookie checks if there is a session and if the session still is active if so it returns the user's ID
+	public function getCurrentUser(){
+	
+	$cookie = Cookie::get('BankingSession');
+	if($cookie != null){
+		
+		$userSession = UserSession::get()->filter(array(
+			'Token' => Convert::raw2sql($cookie)
+			))[0];
+		
+		if($userSession != null){
+			
+			$expiry = $userSession->Expiry;
+			
+			if($expiry > Time()){
+				return $userSession->UserID;
+			
+			}
+		
+		}
+	
+	
+	}
+	return null;
 	
 	
 	}

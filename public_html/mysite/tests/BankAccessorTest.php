@@ -164,4 +164,53 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','paw',$array)->didPass());
     }
 	
+	/*
+	*
+	* Tests for getCurrentUser()
+	*
+	*/
+	
+	public function testGetCurrentUserCorrectUser() {
+		
+		$accessor2 = new BankAccessor();
+		$expected = 2;
+	    $accessor2->login('Rob','password2');
+	   
+	   
+		$this->assertEquals($expected, $accessor2->getCurrentUser());
+    }
+	
+	public function testGetCurrentUserIncorrectUser() {
+		
+		$accessor3 = new BankAccessor();
+		$expected = 1;
+	    $accessor3->login('Rob','password2');
+	   
+	   
+		$this->assertNotEquals($expected, $accessor3->getCurrentUser());
+    }
+	
+	/*
+	*
+	* Tests for Transfer()
+	*
+	*/
+	
+	
+	/*
+	*
+	* Tests for SQL injection in Login()
+	*
+	*/
+	
+	
+	public function testSQLInjectionLogin() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+	   
+		$this->assertEquals($expected, $accessor->login('Marin; DROP TABLE Users','password')->getUser());
+    }
+	
+	
 }

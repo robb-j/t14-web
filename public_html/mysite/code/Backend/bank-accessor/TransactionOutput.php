@@ -10,8 +10,8 @@
 		//This constructor takes in these parameters and sets the relevant fields
 		public function __construct( $account, $transactions ){
 		
-			setAccount($account);
-			setTransactions($transactions);
+			$this->setAccount($account);
+			$this->setTransactions($transactions);
 
 		}
 		

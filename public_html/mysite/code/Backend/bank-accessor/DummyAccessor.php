@@ -50,7 +50,10 @@ class DummyAccessor implements BankInterface {
 	
 	
 	}
-
+	
+	public function getCurrentUser(){
+	
+	}
 
 }
 ?>
