@@ -115,7 +115,7 @@ class BankAccessor extends Object implements BankInterface {
 				$arrayList->push(Product::get()->byID($theRowID));
 			}
 			
-			$user->NewProducts = $arrayList;
+			$user->NewProducts = $products;
 			
 			//set the user session 
 			$token = $this->generateToken();
