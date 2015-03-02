@@ -51,7 +51,7 @@ class DummyAccessor extends Object implements BankInterface {
 	
 	}
 	
-	public function getCurrentUser(){
+	public function getCurrentSession(){
 	
 	}
 
