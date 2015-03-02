@@ -1,8 +1,15 @@
 <?php
 
+/*
+* This phpCrypt program is open source software found at https://github.com/gilfether/phpcrypt
+* "phpCrypt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."
+*/
+include_once("phpcrypt-master/phpCrypt.php");
+use PHP_Crypt\PHP_Crypt as PHP_Crypt;
+
 class BankAccessor extends Object implements BankInterface {
 
-	
+		
 
 	public function loginFromMobile( $username, $passwordBits, $indexes ){
 		
@@ -315,6 +322,19 @@ class BankAccessor extends Object implements BankInterface {
 	}
 	
 	private function decrypt( $password){
+		
+		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
+
+		$data = "Password";
+		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
+
+		$iv = $crypt->createIV();
+		$encrypt = $crypt->encrypt($data);
+
+		echo "|".$encrypt."|";
+		$crypt->IV($iv);
+		$decrypt = $crypt->decrypt($encrypt);
+		echo "|".$decrypt."|";
 	
 		// decrypt the AES password
 		// return password
