@@ -249,7 +249,7 @@ class BankAccessor extends Object implements BankInterface {
 	
 	
 	//This function gets the current user cookie checks if there is a session and if the session still is active if so it returns the user's ID
-	public function getCurrentSession(){
+	public function getCurrentUser(){
 	
 	$cookie = Cookie::get('BankingSession');
 	if($cookie != null){
@@ -264,7 +264,7 @@ class BankAccessor extends Object implements BankInterface {
 			
 			if($expiry > Time()){
 				
-				return $userSession;
+				return $userSession->User();
 				
 				
 			}

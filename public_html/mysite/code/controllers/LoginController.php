@@ -75,8 +75,7 @@ class LoginController extends Controller {
 		}
 		else {
 			
-			// If the login failed, add a cooke and redirect to /banking
-			Cookie::set("BankingSession", $output->getToken(), 10);
+			// If the login failed, redirect back to /banking
 			return $this->redirect("banking/");
 		}
 	}
