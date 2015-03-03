@@ -2,9 +2,13 @@
 
 class MobileApiController extends Controller {
 
+	private static $allowed_actions = array(
+        'login'
+    );
+
 	public function login(SS_HTTPRequest $request){
 	
-		$username = $request->param('username');
+		/*$username = $request->param('username');
 		$password = $request->param('passwordBits');
 		$indexs = $request->param('indexes');
 	
@@ -13,8 +17,8 @@ class MobileApiController extends Controller {
 		
 		$this->response->setBody(json_encode( $loginOutput));
 		$this->response->addHeader("Content-type", "application/json");
-		return $this->response.
-
+		return $this->response.*/
+		return "Hello World";
 		
 	}
 
