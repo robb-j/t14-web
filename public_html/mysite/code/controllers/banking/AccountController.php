@@ -14,6 +14,9 @@ class AccountController extends BankController {
 	
 	public function Content() {
 		
+		$this->NewProducts = BankAccessor::create()->getNewProductsForUser($this->CurrentUser);
+		
+		
 		// Render the Account template
 		return $this->renderWith("AccountContent");
 	}

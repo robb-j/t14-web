@@ -35,7 +35,7 @@
 			
 			<!-- The main part of the side, using a bootstrap container http://getbootstrap.com/css/#overview-container -->
 			<div class="container">
-				<div class="content-container">
+				<div class="main-container">
 					<div class="row">
 						
 						

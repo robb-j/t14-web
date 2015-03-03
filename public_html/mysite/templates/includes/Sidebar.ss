@@ -1,11 +1,10 @@
-<div class="sidebar-outer">
-	
+<div class="sidebar">
 	
 	
 	<!-- A Welcom message -->
 	<div class="sidebar-section">
 		<div class="welcome-message">
-			<p> Hello, $CurrentUser.FirstName </p>
+			<h3> Hello, $CurrentUser.FirstName </h3>
 		</div>
 	</div>
 	
@@ -14,21 +13,21 @@
 	<div class="sidebar-section">
 		
 		
-		<h3> My Accounts </h3>
+		<h3> Accounts </h3>
 		
 		
 		<div class="accounts-table">
 			
 			<% loop $CurrentUser.Accounts %>
-				<div class="account-row">
+				<div class="sidebar-row">
 					
 					<div class="row">
-						<div class="col-xs-8">
+						<div class="col-xs-7">
 							<p> $AccountType </p>
 						</div>
 						
-						<div class="col-xs-4">
-							<p> $Balance </p>
+						<div class="col-xs-5">
+							<p class="item-right money"> $Balance </p>
 						</div>
 					</div>
 					
@@ -39,5 +38,5 @@
 		
 	</div>
 	
-	
+
 </div>

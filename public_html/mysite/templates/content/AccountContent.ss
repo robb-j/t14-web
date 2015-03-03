@@ -9,10 +9,12 @@
 		<div class="row">
 			
 			<!-- The Heading on the left -->
-			<div class="col-xs-10"> <h2> My Accounts </h2></div>
+			<div class="col-xs-9"> <h2> My Accounts </h2></div>
 			
 			<!-- The Transfer button to the right -->
-			<div class="col-xs-2"><a href="banking/transfer"> Transfer </a></div>
+			<div class="col-xs-3">
+				<div class="light-button"> <a href="banking/transfer"> Transfer </a> </div>
+			</div>
 			
 		</div>
 		
@@ -59,7 +61,22 @@
 		
 		<!-- The table of new products for the given user -->
 		<div class="products-table data-table">
-			<p> List new products here </p>
+			
+			<% loop $NewProducts %>
+				
+				<div class="data-row <% if Last %>last-row<% end_if %>">
+					
+					<a href="banking/product/$ID">
+						
+						<p> $Title </p>
+					</a>
+					
+				</div>
+				
+				
+			<% end_loop %>
+			
+			
 		</div>
 	</div>
 	
