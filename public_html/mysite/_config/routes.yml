@@ -4,6 +4,7 @@ After: 'framework/routes'
 ---
 Director:
   rules:
+	'bankapi/': 'MobileApiController'
     'banking/account/$ID': 'AccountDetailController'
     'banking': 'AccountController'
     'login': 'LoginController'

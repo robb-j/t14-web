@@ -53,7 +53,7 @@ class BankAccessor extends Object implements BankInterface {
 			$databasePass = $user->Password;
 			
 			//	If the password is the correct length, there are 3 indexes and the password matches the one on the database
-			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes) ){
+			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$sanitisedUsername) ){
 				
 				//	This gets all of the accounts from the user
 				$accounts = $user->Accounts();
@@ -99,7 +99,7 @@ class BankAccessor extends Object implements BankInterface {
 		}
 
 		//Send password to be decrypted
-		if($this->checkPassword($databasePass, $password) === true){
+		if($this->checkPassword($databasePass, $password,$sanitisedUsername) === true){
 		
 			//This returns the first user as we are assuming there is no duplicate usernames
 			$user = User::get()->filter(array(
@@ -280,7 +280,7 @@ class BankAccessor extends Object implements BankInterface {
                                    Where P.ID NOT IN  
 								   (Select Product.ID 
 								   From Product, User, Account
-								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username <> \'' . Convert::raw2sql($user->Username)  . '\' )');
+								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username = \'' . Convert::raw2sql($user->Username)  . '\' )');
 
 			$arrayList = new ArrayList();	
 			foreach($products as $row) {
@@ -292,10 +292,10 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
-	private function checkPassword( $databasePassword, $givenPassword){
+	private function checkPassword( $databasePassword, $givenPassword,$username){
 	
 		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
-		$iv = "75238a690bcb3f78";
+		$iv = substr(openssl_digest($username, 'sha512'), 0, 16);
 
 		$data = $givenPassword;
 		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
@@ -305,9 +305,9 @@ class BankAccessor extends Object implements BankInterface {
 	    
 		$pass = base64_encode($encrypted);
 	
-		$plainpass = $this->decrypt($pass);
+		$plainpass = $this->decrypt($pass,$username);
 		// call the decrypt of password 
-		$plaindatabasePassword = $this->decrypt($databasePassword);
+		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 
 		// check return
 		// pass back fail/pass
@@ -325,10 +325,10 @@ class BankAccessor extends Object implements BankInterface {
 	
 	}
 	
-	private function checkPasswordMobile( $databasePassword, $givenPassword, $digits){
+	private function checkPasswordMobile( $databasePassword, $givenPassword, $digits,$username){
 	
 		// call the decrypt of password 
-		$plaindatabasePassword = $this->decrypt($databasePassword);
+		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 		// check return with positions
 		
 		if(strcmp($plaindatabasePassword{$digits[0]},$givenPassword[0]) ===0 && 
@@ -348,10 +348,13 @@ class BankAccessor extends Object implements BankInterface {
 	
 	}
 	
-	private function decrypt( $password){
+	private function decrypt( $password,$username){
 		
 		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
-		$iv = "75238a690bcb3f78";
+		//$iv = "75238a690bcb3f78";
+		
+		
+		$iv = substr(openssl_digest($username, 'sha512'), 0, 16);
 		
 		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
 

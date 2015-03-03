@@ -26,8 +26,9 @@ class User extends DataObject {
 	function onBeforeWrite(){
 	
 		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
-		$iv = "75238a690bcb3f78";
-
+		//$iv = "75238a690bcb3f78";
+		$iv = substr(openssl_digest($this->getField("Username"), 'sha512'), 0, 16);
+		
 		$data = $this->getField("Password");
 		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
 
