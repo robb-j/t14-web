@@ -6,5 +6,6 @@ Director:
   rules:
     '': 'AccountController'
     'banking': 'AccountController'
+    'banking/account/$ID': 'AccountDetailController'
     'login': 'LoginController'
     'image/$ImageId/$Width/$Height': 'ImageController'
