@@ -14,7 +14,6 @@ class AccountDetailController extends BankController {
 	
 	public function Content() {
 		
-	// Render the Account template
-	return "Hello World, I made a controller";
+		return "Hello World, I made a controller";
 	}
 }
