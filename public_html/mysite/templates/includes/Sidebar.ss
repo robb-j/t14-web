@@ -3,10 +3,11 @@
 	
 	
 	<!-- A Welcom message -->
-	<div class="welcome-message">
-		<p> Hello, $CurrentUser.FirstName </p>
+	<div class="sidebar-section">
+		<div class="welcome-message">
+			<p> Hello, $CurrentUser.FirstName </p>
+		</div>
 	</div>
-	
 	
 	
 	<!-- The section of accounts for the user -->
@@ -18,7 +19,7 @@
 		
 		<div class="accounts-table">
 			
-			<% loop $CurrentUser.Accounts %>				
+			<% loop $CurrentUser.Accounts %>
 				<div class="account-row">
 					
 					<div class="row">

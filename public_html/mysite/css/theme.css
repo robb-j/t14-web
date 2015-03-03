@@ -1,0 +1,116 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
+
+
+/*
+ * 	General Styles
+ */
+.page-container h2 {
+	
+	margin: 0px 50px 5px 50px;
+	font-family: 'Open Sans';
+	letter-spacing: 10;
+	text-transform: uppercase;
+	color: #666666;
+}
+
+.page-container p {
+	
+	font-family: 'Open Sans';
+	margin: 0px;
+}
+
+.page-container a {
+	color: black;
+}
+
+.page-container, html {
+	background: #EEEEEE;
+}
+
+
+
+
+/*
+ * 	The Navigation Bar
+ */
+.navigation-bar {
+	background: white;
+}
+
+.navigation-bar .navigation-bar-inner {
+	
+	width: 90%;
+	min-width: 900px;
+	margin: auto;
+	border-bottom: 5px solid #1D654A;
+}
+
+.navigation-bar .navigation-bar-inner .navbar-item {
+	
+	margin: 30px;
+	font-size: 28;
+}
+
+.navigation-bar .navigation-bar-inner .navbar-item p {
+	font-size: 32px;
+}
+
+
+
+/*
+ * 	The Sidebar
+ */
+.sidebar-outer {	
+	margin-top: 50px;
+}
+
+.sidebar-outer .sidebar-section {
+	
+	margin-bottom: 40px;
+	padding-bottom: 10px;
+	border-bottom: 3px solid #1D654A;
+}
+
+.sidebar-outer .welcome-message p {
+	font-size: 32px;
+	text-align: center;
+}
+
+
+
+
+
+/*
+ *	General Styling
+ */
+.content-container {
+	background: white;
+	height: 100%;
+	margin-bottom: 100px;
+}
+.main-section {
+	
+	margin-top: 50px;
+}
+
+.main-section .data-table {
+	
+	margin: 0px 50px;
+	background-color: #ECF0F2;
+	
+	padding: 0px 15px;
+}
+
+.main-section .data-table .data-row {
+	border-bottom: 3px solid #1D654A;
+	padding: 20px 0px;
+	margin: 0px 25px;
+}
+
+.main-section .data-table .data-row.last-row {
+	border-bottom: 0px;
+}
+
+.main-section .data-table .data-row p {
+	font-size: 28px;
+}

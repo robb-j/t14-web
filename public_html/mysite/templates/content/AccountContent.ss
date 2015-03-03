@@ -2,7 +2,7 @@
 	
 	
 	<!-- The Accounts section -->
-	<div class="accounts-section">
+	<div class="accounts-section main-section">
 		
 		
 		<!-- The Heading & Transfer button -->
@@ -18,13 +18,13 @@
 		
 		
 		<!-- The Table of Accounts -->
-		<dvi class="account-table section">
+		<div class="account-table data-table">
 			
 			
 			<!-- Loop through the user's accounts -->
 			<% loop $CurrentUser.Accounts %>
 			
-				<div class="account-row">
+				<div class="account-row data-row <% if Last %>last-row<% end_if %>">
 					
 					<!-- Make this link to the account page -->
 					<a href="banking/account/$ID">
@@ -32,12 +32,12 @@
 							
 							<!-- The name of the Account -->
 							<div class="col-xs-10">
-								<div class="account-name"> $AccountType </div>
+								<div class="account-name"><p> $AccountType</p></div>
 							</div>
 							
 							<!-- The Balance of the account on the right -->
 							<div class="col-xs-2">
-								<div class="account-balance"> $Balance </div>
+								<div class="account-balance"><p> $Balance </p></div>
 							</div>
 						</div>
 					</a>
@@ -52,13 +52,13 @@
 	
 	
 	<!-- The New Products Section -->
-	<div class="products-section">
+	<div class="products-section main-section">
 		
 		<!-- The Heading -->
 		<h2> New Products </h2>
 		
 		<!-- The table of new products for the given user -->
-		<div class="products-table section">
+		<div class="products-table data-table">
 			<p> List new products here </p>
 		</div>
 	</div>

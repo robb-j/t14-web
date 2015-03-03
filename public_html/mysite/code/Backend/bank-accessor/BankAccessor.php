@@ -312,10 +312,10 @@ class BankAccessor extends Object implements BankInterface {
 		// check return
 		// pass back fail/pass
 		if( strcmp($plaindatabasePassword, $plainpass) === 0){
-			$plaindatabasePassword = null;
+			$plaindatabasePassword = "";
 			return true;
 		}else{
-			$plaindatabasePassword = null;
+			$plaindatabasePassword = "";
 			return false;
 		
 		}
@@ -335,10 +335,10 @@ class BankAccessor extends Object implements BankInterface {
 		   strcmp($plaindatabasePassword{$digits[1]},$givenPassword[1])===0 && 
 		   strcmp($plaindatabasePassword{$digits[2]},$givenPassword[2])===0){
 		
-			$plaindatabasePassword = null;
+			$plaindatabasePassword = "";
 			return true;
 		}else{
-			$plaindatabasePassword = null;
+			$plaindatabasePassword = "";
 			return false;
 		
 		}
