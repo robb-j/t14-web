@@ -32,11 +32,19 @@ class BankAccessorTest extends SapphireTest {
 	public function testLoginCorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
+		$expected = "testUser";
+	   $gotten = $accessor->login('testUser',"MyPassword")->getUser()->Username;
+		$this->assertEquals($expected, $gotten);
+    }
+	
+	/*public function testLoginCorrectUsernameCorrectPassword() {
+		
+		$accessor = new BankAccessor();
 		$expected = "Martin";
 	   
 		$this->assertEquals($expected, $accessor->login('Martin','password')->getUser()->Username);
     }
-	/*
+	
 	public function testLoginIncorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
@@ -83,8 +91,18 @@ class BankAccessorTest extends SapphireTest {
 	* Tests for LoginFromMobile()
 	*
 	*/
-	/*
+	
 	public function testLoginFromMobileCorrectUsernameCorrectPassword() {
+		
+		$accessor = new BankAccessor();
+		$expected = "testUser";
+		$array = array(0,1,2);
+	   $gotten = $accessor->loginFromMobile('testUser','MyP',$array)->getUser()->Username;
+		$this->assertEquals($expected, $gotten );
+    }
+	
+	
+	/*public function testLoginFromMobileCorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
 		$expected = "Martin";
@@ -221,14 +239,14 @@ class BankAccessorTest extends SapphireTest {
 	*
 	*/
 	
-	
+	/*
 	public function testSQLInjectionLogin() {
 		
 		$accessor = new BankAccessor();
 		$expected = null;
 	   
 		$this->assertEquals($expected, $accessor->login('Marin; DROP TABLE Users','password')->getUser());
-    }
+    }*/
 	
 	
 }
