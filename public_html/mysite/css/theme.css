@@ -45,32 +45,46 @@
 
 
 
+
 /*
- * 	The Navigation Bar
+ * 	Navigation bar
  */
 .navigation-bar {
 	background: white;
 }
 
+/* Need to make it go into horizontal menu on small viewports or resize the text dynamically */
 .navigation-bar .navigation-bar-inner {
-	
-	width: 90%;
-	min-width: 900px;
+	width: 100%;
+	min-width: 960px;
 	margin: auto;
 	border-bottom: 5px solid #1D654A;
 }
-
+/* resizes really badly */
 .navigation-bar .navigation-bar-inner .navbar-item {
-	
 	margin: 30px;
-	font-size: 28;
+	text-transform: uppercase;
+	
+	
 }
-
+/*change this to green only when page is active not hover*/
+.col-xs-2 a:hover {
+	color:#196749;
+	text-decoration:none;
+	font-weight: bold;
+}
+/* Test if resizes correctly */
+/* whats the min size? */
 .navigation-bar .navigation-bar-inner .navbar-item p {
-	font-size: 32px;
+	font-size: 2.5vw;
 }
 
-
+#logo {
+	margin:10px 10px;
+	position:relative;
+	width:155px;
+	height:85px;
+}
 
 
 
