@@ -11,23 +11,24 @@ class MobileApiController extends Controller {
 	    return "Bank Api Index";
     }
 
-	public function login(){
+	public function login(SS_HTTPRequest $request){
 	
-		/*$username = $request->param('username');
-		$password = $request->param('passwordBits');
+		$username = $request->param('username');
+		$password = $request->param('password');
 		$indexs = $request->param('indexes');
 	
 		$accessor = new BankAccessor();
-		$loginOutput = $accessor->login($username,$password,$indexs);
+		$loginOutput = $accessor->loginFromMobile($username,$password,$indexs);
 		
+		//$response = new SS_HTTPResponse();
 		$this->response->setBody(json_encode( $loginOutput));
 		$this->response->addHeader("Content-type", "application/json");
-		return $this->response.*/
-		
-		
-		$this->response->setBody("Hello World");
-		
 		return $this->response;
+		
+		
+		//$this->response->setBody("Hello World");
+		
+		//return $this->response;
 		
 	}
 
