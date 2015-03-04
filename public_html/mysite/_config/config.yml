@@ -27,5 +27,16 @@ SiteConfig:
 LeftAndMain:
   extensions:
     - 'mysiteLeftAndMainExtension'
-#  extra_requirements_css:
-#    - 'mysite/css/cms.css'
+
+
+# API access
+User:
+  api_access: true
+Product:
+  api_access: true
+Account:
+  api_access: true
+Transaction:
+  api_access: true
+UserSession:
+  api_access: true
