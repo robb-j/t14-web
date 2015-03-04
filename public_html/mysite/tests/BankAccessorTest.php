@@ -96,8 +96,8 @@ class BankAccessorTest extends SapphireTest {
 		
 		$accessor = new BankAccessor();
 		$expected = "testUser";
-		$array = array(0,1,2);
-	   $gotten = $accessor->loginFromMobile('testUser','MyP',$array)->getUser()->Username;
+		$array = array(0,1,5);
+	   $gotten = $accessor->loginFromMobile('testUser','Mys',$array)->getUser()->Username;
 		$this->assertEquals($expected, $gotten );
     }
 	

@@ -37,6 +37,8 @@ class BankAccessor extends Object implements BankInterface {
 	*/
 	public function loginFromMobile( $username, $passwordBits, $indexes ){
 		
+		
+		
 		//	Check for SQL injection 
 		$sanitisedUsername = Convert::raw2sql($username);
 		
@@ -46,14 +48,14 @@ class BankAccessor extends Object implements BankInterface {
 			'Username' => $sanitisedUsername
 		))[0];
 		
-		
+	
 		if($user !== null){
-		
+			
 			//	This gets the password held in the database
 			$databasePass = $user->Password;
 			
 			//	If the password is the correct length, there are 3 indexes and the password matches the one on the database
-			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$sanitisedUsername) ){
+			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username) ){
 				
 				//	This gets all of the accounts from the user
 				$accounts = $user->Accounts();
@@ -70,9 +72,6 @@ class BankAccessor extends Object implements BankInterface {
 				$userSession->Expiry = (Time() + 600);
 				$userSession->Token = $token;
 				$userSession->write();
-				
-				//	Create the BankingSession Cookie
-				Cookie::set('BankingSession', $token, 0);
 				
 				// Return a successful LoginOutput object
 				return new LoginOutput($user, $accounts, $products, $token , true);
@@ -329,12 +328,13 @@ class BankAccessor extends Object implements BankInterface {
 	
 		// call the decrypt of password 
 		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
-		// check return with positions
 		
+		// check return with positions
 		if(strcmp($plaindatabasePassword{$digits[0]},$givenPassword[0]) ===0 && 
 		   strcmp($plaindatabasePassword{$digits[1]},$givenPassword[1])===0 && 
 		   strcmp($plaindatabasePassword{$digits[2]},$givenPassword[2])===0){
-		
+	
+	
 			$plaindatabasePassword = "";
 			return true;
 		}else{

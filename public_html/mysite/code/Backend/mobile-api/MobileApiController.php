@@ -13,17 +13,38 @@ class MobileApiController extends Controller {
 
 	public function login(SS_HTTPRequest $request){
 	
-		$username = $request->param('username');
-		$password = $request->param('password');
-		$indexs = $request->param('indexes');
-	
-		$accessor = new BankAccessor();
-		$loginOutput = $accessor->loginFromMobile($username,$password,$indexs);
+	  /*$paramElement = $request->allParams();
+	  echo"all= |".sizeof($paramElement)."|";*/
+	  
+		$indexes = new ArrayList();
+		$username = $request->postVar('username');
+		$password = $request->postVar('password');
+		$indexes->push ( $request->postVar('indexes0'));
+		$indexes->push ( $request->postVar('indexes1')); 
+		$indexes->push ($request->postVar('indexes2')); 
 		
+
+		
+			
+			
+		
+		/*echo" user= |".$username."|";
+		echo" pass= |".$password."|";
+		echo" indexes= |".sizeof($indexes)."|";*/
+		
+		
+		$loginOutput = BankAccessor::create()->loginFromMobile($username,$password,$indexes);
+		
+		//echo " username|".$loginOutput->getUser()->Username."|";
 		//$response = new SS_HTTPResponse();
-		$this->response->setBody(json_encode( $loginOutput));
-		$this->response->addHeader("Content-type", "application/json");
-		return $this->response;
+		//$this->response->setBody(json_encode( $loginOutput));
+		//$this->response->addHeader("Content-type", "application/json");
+		
+		//return $loginOutput->getUser()->Username;
+		
+		 $response = $this->serializer->serialize( $loginOutput );          
+         return $this->answer($response);
+		
 		
 		
 		//$this->response->setBody("Hello World");
