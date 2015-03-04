@@ -3,7 +3,7 @@
 class MobileApiController extends Controller {
 
 	private static $allowed_actions = array(
-        'login', 'loadTransactions'
+        'login', 'loadTransactions','makeTransfer'
     );
     
     public function init() {
@@ -31,6 +31,7 @@ class MobileApiController extends Controller {
 			$request->postVar('index2'), 
 			$request->postVar('index3')
 		);
+
 		
 		
 		// Try to sign in with them
@@ -96,6 +97,47 @@ class MobileApiController extends Controller {
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
+	}
+	
+	public function makeTransfer(SS_HTTPRequest $request) {
+	
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$accountAID = $request->postVar("accountAID");
+		$accountBID = $request->postVar("accountBID");
+		$amount = $request->postVar("amount");
+		$token = $request->postVar("token");
+
+		
+		
+		// Try to make the transfer
+		$output = BankAccessor::create()->makeTransfer($userID, $accountAID, $accountBID, $amount, $token);
+		
+		$data = null;
+		
+		// Decide what data to give back
+		if ($output->didPass()) {
+			
+			$data = array(
+				"payerAcc" => $output->getPayerAccount(),
+				"payeeAcc" => $output->getPayeeAccount(),
+				"amount" => $output->getAmount()
+			);
+		}
+		else {
+			
+			$data = array(
+				"Error" => "Error making transfer"
+			);
+		}
+		
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	
+	
 	}
 
 

@@ -55,7 +55,7 @@ class BankAccessor extends Object implements BankInterface {
 			$databasePass = $user->Password;
 			
 			//	If the password is the correct length, there are 3 indexes and the password matches the one on the database
-			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username) ){
+			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $indexes[0]!=null && $indexes[1]!=null && $indexes[2]!=null && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username) ){
 				
 				//	This gets all of the accounts from the user
 				$accounts = $user->Accounts();
@@ -201,7 +201,7 @@ class BankAccessor extends Object implements BankInterface {
 			'Token' => $sanitisedToken
 			))[0];
 		
-		if($userSession != null){
+		if($userSession != null && $sanitisedAccountAID != null && $sanitisedAccountBID != null && $sanitisedAmount>=0 && $sanitisedAmount !=null ){
 			$actaulUserID = $userSession->UserID;
 
 			if (strcmp($actaulUserID,$sanitisedUserID)===0){
@@ -225,9 +225,9 @@ class BankAccessor extends Object implements BankInterface {
 				if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
 				
 					// Transfer the money to the account
-					$accountA->Balance = $accountA->Balance - amount;
+					$accountA->Balance = $accountA->Balance - $amount;
 					$accountA->write();
-					$accountB->Balance = $accountB->Balance + amount;
+					$accountB->Balance = $accountB->Balance + $amount;
 					$accountB->write();
 					
 					// Update the user session
@@ -330,7 +330,7 @@ class BankAccessor extends Object implements BankInterface {
 		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 		
 		// check return with positions
-		if(strcmp($plaindatabasePassword[$digits[0]],$givenPassword[0]) ===0 && 
+		if(strcmp($plaindatabasePassword[$digits[0]],$givenPassword[0])===0 && 
 		   strcmp($plaindatabasePassword[$digits[1]],$givenPassword[1])===0 && 
 		   strcmp($plaindatabasePassword[$digits[2]],$givenPassword[2])===0){
 	

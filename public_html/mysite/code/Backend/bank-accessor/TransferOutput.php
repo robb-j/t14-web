@@ -14,26 +14,26 @@
 		
 			$this->setPayerAccount($payerAccount);
 			$this->setPayeeAccount($payeeAccount);
-			$this->setAmountAccount($ammount );
+			$this->setAmount($ammount );
 			$this->setdidPass($passed);
 			
 		}
 		
 		public function getPayerAccount(){
 			
-			return $payerAccount;
+			return $this->payerAccount;
 			
 		}
 		
 		public function getPayeeAccount(){
 			
-			return $payeeAccount;
+			return $this->payeeAccount;
 			
 		}
 		
 		public function getAmount(){
 			
-			return $amount;
+			return $this->amount;
 			
 		}
 		
