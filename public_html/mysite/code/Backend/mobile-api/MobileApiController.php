@@ -3,7 +3,7 @@
 class MobileApiController extends Controller {
 
 	private static $allowed_actions = array(
-        'login', 'loadTransactions','makeTransfer'
+        'login', 'loadTransactions','makeTransfer','logout'
     );
     
     public function init() {
@@ -52,7 +52,7 @@ class MobileApiController extends Controller {
 		else {
 			
 			$data = array(
-				"Error" => "Error logging in"
+				"Error" => $output->getReason()
 			);
 		}
 		
@@ -137,6 +137,16 @@ class MobileApiController extends Controller {
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
 	
+	
+	}
+	
+	public function logout(SS_HTTPRequest $request){
+	
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		
+		// Try to make the transfer
+		$output = BankAccessor::create()->logout($userID ,$token);
 	
 	}
 

@@ -16,15 +16,18 @@
 		// Whether this interaction passed or failed
 		private $didPass;
 		
+		private $reason;
+		
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function __construct( $user, $accounts, $allProducts, $token, $passed = false){
+		public function __construct( $user, $accounts, $allProducts, $token, $passed = false, $reason){
 		
 			$this->setUser($user);
 			$this->setAccounts($accounts);
 			$this->setAllProducts($allProducts);
 			$this->setToken($token);
 			$this->setdidPass($passed);
+			$this->setReason($reason);
 		}
 		
 		
@@ -59,6 +62,11 @@
 			return $this->allProducts;
 		}
 		
+		public function getReason(){
+			
+			return $this->reason;
+		}
+		
 		
 		//These are private as once they are set we don't want them to be able to change
 		private function setUser($user){
@@ -87,6 +95,11 @@
 		private function setAllProducts($allProducts) {
 			
 			$this->allProducts = $allProducts;
+		}
+		
+		private function setReason($reason){
+		
+			$this->reason = $reason;
 		}
 	}
 ?>

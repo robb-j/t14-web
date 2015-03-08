@@ -52,33 +52,39 @@ class BankAccessor extends Object implements BankInterface {
 			//	This gets the password held in the database
 			$databasePass = $user->Password;
 			//	If the password is the correct length, there are 3 indexes and the password matches the one on the database
-			if(  strlen($passwordBits) === 3 &&  sizeof($indexes)===3 /*&& $indexes[0] != null && $indexes[1] != null && $indexes[2] != null*/ && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username)){
+			if(  strlen($passwordBits) === 3 &&  sizeof($indexes)===3 /*&& $indexes[0] != null && $indexes[1] != null && $indexes[2] != null*/ 
+			&& $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username ) 
+			){
 				
-				
-				//	This gets all of the accounts from the user
-				$accounts = $user->Accounts();
-				
-				//	This gets all of the products the user doesn't already have
-				$products = $this->getNewProductsForUser($user);
-				
-				//	Generate a new random authentication token
-				$token = $this->generateToken();
-				
-				//	Set the user session and gives then 10mins until it expires
-				$userSession= UserSession::create();
-				$userSession->UserID = $user->ID;
-				$userSession->Expiry = (Time() + 600);
-				$userSession->Token = $token;
-				$userSession->write();
-				
-				// Return a successful LoginOutput object
-				return new LoginOutput($user, $accounts, $products, $token , true);
+				if( !$this->checkIfUserLoggedIn($user)){
+					//	This gets all of the accounts from the user
+					$accounts = $user->Accounts();
+					
+					//	This gets all of the products the user doesn't already have
+					$products = $this->getNewProductsForUser($user);
+					
+					//	Generate a new random authentication token
+					$token = $this->generateToken();
+					
+					//	Set the user session and gives then 10mins until it expires
+					$userSession= UserSession::create();
+					$userSession->UserID = $user->ID;
+					$userSession->Expiry = (Time() + 600);
+					$userSession->Token = $token;
+					$userSession->write();
+					
+					// Return a successful LoginOutput object
+					return new LoginOutput($user, $accounts, $products, $token , true,"Success");
+				}else{
+					// Return an unsuccessful LoginOutput object
+					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
+				}
 			}
 			
 		}
 		
 		// Return an unsuccessful LoginOutput object
-		return new LoginOutput(null, null, null, null);
+		return new LoginOutput(null, null, null, null,false,"Incorrect username or password");
 	}
 	
 	public function login( $username, $password){
@@ -96,26 +102,32 @@ class BankAccessor extends Object implements BankInterface {
 			$databasePass = $user->Password;
 
 			//Send password to be decrypted
-			if($this->checkPassword($databasePass, $password,$sanitisedUsername) === true){
+			if($this->checkPassword($databasePass, $password,$sanitisedUsername) === true && !$this->checkIfUserLoggedIn($user)){
 				
-				//This returns a HasManyList use [x] to access elements
-				$accounts = $user->Accounts();
-			
-				$products = $this->getNewProductsForUser($user);
+				if( !$this->checkIfUserLoggedIn($user)){
 				
+					//This returns a HasManyList use [x] to access elements
+					$accounts = $user->Accounts();
 				
-				//set the user session 
-				$token = $this->generateToken();
+					$products = $this->getNewProductsForUser($user);
+					
+					
+					//set the user session 
+					$token = $this->generateToken();
 
-				$userSession= UserSession::create();
-				$userSession->UserID = $user->ID;
-				$userSession->Expiry = (Time() + 600);
-				$userSession->Token = $token;
-				$userSession->write();
-				
-				Cookie::set('BankingSession', $token, 0);
-				
-				return new LoginOutput($user, $accounts, $products, $token, true);
+					$userSession= UserSession::create();
+					$userSession->UserID = $user->ID;
+					$userSession->Expiry = (Time() + 600);
+					$userSession->Token = $token;
+					$userSession->write();
+					
+					Cookie::set('BankingSession', $token, 0);
+					
+					return new LoginOutput($user, $accounts, $products, $token, true);
+				}else{
+					// Return an unsuccessful LoginOutput object
+					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
+				}
 			}
 		}
 
@@ -265,6 +277,22 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
+	public function logout($userID ,$token){
+	
+	
+		$userSession = UserSession::get()->filter(array(
+			'UserID' => Convert::raw2sql($userID),
+			'Token' => Convert::raw2sql($token)
+		))[0];
+		
+		if($userSession != null){
+			$userSession->Expiry = Time()-10;
+			$userSession->write();
+			return true;
+		}
+		return false;
+	}
+	
 	private function checkPassword( $databasePassword, $givenPassword,$username){
 	
 		/* 
@@ -358,5 +386,24 @@ class BankAccessor extends Object implements BankInterface {
 		
 		return $token;
 	}
+	private function checkIfUserLoggedIn($user){
+		// Check the User is the one with the token		
+		$userSession = UserSession::get()->filter(array(
+			'UserID' => $user->ID
+		));
+			
+			
+			$count = 0;
+			foreach($userSession as $row) {
+				if($userSession[$count]->Expiry >=Time()){
+					return true;
+				
+				}
+				$count++;
+			}
+			return false;
+	
+	}
+	
 }
 ?>
