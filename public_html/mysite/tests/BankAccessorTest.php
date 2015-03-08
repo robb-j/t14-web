@@ -6,12 +6,15 @@
  */
 class BankAccessorTest extends SapphireTest {
 	
+	
+
 	/**
 	 * @Before
 	 */
 	public function setup() {
 		
 		// Something that happends before EACH test
+		
 	}
 	
 	/**
@@ -28,21 +31,14 @@ class BankAccessorTest extends SapphireTest {
 	* Tests for Login()
 	*
 	*/
+
 	
 	public function testLoginCorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
-		$expected = "testUser";
-	   $gotten = $accessor->login('testUser',"MyPassword")->getUser()->Username;
-		$this->assertEquals($expected, $gotten);
-    }
-	
-	/*public function testLoginCorrectUsernameCorrectPassword() {
-		
-		$accessor = new BankAccessor();
 		$expected = "Martin";
 	   
-		$this->assertEquals($expected, $accessor->login('Martin','password')->getUser()->Username);
+		$this->assertEquals($expected, $accessor->login('Martin','Password')->getUser()->Username);
     }
 	
 	public function testLoginIncorrectUsernameCorrectPassword() {
@@ -50,7 +46,7 @@ class BankAccessorTest extends SapphireTest {
 		$accessor = new BankAccessor();
 		$expected = null;
 	   
-		$this->assertEquals($expected, $accessor->login('NotMartin','password')->getUser());
+		$this->assertEquals($expected, $accessor->login('NotMartin','Password')->getUser());
     }
 	
 	public function testLoginCorrectUsernameIncorrectPassword() {
@@ -75,7 +71,7 @@ class BankAccessorTest extends SapphireTest {
 		$accessor = new BankAccessor();
 		$expected = true;
 	   
-		$this->assertEquals($expected, $accessor->login('Martin','password')->didPass());
+		$this->assertEquals($expected, $accessor->login('Martin','Password')->didPass());
     }
 	
 	public function testLoginDidPassIncorrectInformation() {
@@ -83,8 +79,8 @@ class BankAccessorTest extends SapphireTest {
 		$accessor = new BankAccessor();
 		$expected = false;
 	   
-		$this->assertEquals($expected, $accessor->login('NotMartin','password')->didPass());
-    }*/
+		$this->assertEquals($expected, $accessor->login('NotMartin','Password')->didPass());
+    }
 	
 	/*
 	*
@@ -95,20 +91,10 @@ class BankAccessorTest extends SapphireTest {
 	public function testLoginFromMobileCorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
-		$expected = "testUser";
-		$array = array(0,1,5);
-	   $gotten = $accessor->loginFromMobile('testUser','Mys',$array)->getUser()->Username;
-		$this->assertEquals($expected, $gotten );
-    }
-	
-	
-	/*public function testLoginFromMobileCorrectUsernameCorrectPassword() {
-		
-		$accessor = new BankAccessor();
 		$expected = "Martin";
 		$array = array(0,1,2);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','pas',$array)->getUser()->Username);
+		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','Pas',$array)->getUser()->Username);
     }
 	
 	public function testLoginFromMobileIncorrectUsernameCorrectPassword() {
@@ -118,7 +104,7 @@ class BankAccessorTest extends SapphireTest {
 	   
 		$array = array(0,1,2);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','pas',$array)->getUser());
+		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Pas',$array)->getUser());
     }
 	
 	public function testLoginFromMobileCorrectUsernameIncorrectPassword() {
@@ -128,7 +114,7 @@ class BankAccessorTest extends SapphireTest {
 	   
 		$array = array(0,1,2);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','paw',$array)->getUser());
+		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','Paw',$array)->getUser());
     }
 	
 	public function testLoginFromMobileIncorrectUsernameIncorrectPassword() {
@@ -138,7 +124,7 @@ class BankAccessorTest extends SapphireTest {
 	   
 		$array = array(0,1,2);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','paw',$array)->getUser());
+		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Paw',$array)->getUser());
     }
 	
 	public function testLoginFromMobileIncorrectPasswordLength() {
@@ -158,7 +144,7 @@ class BankAccessorTest extends SapphireTest {
 	   
 		$array = array(0,1,2,3,4);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','paw',$array)->getUser());
+		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Paw',$array)->getUser());
     }
 	
 	//Need tests to check products and accounts
@@ -169,7 +155,7 @@ class BankAccessorTest extends SapphireTest {
 	   
 		$array = array(0,1,2);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','pas',$array)->didPass());
+		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','Pas',$array)->didPass());
     }
 	
 	public function testLoginFromMobileDidPassIncorrectInformation() {
@@ -179,8 +165,8 @@ class BankAccessorTest extends SapphireTest {
 	   
 	$array = array(0,1,2);
 	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','paw',$array)->didPass());
-    }*/
+		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Paw',$array)->didPass());
+    }
 	
 	/*
 	*
@@ -226,9 +212,6 @@ class BankAccessorTest extends SapphireTest {
 		
 		$accessor3 = new BankAccessor();
 		$expected = "Spotify";
-	    
-	   
-	   
 		$this->assertEquals($expected, $accessor3->loadTransactions( 1, 1,3, 2015, "OwTHze1QqNVllolxp1b2cfG49XdMz2ZXDsX6yDK2nIOtlHu7KxrhWoCpgrbp8Om4" )->getTransactions()[0]->Payee);
     }
 
@@ -239,14 +222,14 @@ class BankAccessorTest extends SapphireTest {
 	*
 	*/
 	
-	/*
+	
 	public function testSQLInjectionLogin() {
 		
 		$accessor = new BankAccessor();
 		$expected = null;
 	   
 		$this->assertEquals($expected, $accessor->login('Marin; DROP TABLE Users','password')->getUser());
-    }*/
+    }
 	
 	
 }

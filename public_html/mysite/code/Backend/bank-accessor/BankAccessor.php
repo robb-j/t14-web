@@ -36,9 +36,7 @@ class BankAccessor extends Object implements BankInterface {
 				was successful which will be false
 	*/
 	public function loginFromMobile( $username, $passwordBits, $indexes ){
-		
-		
-		
+
 		//	Check for SQL injection 
 		$sanitisedUsername = Convert::raw2sql($username);
 		
@@ -53,20 +51,20 @@ class BankAccessor extends Object implements BankInterface {
 			
 			//	This gets the password held in the database
 			$databasePass = $user->Password;
-			
 			//	If the password is the correct length, there are 3 indexes and the password matches the one on the database
-			if( strlen($passwordBits) === 3 && sizeof($indexes)===3 && $indexes[0]!=null && $indexes[1]!=null && $indexes[2]!=null && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username) ){
+			if(  strlen($passwordBits) === 3 &&  sizeof($indexes)===3 /*&& $indexes[0] != null && $indexes[1] != null && $indexes[2] != null*/ && $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username)){
+				
 				
 				//	This gets all of the accounts from the user
 				$accounts = $user->Accounts();
 				
-				//	This gets all of the products the user doesn't already ahve
+				//	This gets all of the products the user doesn't already have
 				$products = $this->getNewProductsForUser($user);
 				
 				//	Generate a new random authentication token
 				$token = $this->generateToken();
 				
-				//	Set the user session
+				//	Set the user session and gives then 10mins until it expires
 				$userSession= UserSession::create();
 				$userSession->UserID = $user->ID;
 				$userSession->Expiry = (Time() + 600);
@@ -88,61 +86,41 @@ class BankAccessor extends Object implements BankInterface {
 		//check for SQL injection 
 		$sanitisedUsername = Convert::raw2sql($username);
 		
-		$databasePass = User::get()->filter(array(
+		$user = User::get()->filter(array(
 			'Username' => $sanitisedUsername
 		))[0];
 		
 		//If there is no user then you can't get the password of a null value
-		if($databasePass !== null){
-			$databasePass = $databasePass->Password;
+		if($user !== null){
+		
+			$databasePass = $user->Password;
+
+			//Send password to be decrypted
+			if($this->checkPassword($databasePass, $password,$sanitisedUsername) === true){
+				
+				//This returns a HasManyList use [x] to access elements
+				$accounts = $user->Accounts();
+			
+				$products = $this->getNewProductsForUser($user);
+				
+				
+				//set the user session 
+				$token = $this->generateToken();
+
+				$userSession= UserSession::create();
+				$userSession->UserID = $user->ID;
+				$userSession->Expiry = (Time() + 600);
+				$userSession->Token = $token;
+				$userSession->write();
+				
+				Cookie::set('BankingSession', $token, 0);
+				
+				return new LoginOutput($user, $accounts, $products, $token, true);
+			}
 		}
 
-		//Send password to be decrypted
-		if($this->checkPassword($databasePass, $password,$sanitisedUsername) === true){
-		
-			//This returns the first user as we are assuming there is no duplicate usernames
-			$user = User::get()->filter(array(
-			'Username' => $sanitisedUsername
-			))[0];
-			
-			//This returns a HasManyList use [x] to access elements
-			$accounts = $user->Accounts();
-			
-			/*
-			*
-			* This is broken not sure how to fix it 
-			*
-			*/
-			$products = $this->getNewProductsForUser($user);
-			
-			
-			//set the user session 
-			$token = $this->generateToken();
-			
-			
-			$userSession= UserSession::create();
-			$userSession->UserID = $user->ID;
-			$userSession->Expiry = (Time() + 600);
-			$userSession->Token = $token;
-			$userSession->write();
-			
-			Cookie::set('BankingSession', $token, 0);
-			
-			return new LoginOutput($user, $accounts, $products, $token, true);
-		
-		}else{
-
-			
-			return new LoginOutput(null, null, null, null);
-		
-		}
-		//If they are equal
-			// generate token
-			// send back loginOutput
-		//else
-			// send back unsuccessful
+		return new LoginOutput(null, null, null, null);
 	}
-	
 	
 	public function loadTransactions( $userID, $accountID, $month, $year, $token ){
 	
@@ -167,24 +145,18 @@ class BankAccessor extends Object implements BankInterface {
 				$start = $sanitisedYear . '-' . $sanitisedMonth . '-0 00:00:00';
 				$end = $sanitisedYear . '-' .  $sanitisedMonth . '-' . $lastDay . ' 23:59:59';
 				
-				$transactions = Transaction::get()->filter(
-					array(
+				$transactions = Transaction::get()->filter(array(
 						'Date:GreaterThan' => $start,
 						'Date:LessThan' => $end
-					)
-					);
-				
+					));
+					
+				// Update the user session
+				$userSession->Expiry = $userSession->Expiry + 600;
 				return new TransactionOutput(Account::get()->byID($sanitisedAccountID),$transactions);
-				
 			}
 		}
 		
 		return new TranasctionOutput(null,null);
-		
-		// get transactions by month/ year
-		// return a transaction output
-	
-	
 	}
 	
 	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token ){
@@ -239,7 +211,6 @@ class BankAccessor extends Object implements BankInterface {
 
 		}
 		return new TransferOutput(null,null,null,false);
-
 	}
 	
 	
@@ -260,20 +231,18 @@ class BankAccessor extends Object implements BankInterface {
 				if($expiry > Time()){
 					
 					return $userSession->User();
-					
-					
 				}
-			
 			}
-		
-		
 		}
 		return null;
 	}
 	
+	//	This function compiles an array list of all the products a user doesn't currently have
 	public function getNewProductsForUser($user){
 	
 		if($user != null){
+		
+			//	This query gets a list off all products the user has and removes them from the list of all products
 			$products = DB::query('SELECT P.ID
 								   FROM Product P 
                                    Where P.ID NOT IN  
@@ -281,30 +250,54 @@ class BankAccessor extends Object implements BankInterface {
 								   From Product, User, Account
 								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username = \'' . Convert::raw2sql($user->Username)  . '\' )');
 
+			// This ceates and array list with the products from the above query
 			$arrayList = new ArrayList();	
+			
 			foreach($products as $row) {
+			
 				$theRowID =  $row['ID'];
 				$arrayList->push(Product::get()->byID($theRowID));
 			}
+			
 			return $arrayList;
 		}
+		
 		return array();
 	}
 	
 	private function checkPassword( $databasePassword, $givenPassword,$username){
 	
+		/* 
+			The Users given password in encrypted and decrypted below as there was some 
+			errors with strcmp now working unless this was done 
+		*/
+		
+		//	This is the key all of the password are encrypted with
 		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
+		
+		/*
+			This is the initialisation vector, it hashes the username using sha512 and selects
+			the first 16 characters so that 2 passwords don't encrypt to the same value 
+		*/
 		$iv = substr(openssl_digest($username, 'sha512'), 0, 16);
 
+		
 		$data = $givenPassword;
+		
+		//	Creates the new encryption object
 		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
 
+		// Sets the initialization vector and encrypts the users given password 
 		$crypt->IV($iv);
 		$encrypted = $crypt->encrypt($data);
 	    
+		// It then encodes it 
 		$pass = base64_encode($encrypted);
 	
+		// And then decrypts it 
 		$plainpass = $this->decrypt($pass,$username);
+		
+		
 		// call the decrypt of password 
 		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 
@@ -315,17 +308,11 @@ class BankAccessor extends Object implements BankInterface {
 			return true;
 		}else{
 			$plaindatabasePassword = "";
-			return false;
-		
+			return false;		
 		}
-	
-		
-	
-	
 	}
 	
 	private function checkPasswordMobile( $databasePassword, $givenPassword, $digits,$username){
-		
 		// call the decrypt of password 
 		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 		
@@ -343,17 +330,11 @@ class BankAccessor extends Object implements BankInterface {
 			$plaindatabasePassword = "";
 			return false;
 		}
-		
-		
-		// pass back fail/pass
-	
 	}
 	
 	private function decrypt( $password,$username){
 		
 		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
-		//$iv = "75238a690bcb3f78";
-		
 		
 		$iv = substr(openssl_digest($username, 'sha512'), 0, 16);
 		
@@ -363,7 +344,6 @@ class BankAccessor extends Object implements BankInterface {
 		
 		$decrypt = $crypt->decrypt( base64_decode($password));
 		return $decrypt;
-	
 	}
 	
 	private function generateToken(){
