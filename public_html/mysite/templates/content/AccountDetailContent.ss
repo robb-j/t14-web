@@ -35,10 +35,15 @@
 								<div class="accountdetail-information"> <p> Balance </p> <p> Overdraft </p> <p> Available </p> </div>
 							</div>
 							
-							<!-- Information of the account-->
+							<!-- Full details of balance of account-->
 							<div class="col-xs-03">
-								<div class="accountdetail-balance"><p> $Balance </p></div>
+								<div class="accountdetail-balance"> <p> $Balance </p> <p> $OverdraftLimit </p> <p id="Available"></p> </div>
 							</div>
+							
+							<script>
+								document.getElementById("Available").innerHTML = $Balance - $OverdraftLimit;
+							</script>
+							
 						</div>
 					
 					
