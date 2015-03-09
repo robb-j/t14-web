@@ -1,15 +1,18 @@
 .accountdetail-name{
 position: absolute;
+size: 10px;
 }
 
 .accountdetail-information {
 position: relative;
-font-size: 10px;
 float: left;
+size: 10px;
 margin-left: 300px;}
 
 .accountdetail-balance{
 position: relative;
 float: right;
+text-align: right;
 color: green;
+size: 10px;
 }
