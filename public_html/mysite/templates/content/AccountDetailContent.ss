@@ -31,14 +31,14 @@
 								<div class="accountdetail-information"> <p> Balance </p> <p> Overdraft </p> <p> Available </p> </div>
 							</div>
 							
-							<script>
-								document.getElementById("Available").innerHTML = $Account.Balance + $Account.OverdraftLimit;
-							</script>
-							
 							<!-- Full details of balance of account-->
 							<div class="col-xs-3">
 								<div class="accountdetail-balance"> <p> $Account.Balance </p> <p> $Account.OverdraftLimit </p> <p id="Available"></p> </div>
 							</div>
+							
+							<script>
+								document.getElementById("Available").innerHTML = $Account.Balance + $Account.OverdraftLimit;
+							</script>
 							
 						</div>
 					
