@@ -7,6 +7,7 @@ Director:
     'bankapi': 'MobileApiController'
     'banking/account/$ID': 'AccountDetailController'
     'banking/product/$ID' : 'ProductDetailController'
+    'banking/transfer/$ID' : 'TransferController'
     'banking': 'AccountController'
     'login': 'LoginController'
     '': 'AccountController'

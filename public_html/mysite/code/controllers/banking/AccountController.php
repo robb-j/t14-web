@@ -7,6 +7,12 @@
 class AccountController extends BankController {
 	
 	
+	private static $allowed_actions = array(
+		"Logout"
+	);
+	
+	
+	
 	// Set the tab title
 	public $TabTitle = "banking";
 	
@@ -19,5 +25,17 @@ class AccountController extends BankController {
 		
 		// Render the Account template
 		return $this->renderWith("AccountContent");
+	}
+	
+	public function Logout() {
+		
+		// Perform the logut
+		BankAccessor::create()->logoutUser();
+		
+		
+		// Redirect to login screen
+		return $this->redirect("login/");
+		
+		//return $this->CurrentUser->ID;
 	}
 }

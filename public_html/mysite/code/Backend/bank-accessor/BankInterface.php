@@ -6,6 +6,8 @@ interface BankInterface {
 	public function login( $username, $password);
 	public function loadTransactions( $userID, $accountID, $month, $year, $token );
 	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token );
+	public function logoutUser();
+	public function logoutFromMobile( $userID, $token );
 	public function getCurrentUser();
 }
 ?>

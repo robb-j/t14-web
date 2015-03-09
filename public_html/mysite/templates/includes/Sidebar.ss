@@ -5,6 +5,9 @@
 	<div class="sidebar-section">
 		<div class="welcome-message">
 			<h3> Hello, $CurrentUser.FirstName </h3>
+			<p class="logout">
+				<a href="AccountController/Logout"> Not you? Log out </a>
+			</p>
 		</div>
 	</div>
 	

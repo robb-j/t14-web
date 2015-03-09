@@ -7,7 +7,7 @@
 .page-container h2 {
 	
 	margin: 0px 50px 5px 50px;
-	font-family: 'Open Sans';
+	font-family: 'Open Sans', 'Helvetica Neue';
 	letter-spacing: 10;
 	text-transform: uppercase;
 	color: #666666;
@@ -15,7 +15,7 @@
 
 .page-container p {
 	
-	font-family: 'Open Sans';
+	font-family: 'Open Sans','Helvetica Neue';
 	margin: 0px;
 }
 
@@ -34,13 +34,19 @@
 	padding: 5px;
 	text-align: center;
 	text-decoration: none;
-	font-family: 'Open Sans';
+	font-family: 'Open Sans', 'Helvetica Neue';
 	max-width: 120px;
 }
 
 .light-button a:hover {
 	text-decoration: none;
 }
+
+.money::before {
+	content: '£';
+}
+
+
 
 
 
@@ -85,6 +91,14 @@
 	width:155px;
 	height:85px;
 }
+
+.sidebar .welcome-message p.logout {
+	text-align: center;
+	width: 100%;
+}
+
+
+
 
 
 
