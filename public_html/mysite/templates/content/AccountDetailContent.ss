@@ -17,17 +17,13 @@
 		<!-- The Table of Accounts -->
 		<div class="account-table data-table">
 			
-			
-			<!-- Loop through the user's accounts -->
-			<% loop $CurrentUser.Accounts %>
-			
-				<div class="account-row data-row <% if Last %>last-row<% end_if %>">
+				<div class="account-detail">
 					
 						<div class="row">
 							
 							<!-- The name of the Account -->
 							<div class="col-xs-6">
-								<div class="accountdetail-name"><p> $AccountType</p></div>
+								<div class="accountdetail-name"><p> $Account.AccountType </p></div>
 							</div>
 							
 							<!-- Information of the account-->
@@ -36,19 +32,18 @@
 							</div>
 							
 							<script>
-								document.getElementById("Available").innerHTML = $Balance + $OverdraftLimit;
+								document.getElementById("Available").innerHTML = $Account.Balance + $Account.OverdraftLimit;
 							</script>
 							
 							<!-- Full details of balance of account-->
 							<div class="col-xs-3">
-								<div class="accountdetail-balance"> <p> $Balance </p> <p> $OverdraftLimit </p> <p id="Available"></p> </div>
+								<div class="accountdetail-balance"> <p> $Account.Balance </p> <p> $Account.OverdraftLimit </p> <p id="Available"></p> </div>
 							</div>
 							
 						</div>
 					
 				</div>
 				
-			<% end_loop %>
 		</div>
 		
 	</div>
