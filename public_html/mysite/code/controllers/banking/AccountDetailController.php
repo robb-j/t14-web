@@ -16,12 +16,12 @@ class AccountDetailController extends BankController {
 		
 		
 		// Add some custom CSS
-		Requirements::css('mysite/css/accountdetail.css');
+		//Requirements::css('mysite/css/accountdetail.css');
 	}
 	
 	public function Content() {
 		
-		$this->NewProducts = BankAccessor::create()->getNewProductsForUser($this->CurrentUser);
+		//$this->NewProducts = BankAccessor::create()->getNewProductsForUser($this->CurrentUser);
 		
 		//return "Hello World, I made a controller";
 		return $this->renderWith("AccountDetailContent");

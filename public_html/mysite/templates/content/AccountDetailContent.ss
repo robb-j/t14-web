@@ -26,12 +26,12 @@
 						<div class="row">
 							
 							<!-- The name of the Account -->
-							<div class="col-xs-06">
+							<div class="col-xs-6">
 								<div class="accountdetail-name"><p> $AccountType</p></div>
 							</div>
 							
 							<!-- Information of the account-->
-							<div class="col-xs-03">
+							<div class="col-xs-3">
 								<div class="accountdetail-information"> <p> Balance </p> <p> Overdraft </p> <p> Available </p> </div>
 							</div>
 							
@@ -40,7 +40,7 @@
 							</script>
 							
 							<!-- Full details of balance of account-->
-							<div class="col-xs-03">
+							<div class="col-xs-3">
 								<div class="accountdetail-balance"> <p> $Balance </p> <p> $OverdraftLimit </p> <p id="Available"></p> </div>
 							</div>
 							

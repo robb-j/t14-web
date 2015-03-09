@@ -146,7 +146,7 @@ class MobileApiController extends Controller {
 		$token = $request->postVar("token");
 		
 		// Try to make the transfer
-		$output = BankAccessor::create()->logout($userID ,$token);
+		$output = BankAccessor::create()->logoutFromMobile($userID ,$token);
 	
 	}
 

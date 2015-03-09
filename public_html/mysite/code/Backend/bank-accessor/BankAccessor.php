@@ -123,7 +123,7 @@ class BankAccessor extends Object implements BankInterface {
 					
 					Cookie::set('BankingSession', $token, 0);
 					
-					return new LoginOutput($user, $accounts, $products, $token, true);
+					return new LoginOutput($user, $accounts, $products, $token, true,"Success");
 				}else{
 					// Return an unsuccessful LoginOutput object
 					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
@@ -131,7 +131,7 @@ class BankAccessor extends Object implements BankInterface {
 			}
 		}
 
-		return new LoginOutput(null, null, null, null);
+		return new LoginOutput(null, null, null, null,false,"Incorrect username or password");
 	}
 	
 	public function loadTransactions( $userID, $accountID, $month, $year, $token ){
@@ -277,7 +277,18 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
-	public function logout($userID ,$token){
+	public function logoutUser() {
+		
+		$user = $this->getCurrentUser();
+		$token = Cookie::get('BankingSession');
+		
+		if ($this->logoutFromMobile($user->ID, $token)) {
+			
+			Cookie::force_expiry("BankingSession");
+		}
+	}
+	
+	public function logoutFromMobile($userID ,$token){
 	
 	
 		$userSession = UserSession::get()->filter(array(
