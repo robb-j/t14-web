@@ -165,9 +165,10 @@
 /*
  *	General Content Styling
  */
-.main-container {
+.main-container-outer .container {
 	background: white;
 	height: 100%;
+	min-width: 960px;
 }
 .content-container {
 	margin-bottom: 100px;
