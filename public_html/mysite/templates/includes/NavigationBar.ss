@@ -13,14 +13,14 @@
 		
 			<div class="col-xs-6" id="links">
 			<div id="nav-text">Lloyd's Banking Group</div>
-			<ul class="list-inline">
-				<li><a href='#' id="current">Banking</a></li>
-				<li><a href='#'>Budgeting</a></li>
-				<li><a href='#'>Rewards</a></li>
-				<li><a href='#'>Tools</a></li>
-				<li><a href='#'>Settings</a></li>
-				</ul>
-			</ul>
+			
+				<a href='Banking' id="current">Banking</a>
+				<a href='Budgeting'>Budgeting</a>
+				<a href='Rewards'>Rewards</a>
+				<a href='Tools'>Tools</a>
+				<a href='Settings'>Settings</a>
+				
+			
 			</div>
 			<div class="col-xs-3">
 			</div>
