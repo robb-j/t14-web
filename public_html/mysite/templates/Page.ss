@@ -34,31 +34,35 @@
 			
 			
 			<!-- The main part of the side, using a bootstrap container http://getbootstrap.com/css/#overview-container -->
-			<div class="container">
-				<div class="main-container">
-					<div class="row">
-						
-						
-						<!-- Show the sidebar on the left -->
-						<div class="col-xs-3">
-							<div class="sidebar-container">
-								<% include Sidebar CurrentUser=$CurrentUser %>
+			<div class="main-container-outer">
+				<div class="container">
+					<div class="main-container">
+						<div class="row">
+							
+							
+							<!-- Show the sidebar on the left -->
+							<div class="col-xs-3">
+								<div class="sidebar-container">
+									<% include Sidebar CurrentUser=$CurrentUser %>
+								</div>
 							</div>
-						</div>
-						
-						
-						<!-- Show the content on the right -->
-						<div class="col-xs-9">
-							<div class="content-container">
-								
-								$Content()
-								
+							
+							
+							<!-- Show the content on the right -->
+							<div class="col-xs-9">
+								<div class="content-container">
+									
+									$Content()
+									
+								</div>
 							</div>
+						
 						</div>
-					
 						
 					</div>
+					
 				</div>
+				
 			</div>			
 			
 		<% end_if %>

@@ -76,20 +76,11 @@
 	margin:5px 0 0 10px;
 	padding:0;
 }
+  
 
-.navbar-item   ul{	
-	list-style-type: none;
-    margin: 0;
-	border-style:none;
-}   
-
-.list-inline{
+.navigation-bar a{
 	text-align:left;
 	margin-top: 5px;
-}
-
-
-.navigation-bar li a{
 	margin-right: 10px;
 	font-size: 25px;
 }
@@ -104,10 +95,6 @@
 	text-align: center;
 	width: 100%;
 }
-
-
-
-
 
 
 /*
@@ -165,9 +152,10 @@
 /*
  *	General Content Styling
  */
-.main-container {
+.main-container-outer .container {
 	background: white;
 	height: 100%;
+	min-width: 960px;
 }
 .content-container {
 	margin-bottom: 100px;
