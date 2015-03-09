@@ -131,7 +131,7 @@ class BankAccessor extends Object implements BankInterface {
 			}
 		}
 
-		return new LoginOutput(null, null, null, null);
+		return new LoginOutput(null, null, null, null,false,"Incorrect username or password");
 	}
 	
 	public function loadTransactions( $userID, $accountID, $month, $year, $token ){
