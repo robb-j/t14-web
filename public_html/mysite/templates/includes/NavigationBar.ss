@@ -12,13 +12,12 @@
 			<div class="col-xs-6" id="links">
 			<div id="nav-text">Lloyd's Banking Group</div>
 			
-				<a href="banking" id="<% if $Current == banking %>"current<% end_if %>">Banking</a>
+				<a href="banking" class="<% if $Current == 'banking' %>current<% end_if %>">Banking</a>
 				<a href='budgeting'>Budgeting</a>
 				<a href='rewards'>Rewards</a>
 				<a href='tools'>Tools</a>
 				<a href='settings'>Settings</a>
 				
-			
 			</div>
 			<div class="col-xs-3">
 			<p><% if $Current == banking %>current<% end_if %></p>
