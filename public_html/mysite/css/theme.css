@@ -57,17 +57,25 @@
  */
 .navigation-bar {
 	background: white;
+	min-width: 960px;
 }
 
 .navigation-bar-inner{
 	border-bottom: 5px solid #1D654A;
-	width: 100%;
-	min-width: 960px;
-	margin: auto;
+	width: 98%;
+	margin:auto;
+	font-family: 'Open Sans';
 }
+
+.navigation-bar-container{
+	min-width: 960px;
+}
+
 #logo {
 	position:relative;
 	padding-right:0;
+	padding-left:7%;
+	
 }
 
 #nav-text{
@@ -76,30 +84,42 @@
 	margin:5px 0 0 10px;
 	padding:0;
 }
-  
 
 .navigation-bar a{
 	text-align:left;
 	margin-top: 5px;
-	margin-right: 10px;
+	margin-right: 7px;
 	font-size: 25px;
+	font-weight:600;
 }
 
-#current {
+.navigation-bar a:hover, a:focus{
+	text-decoration:none;
+	color:#4d4d4d;
+}
+
+#current{
 	color:#196749;
 	text-decoration:none;
 	font-weight: bold;
 }
 
+.current a{
+color:#196749;
+	text-decoration:none;
+	font-weight: bold;
+}
+
+/*
+ * 	The Sidebar
+ */
+ 
+ 
 .sidebar .welcome-message p.logout {
 	text-align: center;
 	width: 100%;
 }
 
-
-/*
- * 	The Sidebar
- */
 .sidebar-container {
 	border-right: 1px solid black;
 }
