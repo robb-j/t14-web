@@ -13,9 +13,8 @@
 			
 		</div>
 		
-		
 		<!-- The Table of Accounts -->
-		<div class="account-table data-table">
+		<div class="accountdetail-table data-table">
 			
 				<div class="account-detail">
 					
@@ -48,13 +47,56 @@
 		
 	</div>
 	
-	
-	<!-- The New Products Section -->
-	<div class="products-section main-section">
+	<!-- The Transactions Section -->
+	<div class="accountdetailtransactions-section main-section">
 		
 		<!-- The Heading -->
 		<h2> TRANSACTIONS </h2>
 		
-	</div>
+		<!-- The Drop Down Bar -->
+		<div class="dropdown">
+		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+			Select a statement
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something here</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+		</ul>
+		</div>
 	
+		<!-- The List of Transactions -->
+		<div class="transaction-table data-table">
+			
+			<!-- Loop through the account's transactions -->
+			<% loop $Account.Transactions %>
+			
+				<div class="transaction-row data-row <% if Last %>last-row<% end_if %>">
+					
+					<div class="row">
+							
+						<!-- The date of the transaction on the left -->
+						<div class="col-xs-4">
+							<div class="transaction-date"><p> $Date </p></div>
+						</div>
+							
+						<!-- The payee in the middle, aligned to the left -->
+						<div class="col-xs-6">
+							<div class="transaction-payee"><p> $Payee </p></div>
+						</div>
+					
+						<!-- The amount on the right -->
+						<div class="col-xs-2">
+							<div class="transaction-amount"><p> $Amount </p></div>
+						</div>
+					</div>
+							
+				</div>
+				
+			<% end_loop %>
+		</div>
+	</div>
+
 </div>

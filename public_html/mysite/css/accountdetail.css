@@ -19,3 +19,26 @@ color: green;
 margin-top:30px;
 font-size: 20px;
 }
+
+.dropdown {
+height:10px;
+float: right;
+margin-right: 70px;
+bottom: 40px;
+}
+
+.transaction-date {
+position: relative;
+}
+
+.transaction-payee{
+position: relative;
+margin-left: 50px;
+
+}
+
+.transaction-amount{
+position: relative;
+float: right;
+color: red;
+}
