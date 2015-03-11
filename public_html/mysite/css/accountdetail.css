@@ -27,18 +27,22 @@ margin-right: 70px;
 bottom: 40px;
 }
 
-.transaction-date {
+.transaction-table.data-table .transaction-row.data-row .row .col-xs-4 .transaction-date p{
 position: relative;
-}
-
-.transaction-payee{
-position: relative;
-margin-left: 50px;
 font-size: 20px;
+color: gray;
 }
 
-.transaction-amount{
+.transaction-table.data-table .transaction-row.data-row .row .col-xs-6 .transaction-payee p{
+position: relative;
+font-size: 20px;
+font-family: Trebuchet MS;
+text-align: left;
+}
+
+.transaction-table.data-table .transaction-row.data-row .row .col-xs-2 .transaction-amount p{
 position: relative;
 float: right;
+font-size: 20px;
 color: red;
 }
