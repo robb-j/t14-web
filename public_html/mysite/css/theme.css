@@ -90,7 +90,7 @@
 	margin-top: 5px;
 	margin-right: 7px;
 	font-size: 30px;
-	font-weight:600;
+	font-weight:bold;
 }
 
 .navigation-bar a:hover, a:focus{
@@ -98,17 +98,12 @@
 	color:#4d4d4d;
 }
 
-.current{
+#current{
 	color:#196749;
 	text-decoration:none;
-	font-weight: bold;
+	font-weight: bolder;
 }
 
-.current a{
-color:#196749;
-	text-decoration:none;
-	font-weight: bold;
-}
 
 /*
  * 	The Sidebar
