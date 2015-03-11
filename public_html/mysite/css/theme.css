@@ -61,7 +61,7 @@
 }
 
 .navigation-bar-inner{
-	border-bottom: 5px solid #1D654A;
+	border-bottom: 7px solid #1D654A;
 	width: 98%;
 	margin:auto;
 	font-family: 'Open Sans';
@@ -89,7 +89,7 @@
 	text-align:left;
 	margin-top: 5px;
 	margin-right: 7px;
-	font-size: 25px;
+	font-size: 30px;
 	font-weight:600;
 }
 
