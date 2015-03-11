@@ -5,7 +5,7 @@
 	<div class="sidebar-section">
 		<div class="welcome-message">
 			<h3> Hello, $CurrentUser.FirstName </h3>
-			<p class="logout">
+			<p class="sidebar-link">
 				<a href="AccountController/Logout"> Not you? Log out </a>
 			</p>
 		</div>
@@ -38,6 +38,11 @@
 			<% end_loop %>
 			
 		</div>
+		
+		
+		<p class="sidebar-link">
+			<a href="banking"> My Accounts </a>
+		</p>
 		
 	</div>
 	

@@ -115,9 +115,13 @@ color:#196749;
  */
  
  
-.sidebar .welcome-message p.logout {
+.sidebar p.sidebar-link {
 	text-align: center;
 	width: 100%;
+}
+
+.sidebar p.sidebar-link a {
+	color: #23527C;
 }
 
 .sidebar-container {
