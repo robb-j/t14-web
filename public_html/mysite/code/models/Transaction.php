@@ -10,6 +10,8 @@ class Transaction extends DataObject {
 	private static $has_one =  array(
 		'Account' => 'Account'
 	);
+
+	
 	
 	/* http://api.silverstripe.org/2.4/class-Date.html */
 }

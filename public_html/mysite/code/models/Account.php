@@ -5,7 +5,8 @@ class Account extends DataObject {
     private static $db = array(
         'AccountType' => 'Varchar(50)',
 		'OverdraftLimit' => 'Currency',
-		'Balance' => 'Currency'
+		'Balance' => 'Currency',
+		'FirstTransaction' => 'Date'
     );
 	private static $has_one =  array(
 		'User' => 'User',
@@ -14,6 +15,8 @@ class Account extends DataObject {
 	private static $has_many = array(
 		'Transactions' => 'Transaction'
 	);
+
+	
 }
 
 ?>
