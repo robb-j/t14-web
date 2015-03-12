@@ -3,7 +3,7 @@
 class Transaction extends DataObject {
 
     private static $db = array(
-        'Amount' => 'Double',
+        'Amount' => 'Currency',
 		'Payee' => 'Varchar(50)',
 		'Date' => 'Date'
     );

@@ -164,6 +164,7 @@ class BankAccessor extends Object implements BankInterface {
 					
 				// Update the user session
 				$userSession->Expiry = $userSession->Expiry + 600;
+				$userSession->write();
 				return new TransactionOutput(Account::get()->byID($sanitisedAccountID),$transactions);
 			}
 		}
@@ -200,7 +201,7 @@ class BankAccessor extends Object implements BankInterface {
 					$accountBOwner = $accountB->UserID;
 					
 					if( $userID =!($accountAOwner && $accountBOwner)){
-						return new TransferOutput(null,null,null,false);
+						return new TransferOutput(null,null,null,false,null,null);
 					}
 				}
 
@@ -208,21 +209,51 @@ class BankAccessor extends Object implements BankInterface {
 				
 				if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
 				
+				
 					// Transfer the money to the account
 					$accountA->Balance = $accountA->Balance - $amount;
 					$accountA->write();
 					$accountB->Balance = $accountB->Balance + $amount;
 					$accountB->write();
 					
+					$transactionA = Transaction::create();
+					$transactionA->Amount = 0 - $amount;
+					$transactionA->Payee = $accountB->AccountType;
+					$transactionA->Date = date("d M Y");
+					$transactionA->AccountID = $accountA->ID;
+					$transactionA->write();
+
+					if($accountA->FirstTransaction === null){
+						$accountA->FirstTransaction = date("M Y");
+						$accountA->write();
+					}
+					echo"|".$accountA->FirstTransaction."|";
+					
+					
+					
+					$transactionB = Transaction::create();
+					$transactionB->Amount = 0 + $amount;
+					$transactionB->Payee = $accountA->AccountType;
+					$transactionB->Date =  date("d M Y");
+					$transactionB->AccountID = $accountB->ID;
+					$transactionB->write();
+					
+					if($accountB->FirstTransaction === null){
+						$accountB->FirstTransaction = date("M Y");
+						$accountB->write();
+					}
+					
+					
 					// Update the user session
 					$userSession->Expiry = $userSession->Expiry + 600;
-					return new TransferOutput($accountA,$accountB,$sanitisedAmount,true);
+					$userSession->write();
+					return new TransferOutput($accountA,$accountB,$sanitisedAmount,true,$accountA->Balance, $accountB->Balance );
 				
 				}
 			}
 
 		}
-		return new TransferOutput(null,null,null,false);
+		return new TransferOutput(null,null,null,false,null,null);
 	}
 	
 	
