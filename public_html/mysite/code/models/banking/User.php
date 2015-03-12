@@ -14,12 +14,17 @@ class User extends DataObject {
 		'Username' => 'Varchar(30)',
         'FirstName' => 'Varchar(30)',
 		'LastName' => 'Varchar(30)',
+		'Email' => 'Varchar(30)',
 		'LastFullCategorise' => 'Date',
 		'DOB' => 'Date',
-		'Password' => 'Varchar(30)'
+		'Password' => 'Varchar(30)',
+		'NumberOfSpins' => 'Int'
     );
 	private static $has_many =  array(
-		'Accounts' => 'Account'
+		'Accounts' => 'Account',
+		'Groups' => 'BudgetGroup',
+		'PointsAwarded' => 'PointGain',
+		'RewardsTaken' => 'RewardTaken'
 	);
 	
 	
