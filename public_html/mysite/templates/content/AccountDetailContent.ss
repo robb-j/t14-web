@@ -51,7 +51,7 @@
 	<div class="accountdetailtransactions-section main-section">
 		
 		<!-- The Heading -->
-		<h2> TRANSACTIONS </h2>
+		<h2> TRANSACTIONS $MyFuction() </h2>
 		
 		<!-- The Drop Down Bar -->
 		<div class="dropdown">
@@ -69,6 +69,7 @@
 	
 		<!-- The List of Transactions -->
 		<div class="transaction-table data-table">
+			
 			
 			<!-- Loop through the account's transactions -->
 			<% loop $Account.Transactions %>
@@ -89,8 +90,16 @@
 					
 						<!-- The amount on the right -->
 						<div class="col-xs-2">
-							<div class="transaction-amount"><p> $Amount </p></div>
+							<div class="transaction-amount"><p id="changetogreen"> $Amount </p></div>
 						</div>
+						
+						<script>
+						if ($Amount > 0) {
+							var balance = document.getElementById("changetogreen");
+							balance.style.color = 'green';
+						}
+						</script>
+						
 					</div>
 							
 				</div>

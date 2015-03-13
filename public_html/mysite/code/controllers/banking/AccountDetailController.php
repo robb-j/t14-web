@@ -27,4 +27,8 @@ class AccountDetailController extends BankController {
 		//return "Hello World, I made a controller";
 		return $this->renderWith("AccountDetailContent");
 	}
+	
+	public function MyFunction() {
+    return "Hello world";
+	}
 }
