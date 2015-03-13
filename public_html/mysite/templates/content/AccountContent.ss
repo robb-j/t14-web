@@ -11,11 +11,6 @@
 			<!-- The Heading on the left -->
 			<div class="col-xs-9"> <h2> My Accounts </h2></div>
 			
-			<!-- The Transfer button to the right -->
-			<div class="col-xs-3">
-				<div class="light-button"> <a href="banking/transfer"> Transfer </a> </div>
-			</div>
-			
 		</div>
 		
 		

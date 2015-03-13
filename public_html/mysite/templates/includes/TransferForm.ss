@@ -1,19 +1,35 @@
 <form $FormAttributes>
 	
-	$Fields.dataFieldByName(SecurityID)
-	
 	<div class="data-row">
 		<div class="row">
 			
-			<div class="col-xs-4"> <p> Transfer To </p> </div>
+			<div class="col-xs-4"> <p> To Account </p> </div>
 			
 			<div class="col-xs-8"> 
-				$Fields.dataFieldByName(Test)
+				$Fields.dataFieldByName(AccountTo)
 			</div>
 			
 		</div>
 		
 	</div>
+	
+	<div class="data-row">
+		<div class="row">
+			
+			<div class="col-xs-4"> <p> Amount </p> </div>
+			
+			<div class="col-xs-8"> 
+				$Fields.dataFieldByName(Amount)
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	
+	$Fields.dataFieldByName(SecurityID)
+	$Fields.dataFieldByName(AccountFrom)
+	$Fields.dataFieldByName(UserID)
 	
 	
 	<% if $Message %>

@@ -14,10 +14,16 @@ class BankController extends Controller {
 	public $NewProducts = array();
 	
 	
-	public function index() {
+	public function init() {
+		
+		parent::init();
 		
 		// Get the session token, if there is one
 		$this->CurrentUser = BankAccessor::create()->getCurrentUser();
+	}
+	
+	
+	public function index() {
 		
 		if ($this->CurrentUser == null) {
 			

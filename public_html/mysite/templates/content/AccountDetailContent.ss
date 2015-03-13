@@ -9,7 +9,13 @@
 		<div class="row">
 			
 			<!-- The Heading on the left -->
-			<div class="col-xs-9"> <h2> INFORMATION </h2></div>
+			<div class="col-xs-9"> <h2> Information </h2></div>
+			
+			
+			<!-- Add a transfer button -->
+			<div class="col-xs-3">
+				<div class="light-button"> <a href="banking/transfer/$Account.ID"> Transfer </a> </div>
+			</div>
 			
 		</div>
 		

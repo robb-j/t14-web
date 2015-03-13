@@ -61,7 +61,7 @@
 }
 
 .navigation-bar-inner{
-	border-bottom: 5px solid #1D654A;
+	border-bottom: 7px solid #1D654A;
 	width: 98%;
 	margin:auto;
 	font-family: 'Open Sans';
@@ -89,8 +89,7 @@
 	text-align:left;
 	margin-top: 5px;
 	margin-right: 7px;
-	font-size: 25px;
-	font-weight:600;
+	font-size: 30px;
 }
 
 .navigation-bar a:hover, a:focus{
@@ -104,20 +103,19 @@
 	font-weight: bold;
 }
 
-.current a{
-color:#196749;
-	text-decoration:none;
-	font-weight: bold;
-}
 
 /*
  * 	The Sidebar
  */
  
  
-.sidebar .welcome-message p.logout {
+.sidebar p.sidebar-link {
 	text-align: center;
 	width: 100%;
+}
+
+.sidebar p.sidebar-link a {
+	color: #23527C;
 }
 
 .sidebar-container {
