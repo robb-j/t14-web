@@ -41,7 +41,7 @@ class WebApi extends Object{
 	}
 	
 	public function getCurrentUser(){
-	
+		return BankAccessor::create()->getCurrentUser();
 	}
 }
 ?>

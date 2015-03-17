@@ -35,7 +35,7 @@ class BankAccessor extends Object implements BankInterface {
 					return new LoginOutput($user, $user->Accounts(), $this->getNewProductsForUser($user), $token, true,"Success");
 				}else{
 				
-					// Return an unsuccessful LoginOutput object
+					//	Return an unsuccessful LoginOutput object
 					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
 				}
 			}
@@ -125,8 +125,8 @@ class BankAccessor extends Object implements BankInterface {
 					$accountB->Balance = $accountB->Balance + $amount;
 					$accountB->write();
 					
-					$this->createTransaction($amount, $accountB->AccountType,$accountA);
-					$this->createTransaction($amount, $accountA->AccountType,$accountB);
+					$this->createTransaction(0-$amount, $accountB->AccountType,$accountA);
+					$this->createTransaction(0+$amount, $accountA->AccountType,$accountB);
 
 					// Update the user session
 					$this->updateSession($userSession);
@@ -192,47 +192,41 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
-	/*public function logoutUser() {
-		
-		$user = $this->getCurrentUser();
-		$token = Cookie::get('BankingSession');
-		
-		if ($this->logoutFromMobile($user->ID, $token)) {
-			
-			Cookie::force_expiry("BankingSession");
-		}
-	}
-	
-	public function logoutFromMobile($userID ,$token){
-	
-	
-		$userSession = UserSession::get()->filter(array(
-			'UserID' => Convert::raw2sql($userID),
-			'Token' => Convert::raw2sql($token)
-		))[0];
-		
-		if($userSession != null){
-			$userSession->Expiry = Time()-10;
-			$userSession->write();
-			return true;
-		}
-		return false;
-	}*/
-	
 	public function logout($userID, $token){
 	
 		$userSession = UserSession::get()->filter(array(
 			'UserID' => Convert::raw2sql($userID),
 			'Token' => Convert::raw2sql($token)
 		))[0];
+		
 		if($userSession != null){
 			$userSession->Expiry = Time()-10;
 			$userSession->write();
 			
-			//Maybe delete the session
+			//Only stores the last n UserSessions for that user
+			$this->deleteUserSessions($userSession->UserID);
+			
 			return true;
 		}
 		return false;
+	
+	}
+	
+	private function deleteUserSessions($userID){
+		
+		$userSession = UserSession::get()->filter(array(
+			'UserID' => Convert::raw2sql($userID)
+		))->sort('Expiry');
+	
+		$count=0;
+		foreach($userSession as $session) {
+				$count++;
+				if($count>10){
+					$session->delete();
+					
+				}
+			}
+	
 	
 	}
 	
@@ -321,14 +315,16 @@ class BankAccessor extends Object implements BankInterface {
 			
 			$count = 0;
 			foreach($userSession as $row) {
+			
 				if($userSession[$count]->Expiry >=Time()){
-					return true;
 				
+					return true;
 				}
+				
 				$count++;
 			}
+			
 			return false;
-	
 	}
 	
 	private function createSession($user, $token){
@@ -340,7 +336,6 @@ class BankAccessor extends Object implements BankInterface {
 		$userSession->write();
 		
 		return true;
-	
 	}
 	
 	private function updateSession($userSession){
@@ -355,7 +350,7 @@ class BankAccessor extends Object implements BankInterface {
 	private function createTransaction($amount, $payee, $account){
 	
 		$transaction = Transaction::create();
-		$transaction->Amount = 0 - $amount;
+		$transaction->Amount = $amount;
 		$transaction->Payee = $payee;
 		$transaction->Date = date("d M Y");
 		$transaction->AccountID = $account->ID;
@@ -364,9 +359,8 @@ class BankAccessor extends Object implements BankInterface {
 		if($account->FirstTransaction === null){
 			$account->FirstTransaction = date("M Y");
 			$account->write();
+			
 		}
-	
 	}
-	
 }
 ?>
