@@ -27,16 +27,15 @@ class MobileApiController extends Controller {
 		
 		// Get the indexies of the password
 		$indexes = array(
-			$request->postVar('index1'), 
-			$request->postVar('index2'), 
-			$request->postVar('index3')
+			(int)$request->postVar('index1'), 
+			(int)$request->postVar('index2'), 
+			(int)$request->postVar('index3')
 		);
 
 		
 		
 		// Try to sign in with them
-		$output = BankAccessor::create()->loginFromMobile($username,$password,$indexes);
-		
+		$output = BankAccessor::create()->login($username,$password,$indexes,true);
 		$data = null;
 		
 		// Decide what data to give back
@@ -146,7 +145,7 @@ class MobileApiController extends Controller {
 		$token = $request->postVar("token");
 		
 		// Try to make the transfer
-		$output = BankAccessor::create()->logoutFromMobile($userID ,$token);
+		$output = BankAccessor::create()->logout($userID ,$token);
 	
 	}
 

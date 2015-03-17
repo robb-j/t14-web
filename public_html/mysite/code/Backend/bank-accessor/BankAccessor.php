@@ -9,85 +9,7 @@ use PHP_Crypt\PHP_Crypt as PHP_Crypt;
 
 class BankAccessor extends Object implements BankInterface {
 
-		
-	/*
-		This function takes in: 
-			The username of the user = $username, 
-			The 3 characters chosen from their password = $passwordBits, 
-			The locations of these 3 characters = $indexes
-	  
-		This function checks the password given against the one held in the database for this user
-		If the password is correct then it gets an array of their accounts as well as an array of
-		all products they don't currently have. Further to this it creates a new cookie for the 
-		users session and adds to the UserSession table this new session with the new random 
-		authentication token generated.
-		
-		This function outputs if successful:
-			A loginOutput object which contains:
-				The User object
-				The Users accounts
-				The Products they don't own
-				The random authentication token
-				If the login was successful or not
-				
-		This function outputs if not successful:
-			A loginOutput object which contains:
-				All null values except if the login
-				was successful which will be false
-	*/
-	public function loginFromMobile( $username, $passwordBits, $indexes ){
-
-		//	Check for SQL injection 
-		$sanitisedUsername = Convert::raw2sql($username);
-		
-		//	Get pass where username = "x" it selects the first position in the array
-		//	as we assume each username is unique
-		$user = User::get()->filter(array(
-			'Username' => $sanitisedUsername
-		))[0];
-		
-	
-		if($user !== null){
-			
-			//	This gets the password held in the database
-			$databasePass = $user->Password;
-			//	If the password is the correct length, there are 3 indexes and the password matches the one on the database
-			if(  strlen($passwordBits) === 3 &&  sizeof($indexes)===3 /*&& $indexes[0] != null && $indexes[1] != null && $indexes[2] != null*/ 
-			&& $this->checkPasswordMobile($databasePass, $passwordBits, $indexes,$user->Username ) 
-			){
-				
-				if( !$this->checkIfUserLoggedIn($user)){
-					//	This gets all of the accounts from the user
-					$accounts = $user->Accounts();
-					
-					//	This gets all of the products the user doesn't already have
-					$products = $this->getNewProductsForUser($user);
-					
-					//	Generate a new random authentication token
-					$token = $this->generateToken();
-					
-					//	Set the user session and gives then 10mins until it expires
-					$userSession= UserSession::create();
-					$userSession->UserID = $user->ID;
-					$userSession->Expiry = (Time() + 600);
-					$userSession->Token = $token;
-					$userSession->write();
-					
-					// Return a successful LoginOutput object
-					return new LoginOutput($user, $accounts, $products, $token , true,"Success");
-				}else{
-					// Return an unsuccessful LoginOutput object
-					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
-				}
-			}
-			
-		}
-		
-		// Return an unsuccessful LoginOutput object
-		return new LoginOutput(null, null, null, null,false,"Incorrect username or password");
-	}
-	
-	public function login( $username, $password){
+	public function login( $username, $password, $indexes, $mobile){
 	
 		//check for SQL injection 
 		$sanitisedUsername = Convert::raw2sql($username);
@@ -102,29 +24,17 @@ class BankAccessor extends Object implements BankInterface {
 			$databasePass = $user->Password;
 
 			//Send password to be decrypted
-			if($this->checkPassword($databasePass, $password,$sanitisedUsername) === true && !$this->checkIfUserLoggedIn($user)){
+			if($this->checkPassword($databasePass, $password, $sanitisedUsername, $indexes, $mobile) === true){
 				
 				if( !$this->checkIfUserLoggedIn($user)){
-				
-					//This returns a HasManyList use [x] to access elements
-					$accounts = $user->Accounts();
-				
-					$products = $this->getNewProductsForUser($user);
-					
-					
-					//set the user session 
+
 					$token = $this->generateToken();
 
-					$userSession= UserSession::create();
-					$userSession->UserID = $user->ID;
-					$userSession->Expiry = (Time() + 600);
-					$userSession->Token = $token;
-					$userSession->write();
+					$this->createSession($user, $token);
 					
-					Cookie::set('BankingSession', $token, 0);
-					
-					return new LoginOutput($user, $accounts, $products, $token, true,"Success");
+					return new LoginOutput($user, $user->Accounts(), $this->getNewProductsForUser($user), $token, true,"Success");
 				}else{
+				
 					// Return an unsuccessful LoginOutput object
 					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
 				}
@@ -133,7 +43,7 @@ class BankAccessor extends Object implements BankInterface {
 
 		return new LoginOutput(null, null, null, null,false,"Incorrect username or password");
 	}
-	
+
 	public function loadTransactions( $userID, $accountID, $month, $year, $token ){
 	
 		// Check for SQL injection
@@ -162,9 +72,8 @@ class BankAccessor extends Object implements BankInterface {
 						'Date:LessThan' => $end
 					));
 					
-				// Update the user session
-				$userSession->Expiry = $userSession->Expiry + 600;
-				$userSession->write();
+				$this->updateSession($userSession);
+				
 				return new TransactionOutput(Account::get()->byID($sanitisedAccountID),$transactions);
 			}
 		}
@@ -216,37 +125,12 @@ class BankAccessor extends Object implements BankInterface {
 					$accountB->Balance = $accountB->Balance + $amount;
 					$accountB->write();
 					
-					$transactionA = Transaction::create();
-					$transactionA->Amount = 0 - $amount;
-					$transactionA->Payee = $accountB->AccountType;
-					$transactionA->Date = date("d M Y");
-					$transactionA->AccountID = $accountA->ID;
-					$transactionA->write();
+					$this->createTransaction($amount, $accountB->AccountType,$accountA);
+					$this->createTransaction($amount, $accountA->AccountType,$accountB);
 
-					if($accountA->FirstTransaction === null){
-						$accountA->FirstTransaction = date("M Y");
-						$accountA->write();
-					}
-					echo"|".$accountA->FirstTransaction."|";
-					
-					
-					
-					$transactionB = Transaction::create();
-					$transactionB->Amount = 0 + $amount;
-					$transactionB->Payee = $accountA->AccountType;
-					$transactionB->Date =  date("d M Y");
-					$transactionB->AccountID = $accountB->ID;
-					$transactionB->write();
-					
-					if($accountB->FirstTransaction === null){
-						$accountB->FirstTransaction = date("M Y");
-						$accountB->write();
-					}
-					
-					
 					// Update the user session
-					$userSession->Expiry = $userSession->Expiry + 600;
-					$userSession->write();
+					$this->updateSession($userSession);
+					
 					return new TransferOutput($accountA,$accountB,$sanitisedAmount,true,$accountA->Balance, $accountB->Balance );
 				
 				}
@@ -308,7 +192,7 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
-	public function logoutUser() {
+	/*public function logoutUser() {
 		
 		$user = $this->getCurrentUser();
 		$token = Cookie::get('BankingSession');
@@ -333,47 +217,31 @@ class BankAccessor extends Object implements BankInterface {
 			return true;
 		}
 		return false;
+	}*/
+	
+	public function logout($userID, $token){
+	
+		$userSession = UserSession::get()->filter(array(
+			'UserID' => Convert::raw2sql($userID),
+			'Token' => Convert::raw2sql($token)
+		))[0];
+		if($userSession != null){
+			$userSession->Expiry = Time()-10;
+			$userSession->write();
+			
+			//Maybe delete the session
+			return true;
+		}
+		return false;
+	
 	}
 	
-	private function checkPassword( $databasePassword, $givenPassword,$username){
-	
-		/* 
-			The Users given password in encrypted and decrypted below as there was some 
-			errors with strcmp now working unless this was done 
-		*/
-		
-		//	This is the key all of the password are encrypted with
-		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
-		
-		/*
-			This is the initialisation vector, it hashes the username using sha512 and selects
-			the first 16 characters so that 2 passwords don't encrypt to the same value 
-		*/
-		$iv = substr(openssl_digest($username, 'sha512'), 0, 16);
-
-		
-		$data = $givenPassword;
-		
-		//	Creates the new encryption object
-		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
-
-		// Sets the initialization vector and encrypts the users given password 
-		$crypt->IV($iv);
-		$encrypted = $crypt->encrypt($data);
-	    
-		// It then encodes it 
-		$pass = base64_encode($encrypted);
-	
-		// And then decrypts it 
-		$plainpass = $this->decrypt($pass,$username);
-		
+	private function checkPasswordWeb( $databasePassword, $givenPassword,$username){
 		
 		// call the decrypt of password 
 		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 
-		// check return
-		// pass back fail/pass
-		if( strcmp($plaindatabasePassword, $plainpass) === 0){
+		if( strcmp(trim($plaindatabasePassword), trim($givenPassword)) === 0){
 			$plaindatabasePassword = "";
 			return true;
 		}else{
@@ -382,14 +250,16 @@ class BankAccessor extends Object implements BankInterface {
 		}
 	}
 	
-	private function checkPasswordMobile( $databasePassword, $givenPassword, $digits,$username){
+	private function checkPasswordMobile( $databasePassword, $givenPassword, $indexes ,$username){
 		// call the decrypt of password 
 		$plaindatabasePassword = $this->decrypt($databasePassword,$username);
 		
 		// check return with positions
-		if(strcmp($plaindatabasePassword[$digits[0]],$givenPassword[0])===0 && 
-		   strcmp($plaindatabasePassword[$digits[1]],$givenPassword[1])===0 && 
-		   strcmp($plaindatabasePassword[$digits[2]],$givenPassword[2])===0){
+		if(strlen($givenPassword) === 3 &&  sizeof($indexes)=== 3 && 
+		   is_int($indexes[0]) && is_int($indexes[1]) && is_int($indexes[2]) &&
+		   strcmp($plaindatabasePassword[$indexes[0]],$givenPassword[0])===0 && 
+		   strcmp($plaindatabasePassword[$indexes[1]],$givenPassword[1])===0 && 
+		   strcmp($plaindatabasePassword[$indexes[2]],$givenPassword[2])===0){
 	
 	
 			$plaindatabasePassword = "";
@@ -401,6 +271,20 @@ class BankAccessor extends Object implements BankInterface {
 			return false;
 		}
 	}
+	
+	
+	
+	private function checkPassword($databasePassword, $givenPassword, $username, $indexes, $mobile){
+	
+		if($mobile){
+				return $this->checkPasswordMobile($databasePassword, $givenPassword, $indexes ,$username);
+		}else{
+		
+			return $this->checkPasswordWeb( $databasePassword, $givenPassword, $username);		
+		}
+	}
+	
+	
 	
 	private function decrypt( $password,$username){
 		
@@ -444,6 +328,43 @@ class BankAccessor extends Object implements BankInterface {
 				$count++;
 			}
 			return false;
+	
+	}
+	
+	private function createSession($user, $token){
+	
+		$userSession= UserSession::create();
+		$userSession->UserID = $user->ID;
+		$userSession->Expiry = (Time() + 600);
+		$userSession->Token = $token;
+		$userSession->write();
+		
+		return true;
+	
+	}
+	
+	private function updateSession($userSession){
+	
+		// Update the user session
+		$userSession->Expiry = $userSession->Expiry + 600;
+		$userSession->write();
+		
+		return true;
+	}
+	
+	private function createTransaction($amount, $payee, $account){
+	
+		$transaction = Transaction::create();
+		$transaction->Amount = 0 - $amount;
+		$transaction->Payee = $payee;
+		$transaction->Date = date("d M Y");
+		$transaction->AccountID = $account->ID;
+		$transaction->write();
+
+		if($account->FirstTransaction === null){
+			$account->FirstTransaction = date("M Y");
+			$account->write();
+		}
 	
 	}
 	

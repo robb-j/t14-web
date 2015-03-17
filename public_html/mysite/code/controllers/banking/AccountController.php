@@ -20,7 +20,7 @@ class AccountController extends BankController {
 	
 	public function Content() {
 		
-		$this->NewProducts = BankAccessor::create()->getNewProductsForUser($this->CurrentUser);
+		$this->NewProducts = WebApi::create()->getNewProductsForUser($this->CurrentUser);
 		
 		
 		// Render the Account template
@@ -30,7 +30,7 @@ class AccountController extends BankController {
 	public function Logout() {
 		
 		// Perform the logut
-		BankAccessor::create()->logoutUser();
+		WebApi::create()->logout();
 		
 		
 		// Redirect to login screen

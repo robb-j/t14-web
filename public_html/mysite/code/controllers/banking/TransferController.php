@@ -89,7 +89,7 @@ class TransferController extends BankController {
 		$userID = $data["UserID"];
 		$amount = $data["Amount"];
 		
-		$output = BankAccessor::create()->makeTransfer($userID, $fromID, $toID, $amount, "");
+		$output = WebApi::create()->makeTransfer($userID, $fromID, $toID, $amount);
 		
 		if ($output->didPass()) {
 			

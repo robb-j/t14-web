@@ -17,7 +17,7 @@ class LoginController extends Controller {
 	// Called when this pages is loaded
 	public function index() {
 		
-		if (BankAccessor::create()->getCurrentUser() != null) {
+		if (WebApi::create()->getCurrentUser() != null) {
 			
 			// Redirect back if already logged in
 			return $this->redirect("banking/");
@@ -64,7 +64,7 @@ class LoginController extends Controller {
 		
 		
 		// Attempt the login
-		$output = BankAccessor::create()->login($user, $pass);
+		$output = WebApi::create()->login($user, $pass);
 		
 		
 		if ($output->didPass() == false) {
