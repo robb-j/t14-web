@@ -5,7 +5,7 @@
  * Martin S A - 27/02/2015
  */
 class BankAccessorTest extends SapphireTest {
-	static $fixture_file = 'UsersList.yml';
+	static $fixture_file = 'mysite/tests/fixtures.yml';
 	
 
 	/**
@@ -14,6 +14,7 @@ class BankAccessorTest extends SapphireTest {
 	public function setup() {
 		
 		// Something that happends before EACH test
+		parent::setup();
 		
 	}
 	
@@ -23,6 +24,7 @@ class BankAccessorTest extends SapphireTest {
 	public function tearDown() {
 		
 		// Something that happens after EACH test
+		parent::testDown();
 	}
 	
 	
@@ -34,9 +36,7 @@ class BankAccessorTest extends SapphireTest {
 	public function testLoginCorrectUsernameCorrectPassword() {
 		$accessor = new BankAccessor();
 		$expected = "MyPerson";
-		echo"HERE";
-		$user = $this->objFromFixture('User','MyPerson');
-	   echo"HERE";
+		$user = $this->objFromFixture('User','myPerson');
 		$this->assertEquals($expected, $accessor->login($user->Username,'Password')->getUser()->Username);
     }
 	

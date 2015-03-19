@@ -13,6 +13,7 @@ class ExampleTest extends SapphireTest {
 	public function setup() {
 		
 		// Something that happends before EACH test
+		parent::setup();
 	}
 	
 	/**
@@ -21,6 +22,7 @@ class ExampleTest extends SapphireTest {
 	public function tearDown() {
 		
 		// Something that happens after EACH test
+		parent::tearDown();
 	}
 	
 	

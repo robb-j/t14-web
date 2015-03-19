@@ -1,10 +1,9 @@
 User:
-  MyPerson:
-    Username: MyPerson
+  myPerson:
+    Username: yPerson
     FirstName: PersonForeName
     Surname: PersonSurname
     Email: me@me.com
     LastFullCategorise: 18 Mar 2015
     DOB: 18 Mar 2015
-    Password: tBb//X+eAUAHijr+gWx1CQ==
-		
+    Password: password
