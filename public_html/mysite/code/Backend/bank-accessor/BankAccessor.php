@@ -466,12 +466,15 @@ class BankAccessor extends Object implements BankInterface {
 	public function categorizePayments( $userID, $token, $categorizedItems ){
 	
 	}
+	
 	public function updateBudget( $userID, $token, $budgetAmount, $categoryName, $groupName){
 	
 	}
+	
 	public function chooseReward( $userID, $token, $rewardID ){
 	
 	}
+	
 	public function performSpin( $userID, $token){
 	
 	}	
