@@ -5,7 +5,7 @@
  * Martin S A - 27/02/2015
  */
 class BankAccessorTest extends SapphireTest {
-	
+	static $fixture_file = 'UsersList.yml';
 	
 
 	/**
@@ -31,9 +31,16 @@ class BankAccessorTest extends SapphireTest {
 	* Tests for Login()
 	*
 	*/
-
-	
 	public function testLoginCorrectUsernameCorrectPassword() {
+		$accessor = new BankAccessor();
+		$expected = "MyPerson";
+		echo"HERE";
+		$user = $this->objFromFixture('User','MyPerson');
+	   echo"HERE";
+		$this->assertEquals($expected, $accessor->login($user->Username,'Password')->getUser()->Username);
+    }
+	
+	/*public function testLoginCorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
 		$expected = "Martin";
@@ -80,7 +87,7 @@ class BankAccessorTest extends SapphireTest {
 		$expected = false;
 	   
 		$this->assertEquals($expected, $accessor->login('NotMartin','Password')->didPass());
-    }
+    }*/
 	
 	/*
 	*
@@ -88,7 +95,7 @@ class BankAccessorTest extends SapphireTest {
 	*
 	*/
 	
-	public function testLoginFromMobileCorrectUsernameCorrectPassword() {
+	/*public function testLoginFromMobileCorrectUsernameCorrectPassword() {
 		
 		$accessor = new BankAccessor();
 		$expected = "Martin";
@@ -208,7 +215,7 @@ class BankAccessorTest extends SapphireTest {
 	*
 	*/
 	
-	public function testLoadACorrectTransaction() {
+	/*public function testLoadACorrectTransaction() {
 		
 		$accessor3 = new BankAccessor();
 		$expected = "Spotify";
@@ -223,13 +230,13 @@ class BankAccessorTest extends SapphireTest {
 	*/
 	
 	
-	public function testSQLInjectionLogin() {
+	/*public function testSQLInjectionLogin() {
 		
 		$accessor = new BankAccessor();
 		$expected = null;
 	   
 		$this->assertEquals($expected, $accessor->login('Marin; DROP TABLE Users','password')->getUser());
-    }
+    }*/
 	
 	
 }
