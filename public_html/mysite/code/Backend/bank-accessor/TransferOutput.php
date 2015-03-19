@@ -23,6 +23,7 @@
 			$this->setPayeeNewBalance($payeeNewBalance);
 		}
 		
+		//	Getters
 		public function getPayerAccount(){
 			
 			return $this->payerAccount;

@@ -1,11 +1,18 @@
 <?php
 
+/*
+	This gets the information from the mobile app, converts it to 
+	the form wanted by BankAccessor and then returns the results 
+	as a JSON object back to the app 
+*/
 class MobileApiController extends Controller {
 
+	//	Sets the list of allowed actions
 	private static $allowed_actions = array(
         'login', 'loadTransactions','makeTransfer','logout'
     );
     
+	//	Initialises the API
     public function init() {
 	    parent::init();
 	    
@@ -17,23 +24,24 @@ class MobileApiController extends Controller {
 	    return "Bank Api Index";
     }
 
+	//	############################
+	//	#### Basic Requirements ####
+	//	############################
+	
+	//	This gets the information for logging in and returns the result
 	public function login(SS_HTTPRequest $request){
 	
-		  	
 	  	// Get the username & password
 		$username = $request->postVar('username');
 		$password = $request->postVar('password');
 		
-		
-		// Get the indexies of the password
+		// Get the indexes of the password
 		$indexes = array(
 			(int)$request->postVar('index1'), 
 			(int)$request->postVar('index2'), 
 			(int)$request->postVar('index3')
 		);
 
-		
-		
 		// Try to sign in with them
 		$output = BankAccessor::create()->login($username,$password,$indexes,true);
 		$data = null;
@@ -47,25 +55,20 @@ class MobileApiController extends Controller {
 				"Token" => $output->getToken(),
 				"Accounts" => $output->getAccounts()
 			);
-		}
-		else {
+		}else {
 			
 			$data = array(
 				"Error" => $output->getReason()
 			);
 		}
-		
-		
+
 		// Put the data into the response & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
 	}
-	
-	
-	
-	
-	
+
+	//	This loads the transactions from a particular month
 	public function loadTransactions(SS_HTTPRequest $request) {
 		
 		
@@ -75,29 +78,24 @@ class MobileApiController extends Controller {
 		$month = $request->postVar("month");
 		$year = $request->postVar("year");
 		$token = $request->postVar("token");
-		
-		
-		
+
 		// Try to get the account's transactions
 		$output = BankAccessor::create()->loadTransactions($userID, $accountID, $month, $year, $token);
+		$data = null;
 		
-		
-		
-		//if ($output->didPass()) {
-			
-			$data = array(
-				"Transactions" => $output->getTransactions(),
-				"Account" => $output->getAccount()
-			);
-		//}
-		
-		
+		//	Builds the returned data
+		$data = array(
+			"Transactions" => $output->getTransactions(),
+			"Account" => $output->getAccount()
+		);
+
 		// Put the data into the response & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
 	}
 	
+	//	This allows the user to transfer money between accounts
 	public function makeTransfer(SS_HTTPRequest $request) {
 	
 		// Get inputs from post variables
@@ -107,11 +105,8 @@ class MobileApiController extends Controller {
 		$amount = $request->postVar("amount");
 		$token = $request->postVar("token");
 
-		
-		
 		// Try to make the transfer
 		$output = BankAccessor::create()->makeTransfer($userID, $accountAID, $accountBID, $amount, $token);
-		
 		$data = null;
 		
 		// Decide what data to give back
@@ -122,33 +117,33 @@ class MobileApiController extends Controller {
 				"payeeAcc" => $output->getPayeeAccount(),
 				"amount" => $output->getAmount()
 			);
-		}
-		else {
+		}else {
 			
 			$data = array(
 				"Error" => "Error making transfer"
 			);
 		}
 		
-		
 		// Put the data into the response & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
-	
-	
 	}
 	
+	//	This allows the user to logout of the app
 	public function logout(SS_HTTPRequest $request){
 	
+		//	Get the userID and token 
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 		
-		// Try to make the transfer
+		//	Logout the user
 		$output = BankAccessor::create()->logout($userID ,$token);
-	
 	}
-
-
+	
+	//	####################################
+	//	#### Intermediate  Requirements ####
+	//	####################################
+	
 }
 ?>
