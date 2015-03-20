@@ -27,29 +27,64 @@ class User extends DataObject {
 		'RewardsTaken' => 'RewardTaken'
 	);
 	
+	static $has_written = false;
+	
 	//	This encrypts the users password before write
 	function onBeforeWrite(){
 	
-		//	This is the key used for encryption/decryption
-		$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
+		if(!self::$has_written) {
+				
+			//	This is the key used for encryption/decryption
+			$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
+			
+			//	Sets the initialisation vector from the first 16 characters of the hashed username
+			$iv = substr(openssl_digest($this->getField("Username"), 'sha512'), 0, 16);
+			
+			//	Created the crypt object
+			$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
+			
+			//	Sets the initialisation vector
+			$crypt->IV($iv);
+			
+			//	Encrypts the data getting added to the Password field
+			$encrypted = $crypt->encrypt($this->getField("Password"));
+
+			//	Adds the base64 encoded version to the field
+			$this->Password = base64_encode($encrypted);
+			
+			self::$has_written = true;
+		}else{
+			$user = User::get()->filter(array(
+				'Password' => $this->getField("Password")
+			))[0];
+			
+			if($user !== null){
+				$this->Password = $user->Password;
+			}else{
+					//	This is the key used for encryption/decryption
+				$key = "pGVsJMJ6z+F7If9+M8FW7njv2NjpSr/VyeCMXSY8DrU=";
+				
+				//	Sets the initialisation vector from the first 16 characters of the hashed username
+				$iv = substr(openssl_digest($this->getField("Username"), 'sha512'), 0, 16);
+				
+				//	Created the crypt object
+				$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
+				
+				//	Sets the initialisation vector
+				$crypt->IV($iv);
+				
+				//	Encrypts the data getting added to the Password field
+				$encrypted = $crypt->encrypt($this->getField("Password"));
+
+				//	Adds the base64 encoded version to the field
+				$this->Password = base64_encode($encrypted);
+			}
+		}
+
 		
-		//	Sets the initialisation vector from the first 16 characters of the hashed username
-		$iv = substr(openssl_digest($this->getField("Username"), 'sha512'), 0, 16);
+			//	Finishes the write operation
+			parent::onBeforeWrite();
 		
-		//	Created the crypt object
-		$crypt = new PHP_Crypt($key, PHP_Crypt::CIPHER_AES_256, PHP_Crypt::MODE_CBC);
-		
-		//	Sets the initialisation vector
-		$crypt->IV($iv);
-		
-		//	Encrypts the data getting added to the Password field
-		$encrypted = $crypt->encrypt($this->getField("Password"));
-	    
-		//	Adds the base64 encoded version to the field
-		$this->Password = base64_encode($encrypted);
-    	
-		//	Finishes the write operation
-    	parent::onBeforeWrite();
     }
 	
 	

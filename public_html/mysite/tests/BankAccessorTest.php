@@ -5,7 +5,7 @@
  * Martin S A - 27/02/2015
  */
 class BankAccessorTest extends SapphireTest {
-	static $fixture_file = 'mysite/tests/fixtures.yml';
+	static $fixture_file = 'mysite/tests/TestUsers.yml';
 	
 
 	/**
@@ -13,7 +13,7 @@ class BankAccessorTest extends SapphireTest {
 	 */
 	public function setup() {
 		
-		// Something that happends before EACH test
+		// Something that happens before EACH test
 		parent::setup();
 		
 	}
@@ -24,219 +24,263 @@ class BankAccessorTest extends SapphireTest {
 	public function tearDown() {
 		
 		// Something that happens after EACH test
-		parent::testDown();
+		parent::tearDown();
 	}
 	
 	
-	/*
-	*
-	* Tests for Login()
-	*
-	*/
-	public function testLoginCorrectUsernameCorrectPassword() {
+	//	#######################################
+	//	#### Tests for Login using the web ####
+	//	#######################################
+	
+	/*public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
+	
 		$accessor = new BankAccessor();
-		$expected = "MyPerson";
+		$expected = "myPerson";
 		$user = $this->objFromFixture('User','myPerson');
-		$this->assertEquals($expected, $accessor->login($user->Username,'Password')->getUser()->Username);
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Password",null,false)->getUser()->Username);
     }
 	
-	/*public function testLoginCorrectUsernameCorrectPassword() {
-		
-		$accessor = new BankAccessor();
-		$expected = "Martin";
-	   
-		$this->assertEquals($expected, $accessor->login('Martin','Password')->getUser()->Username);
-    }
+	public function testLoginIncorrectUsernameCorrectPasswordCorrectMobileBool() {
 	
-	public function testLoginIncorrectUsernameCorrectPassword() {
-		
 		$accessor = new BankAccessor();
 		$expected = null;
-	   
-		$this->assertEquals($expected, $accessor->login('NotMartin','Password')->getUser());
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login("WrongUser","Password",null,false)->getUser());
     }
 	
-	public function testLoginCorrectUsernameIncorrectPassword() {
-		
+	public function testLoginCorrectUsernameIncorrectPasswordCorrectMobileBool() {
+	
 		$accessor = new BankAccessor();
 		$expected = null;
-	   
-		$this->assertEquals($expected, $accessor->login('Martin','Notpassword')->getUser());
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"WrongPassword",null,false)->getUser());
     }
 	
-	public function testLoginIncorrectUsernameIncorrectPassword() {
-		
+	public function testLoginCorrectUsernameCorrectPasswordIncorrectMobileBool() {
+	
 		$accessor = new BankAccessor();
 		$expected = null;
-	   
-		$this->assertEquals($expected, $accessor->login('NotMartin','Notpassword')->getUser());
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Password",null,true)->getUser());
     }
 	
-	//Need tests to check products and accounts 
-	public function testLoginDidPassCorrectInformation() {
-		
+	public function testLoginIncorrectUsernameIncorrectPasswordCorrectMobileBool() {
+	
 		$accessor = new BankAccessor();
-		$expected = true;
-	   
-		$this->assertEquals($expected, $accessor->login('Martin','Password')->didPass());
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login("WrongUser","WrongPassword",null,false)->getUser());
     }
 	
-	public function testLoginDidPassIncorrectInformation() {
-		
+	public function testLoginIncorrectUsernameCorrectPasswordIncorrectMobileBool() {
+	
 		$accessor = new BankAccessor();
-		$expected = false;
-	   
-		$this->assertEquals($expected, $accessor->login('NotMartin','Password')->didPass());
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login("wrongUser","Password",null,true)->getUser());
+    }
+	
+	public function testLoginCorrectUsernameIncorrectPasswordIncorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"WrongPassword",null,true)->getUser());
+    }
+	
+	public function testLoginIncorrectUsernameIncorrectPasswordIncorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login("WrongUser","WrongPassword",null,true)->getUser());
     }*/
-	
-	/*
-	*
-	* Tests for LoginFromMobile()
-	*
-	*/
-	
-	/*public function testLoginFromMobileCorrectUsernameCorrectPassword() {
-		
-		$accessor = new BankAccessor();
-		$expected = "Martin";
-		$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','Pas',$array)->getUser()->Username);
-    }
-	
-	public function testLoginFromMobileIncorrectUsernameCorrectPassword() {
-		
-		$accessor = new BankAccessor();
-		$expected = null;
-	   
-		$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Pas',$array)->getUser());
-    }
-	
-	public function testLoginFromMobileCorrectUsernameIncorrectPassword() {
-		
-		$accessor = new BankAccessor();
-		$expected = null;
-	   
-		$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','Paw',$array)->getUser());
-    }
-	
-	public function testLoginFromMobileIncorrectUsernameIncorrectPassword() {
-		
-		$accessor = new BankAccessor();
-		$expected = null;
-	   
-		$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Paw',$array)->getUser());
-    }
-	
-	public function testLoginFromMobileIncorrectPasswordLength() {
-		
-		$accessor = new BankAccessor();
-		$expected = null;
-	   
-		$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','NotCorrectLength',$array)->getUser());
-    }
-	
-	public function testLoginFromMobileIncorrectNumberOfPasswordDigits() {
-		
-		$accessor = new BankAccessor();
-		$expected = null;
-	   
-		$array = array(0,1,2,3,4);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Paw',$array)->getUser());
-    }
-	
-	//Need tests to check products and accounts
-	public function testLoginFromMobileDidPassCorrectInformation() {
-		
-		$accessor = new BankAccessor();
-		$expected = true;
-	   
-		$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('Martin','Pas',$array)->didPass());
-    }
-	
-	public function testLoginFromMobileDidPassIncorrectInformation() {
-		
-		$accessor = new BankAccessor();
-		$expected = false;
-	   
-	$array = array(0,1,2);
-	   
-		$this->assertEquals($expected, $accessor->loginFromMobile('NotMartin','Paw',$array)->didPass());
-    }
-	
-	/*
-	*
-	* Tests for getCurrentUser()
-	*
-	*/
-	
-	//These tests are now broken
-	/*
-	public function testGetCurrentUserCorrectUser() {
-		
-		$accessor2 = new BankAccessor();
-		$expected = "Rob";
-	    $accessor2->login('Rob','password2');
-	   
-	   
-		$this->assertEquals($expected, $accessor2->getCurrentUser()->Username);
-    }
-	
-	public function testGetCurrentUserIncorrectUser() {
-		
-		$accessor3 = new BankAccessor();
-		$expected = "Martin";
-	    $accessor3->login('Rob','password2');
-	   
-	   
-		$this->assertNotEquals($expected, $accessor3->getCurrentUser()->Username);
-    }*/
-	
-	/*
-	*
-	* Tests for Transfer()
-	*
-	*/
-	
-	/*
-	*
-	* Tests for LoadTransactions()
-	*
-	*/
-	
-	/*public function testLoadACorrectTransaction() {
-		
-		$accessor3 = new BankAccessor();
-		$expected = "Spotify";
-		$this->assertEquals($expected, $accessor3->loadTransactions( 1, 1,3, 2015, "OwTHze1QqNVllolxp1b2cfG49XdMz2ZXDsX6yDK2nIOtlHu7KxrhWoCpgrbp8Om4" )->getTransactions()[0]->Payee);
-    }
 
+	//	##############################################
+	//	#### Tests for Login using the mobile app ####
+	//	##############################################
 	
-	/*
-	*
-	* Tests for SQL injection in Login()
-	*
-	*/
+	/*public function testLoginCorrectUsernameCorrectPasswordCorrectIndexesCorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = "myPerson";
+		$array = array(0,1,2);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Pas",$array,true)->getUser()->Username);
+    }
+	
+	public function testLoginInCorrectUsernameCorrectPasswordCorrectIndexesCorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$array = array(0,1,2);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login("WrongUser","Pas",$array,true)->getUser());
+    }
+	
+	public function testLoginCorrectUsernameIncorrectPasswordCorrectIndexesCorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$array = array(0,1,2);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Pat",$array,true)->getUser());
+    }
+	
+	public function testLoginCorrectUsernameCorrectPasswordIncorrectIndexesCorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$array = array(0,1,8);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Pas",$array,true)->getUser());
+    }
+	
+	public function testLoginCorrectUsernameCorrectPasswordCorrectIndexesIncorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$array = array(0,1,2);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Pas",$array,false)->getUser());
+    }
+	
+	public function testLoginCorrectUsernameIncorrectPasswordSizeCorrectIndexesCorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$array = array(0,1,2);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Pass",$array,true)->getUser());
+    }
+	
+	public function testLoginCorrectUsernameCorrectPasswordIncorrectIndexesSizeCorrectMobileBool() {
+	
+		$accessor = new BankAccessor();
+		$expected = null;
+		$array = array(0,1,2,3);
+		$user = $this->objFromFixture('User','myPerson');
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Pas",$array,true)->getUser());
+    }*/
+
+	//	######################################
+	//	#### Tests for LoginOutput object ####
+	//	######################################
+	
+	/*public function testLoginOutputDidPassCorrectInformation() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+	   
+		$this->assertEquals($expected, $accessor->login($user->Username,"Password",null,false)->didPass());
+    }
+	
+	public function testLoginOutputDidPassIncorrectInformation() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+	   
+		$this->assertEquals($expected, $accessor->login($user->Username,"NotPassword",null,false)->didPass());
+    }
+	
+	public function testLoginOutputCorrectInformationGetCorrectUser() {
+		
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$expected = $user;
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"Password",null,false)->getUser());
+    }
+	
+	public function testLoginOutputInCorrectInformationGetCorrectUser() {
+		
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$expected = null;
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"NotPassword",null,false)->getUser());
+    }*/
 	
 	
-	/*public function testSQLInjectionLogin() {
+	/* Requires tests for the accounts and the products*/
+	
+	
+	
+	
+	/*public function testLoginOutputCorrectInformationGetAToken() {
+		
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$expected = null;
+		
+		$this->assertNotEquals($expected, $accessor->login($user->Username,"Password",null,false)->getToken());
+    }
+	
+	public function testLoginOutputInCorrectInformationGetNoToken() {
+		
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$expected = null;
+		
+		$this->assertEquals($expected, $accessor->login($user->Username,"NotPassword",null,false)->getToken());
+    }*/
+	
+	//	#######################################
+	//	#### Tests for Login SQL Injection ####
+	//	#######################################
+	
+	/*public function testSQLInjectionLoginUsernameField() {
 		
 		$accessor = new BankAccessor();
 		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
 	   
-		$this->assertEquals($expected, $accessor->login('Marin; DROP TABLE Users','password')->getUser());
+		$this->assertEquals($expected, $accessor->login("myPerson; DROP TABLE Users","Password",null,false)->getUser());
+    }
+	
+	public function testSQLInjectionLoginPasswordField() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+	    $user = $this->objFromFixture('User','myPerson');
+	   
+		$this->assertEquals($expected, $accessor->login($user->Username,"Password; DROP TABLE Users",null,false)->getUser());
+    }
+	
+	public function testSQLInjectionLoginIndexesField() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+	   
+		$this->assertEquals($expected, $accessor->login($user->Username,"Password","DROP TABLE Users",false)->getUser());
     }*/
 	
+	
+	public function testLoadTrans() {
+		
+		$accessor = new BankAccessor();
+		$expected = 1;
+		//$user = $this->objFromFixture('User','myPerson');
+	   
+		$this->assertEquals($expected, $accessor->loadTransactions(2,1,"Mar","2015","TickCjL40xBbSbgLq2fNblrZZ5uVT7EQ0bfb7dSlG6i8KRx2qXD3J8ln2vhj5OsE")->getAccount()->UserID);
+    }
 	
 }

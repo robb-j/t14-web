@@ -1,9 +1,10 @@
 User:
   myPerson:
-    Username: yPerson
-    FirstName: PersonForeName
-    Surname: PersonSurname
-    Email: me@me.com
-    LastFullCategorise: 18 Mar 2015
-    DOB: 18 Mar 2015
-    Password: password
+    Username:myPerson
+    FirstName:PersonForeName
+    Surname:PersonSurname
+    Email:me@me.com
+    LastFullCategorise:18 Mar 2015
+    Password:Password
+    DOB:18 Mar 2015
+    

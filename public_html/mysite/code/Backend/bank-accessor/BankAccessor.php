@@ -83,10 +83,10 @@ class BankAccessor extends Object implements BankInterface {
 			$actaulUserID = $userSession->UserID;
 
 			/*	
-				If the userID given is the same as the one in the database then load the transactions 
-				associated with the account given from the specified month
+				If the userID given is the same as the one in the database and the user owns the account
+				then load the transactions associated with the account given from the specified month
 			*/
-			if (strcmp($actaulUserID,$sanitisedUserID)===0){
+			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,Account::get()->byID($sanitisedAccountID)->UserID)=== 0){
 				
 				//	Gets the last day in the month specified 
 				$lastDay = cal_days_in_month(CAL_GREGORIAN, $sanitisedMonth, $sanitisedYear);
@@ -96,7 +96,8 @@ class BankAccessor extends Object implements BankInterface {
 				//	Load all transaction in the time frame wanted
 				$transactions = Transaction::get()->filter(array(
 						'Date:GreaterThan' => $start,
-						'Date:LessThan' => $end
+						'Date:LessThan' => $end,
+						'AccountID' => $sanitisedAccountID
 					));
 				
 				//	Extend the users session 
@@ -108,7 +109,7 @@ class BankAccessor extends Object implements BankInterface {
 		}
 		
 		//	Returns a failed TransactionOutput object
-		return new TranasctionOutput(null,null);
+		return new TransactionOutput(null,null);
 	}
 	
 	/*
@@ -129,8 +130,8 @@ class BankAccessor extends Object implements BankInterface {
 			'Token' => $sanitisedToken
 			))[0];
 		
-		//	If the token is associated with an account, both accountID's are not null, the amount is >0 
-		if($userSession != null && $sanitisedAccountAID != null && $sanitisedAccountBID != null && $sanitisedAmount>0 && $sanitisedAmount !=null ){
+		//	If the token is associated with an account, both accountID's are not null, the amount is >0 and they aren't the same accounts
+		if($userSession != null && $sanitisedAccountAID != null && $sanitisedAccountBID != null && $sanitisedAmount>0 && $sanitisedAmount !=null && $sanitisedAccountAID != $sanitisedAccountBID ){
 		
 			//	Get the userID from the session
 			$actaulUserID = $userSession->UserID;
@@ -421,6 +422,8 @@ class BankAccessor extends Object implements BankInterface {
 		
 		//	Then write this to the database
 		$userSession->write();
+		
+		$this->deleteUserSessions($user->ID);
 		
 		return true;
 	}
