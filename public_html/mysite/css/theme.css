@@ -5,7 +5,6 @@
  * 	Page Styles
  */
 .page-container h2 {
-	
 	margin: 0px 50px 5px 50px;
 	font-family: 'Open Sans', 'Helvetica Neue';
 	letter-spacing: 10;
@@ -14,9 +13,16 @@
 }
 
 .page-container p {
-	
 	font-family: 'Open Sans','Helvetica Neue';
 	margin: 0px;
+}
+
+.page-container currency-red {
+	color: #CC391A;
+}
+
+.page-container currency-green {
+	color: #30A857;
 }
 
 .page-container a {
