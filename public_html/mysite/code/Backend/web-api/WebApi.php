@@ -71,5 +71,11 @@ class WebApi extends Object{
 	//	#### Intermediate  Requirements ####
 	//	####################################
 	
+	public function newPayments($userID){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->newPayments( $userID, Cookie::get('BankingSession') );
+	}
+	
 }
 ?>

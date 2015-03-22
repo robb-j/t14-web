@@ -70,12 +70,9 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedAccountID = Convert::raw2sql($accountID);
 		$sanitisedMonth = Convert::raw2sql($month);
 		$sanitisedYear = Convert::raw2sql($year);
-		$sanitisedToken = Convert::raw2sql($token);
 		
 		//	Gets the user session that is associated with the token	
-		$userSession = UserSession::get()->filter(array(
-			'Token' => $sanitisedToken
-			))[0];
+		$userSession = $this->getUserSession($token);
 		
 		//	If the session exists get the UserID associated with the session
 		if($userSession != null){
@@ -126,9 +123,7 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedToken = Convert::raw2sql($token);
 
 		//	Gets the user session that is associated with the token	
-		$userSession = UserSession::get()->filter(array(
-			'Token' => $sanitisedToken
-			))[0];
+		$userSession = $this->getUserSession($token);
 		
 		//	If the token is associated with an account, both accountID's are not null, the amount is >0 and they aren't the same accounts
 		if($userSession != null && $sanitisedAccountAID != null && $sanitisedAccountBID != null && $sanitisedAmount>0 && $sanitisedAmount !=null && $sanitisedAccountAID != $sanitisedAccountBID ){
@@ -190,9 +185,7 @@ class BankAccessor extends Object implements BankInterface {
 		$cookie = Cookie::get('BankingSession');
 		if($cookie != null){
 			
-			$userSession = UserSession::get()->filter(array(
-				'Token' => Convert::raw2sql($cookie)
-				))[0];
+			$userSession = $this->getUserSession($cookie);
 			
 			if($userSession != null){
 				
@@ -458,12 +451,57 @@ class BankAccessor extends Object implements BankInterface {
 		}
 	}
 	
+	private function getUserSession($token){
+	
+		//	Gets the user session that is associated with the token	
+		$userSession = UserSession::get()->filter(array(
+			'Token' => Convert::raw2sql($token)
+			))[0];
+	
+		return $userSession;
+	}
+	
 	//	####################################################
 	//	#### Intermediate Requirements public functions ####
 	//	####################################################
 	
 	public function newPayments( $userID, $token ){
 	
+		//	Gets the user session from the token
+		$userSession = $this->getUserSession($token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		if($userSession != null ){
+		
+			$actualUserID = $userSession->UserID;
+			
+			if(strcmp($actualUserID, $sanitisedUserID) === 0){
+				
+				$user = User::get()->byID($actualUserID);
+				
+				if ($user != null){
+					
+					$arrayList = new ArrayList();	
+					$accounts = $user->Accounts();
+					foreach( $accounts  as $row) {
+				
+						$theRowID =  $row->ID;
+						
+						$transactions = Transaction::get()->filter(array(
+							'AccountID' => $theRowID,
+							'CategoryID' => 0
+						));
+						
+						foreach($transactions as $transaction){
+							$arrayList->push($transaction);
+						}
+					}
+			
+					return $arrayList;
+				}		
+			}
+		}
+		return new ArrayList();
 	}
 	
 	public function categorizePayments( $userID, $token, $categorizedItems ){
@@ -476,10 +514,98 @@ class BankAccessor extends Object implements BankInterface {
 	
 	public function chooseReward( $userID, $token, $rewardID ){
 	
+		//	Gets the user session from the token
+		$userSession = $this->getUserSession($token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		if($userSession != null ){
+		
+			$actualUserID = $userSession->UserID;
+			
+			if(strcmp($actualUserID, $sanitisedUserID) === 0){
+				
+				$user = User::get()->byID($actualUserID);
+				
+				if ($user != null){
+					
+					
+					$userPoints = $user->Points;
+					
+					
+				}
+				
+			
+			}
+			
+		}
+		return $userPoints;
 	}
 	
 	public function performSpin( $userID, $token){
 	
+		//	Gets the user session from the token
+		$userSession = $this->getUserSession($token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		if($userSession != null ){
+		
+			$actualUserID = $userSession->UserID;
+			
+			if(strcmp($actualUserID, $sanitisedUserID) === 0){
+				
+				$user = User::get()->byID($actualUserID);
+				
+				if ($user != null){
+					
+					if( $user->NumberOfSpins > 0){
+					
+						// do spin
+						$result = mt_rand( 0 , 100);
+						if ($result >=0 && $result <=50) {
+						
+							$pointsToBeAdded = 20;
+						} elseif ($result > 50 && $result <=75) {
+						
+							$pointsToBeAdded = 40;
+						} elseif ($result >75 && $result <=88) {
+						
+							$pointsToBeAdded = 60;
+						}elseif ($result >88 && $result <=95) {
+						
+							$pointsToBeAdded = 80;
+						}elseif ($result >95 && $result <=100) {
+						
+							$pointsToBeAdded = 100;
+						}else{
+							return null;
+						}
+						
+						// update points
+						
+						//	Increases the Expiry by 600 seconds
+						$user->Points = $user->Points + $pointsToBeAdded;
+						$user->NumberOfSpins = $user->NumberOfSpins -1;
+						$user->write();
+						
+						$pointGain = PointGain::create();
+						$pointGain->Title = "Spin";
+						$pointGain->Description = "Gain of " . $pointsToBeAdded . " points";
+						$pointGain->Date = date("d M Y");
+						$pointGain->Points = $pointsToBeAdded;
+						$pointGain->UserID = $actualUserID;
+						
+						//	Then write this to the database
+						$pointGain->write();
+						
+						$this->updateSession($userSession);
+						// return points
+						return $pointGain;
+					}
+				}
+			}
+		}
+		
+		return null;
 	}	
 }
 ?>

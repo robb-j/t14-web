@@ -9,7 +9,7 @@ class MobileApiController extends Controller {
 
 	//	Sets the list of allowed actions
 	private static $allowed_actions = array(
-        'login', 'loadTransactions','makeTransfer','logout'
+        'login', 'loadTransactions','makeTransfer','logout','newPayments','chooseReward', "performSpin"
     );
     
 	//	Initialises the API
@@ -144,6 +144,104 @@ class MobileApiController extends Controller {
 	//	####################################
 	//	#### Intermediate  Requirements ####
 	//	####################################
+	
+	public function newPayments(SS_HTTPRequest $request){
+	
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+
+		// Try to make the transfer
+		$output = BankAccessor::create()->newPayments($userID, $token);
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output) > 0 ) {
+			
+			$data = array(
+				"transactions" => $output
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error making transfer"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	
+	
+	
+	}
+	
+	public function chooseReward(SS_HTTPRequest $request){
+	
+	// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		$rewardID = $request->postVar("rewardID");
+
+		// Try to make the transfer
+		$output = BankAccessor::create()->chooseReward($userID, $token, $rewardID);
+		$data = null;
+		
+		// Decide what data to give back
+		if ($output > 0 ) {
+			
+			$data = array(
+				"Points" => $output
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error making transfer"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	
+	
+	
+	
+	}
+	
+	public function performSpin(SS_HTTPRequest $request){
+	
+	// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+
+		// Try to make the transfer
+		$output = BankAccessor::create()->performSpin($userID, $token);
+		$data = null;
+		
+		// Decide what data to give back
+		if ($output != null ) {
+			$data = array(
+				"Points" => $output->Points
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error making transfer"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	
+	
+	
+	
+	}
 	
 }
 ?>

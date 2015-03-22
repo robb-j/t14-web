@@ -3,7 +3,7 @@
 interface BankInterface {
 	
 	//	Basic requirements
-	public function login( $username, $password,$indexes, $mobile );
+	public function login( $username, $password, $indexes, $mobile );
 	public function loadTransactions( $userID, $accountID, $month, $year, $token );
 	public function makeTransfer( $userID, $accountAID, $accountBID, $amount, $token );
 	public function getCurrentUser();
