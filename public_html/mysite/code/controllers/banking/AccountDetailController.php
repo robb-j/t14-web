@@ -9,7 +9,7 @@ class AccountDetailController extends BankController {
 	
 	// Set the tab title
 	public $TabTitle = "banking";
-	
+
 	public function init() {
 		
 		parent::init();
@@ -17,6 +17,10 @@ class AccountDetailController extends BankController {
 		
 		// Add some custom CSS
 		Requirements::css('mysite/css/accountdetail.css');
+		
+		// Add some javascript
+		Requirements::javascript("mysite/js/libs/jquery.js");
+		Requirements::javascript("mysite/js/AccountDetail.js");
 	}
 	
 	public function Content() {
