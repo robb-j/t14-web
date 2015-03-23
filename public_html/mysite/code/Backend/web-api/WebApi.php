@@ -76,14 +76,14 @@ class WebApi extends Object{
 		//	Adds the token from the cookie "Cookie::get('BankingSession')"
 		return BankAccessor::create()->newPayments( $userID, Cookie::get('BankingSession') );
 	}
-	public chooseReward($userID, $rewardID){
+	public function chooseReward($userID, $rewardID){
 	
 		//	Adds the token from the cookie "Cookie::get('BankingSession')"
 		return BankAccessor::create()->chooseReward( $userID, Cookie::get('BankingSession') , $rewardID);
 	
 	}
 	
-	public performSpin($userID){
+	public function performSpin($userID){
 	
 		//	Adds the token from the cookie "Cookie::get('BankingSession')"
 		return BankAccessor::create()->performSpin( $userID, Cookie::get('BankingSession') );
