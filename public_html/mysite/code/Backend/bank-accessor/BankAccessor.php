@@ -36,12 +36,13 @@ class BankAccessor extends Object implements BankInterface {
 			//	If the given password matches the one in the database 
 			if($this->checkPassword($databasePass, $password, $sanitisedUsername, $indexes, $mobile) === true){
 				
+				
 				/*
 					If the user if not already logged in, then generate a new authentication token, 
 					create the session in the database and return a login output object  
 				*/
 				if( !$this->checkIfUserLoggedIn($user)){
-
+					
 					$token = $this->generateToken();
 
 					$this->createSession($user, $token);
@@ -267,7 +268,7 @@ class BankAccessor extends Object implements BankInterface {
 		//	Gets all of the sessions from the user and sorts them by expiry time
 		$userSession = UserSession::get()->filter(array(
 			'UserID' => Convert::raw2sql($userID)
-		))->sort('Expiry');
+		))->sort('Expiry ', 'DESC');
 	
 		// Only keeps the 10 latest and deletes the rest
 		$count=0;
@@ -305,6 +306,7 @@ class BankAccessor extends Object implements BankInterface {
 
 		// If the trimmed versions of both are the same then return true else return false
 		if( strcmp(trim($plaindatabasePassword), trim($givenPassword)) === 0){
+			
 			
 			//	This wipes the plain text password from ram
 			$plaindatabasePassword = $this->generateToken();
@@ -517,6 +519,8 @@ class BankAccessor extends Object implements BankInterface {
 		//	Gets the user session from the token
 		$userSession = $this->getUserSession($token);
 		$sanitisedUserID = Convert::raw2sql($userID);
+		$sanitisedRewardID = Convert::raw2sql($rewardID);
+		$reward = Reward::get()->byID($sanitisedRewardID);
 		
 		if($userSession != null ){
 		
@@ -526,19 +530,52 @@ class BankAccessor extends Object implements BankInterface {
 				
 				$user = User::get()->byID($actualUserID);
 				
-				if ($user != null){
+				if ($user !== null && $reward !== null){
 					
 					
 					$userPoints = $user->Points;
+					$rewardCost = $reward->Cost;
+					if($userPoints >= $rewardCost ){
 					
+						$user->Points = $user->Points - $rewardCost;
+						$user->write();
 					
+						//	Create a new row and fills in the relevant fields 
+						$rewardTaken = RewardTaken::create();
+						$rewardTaken->RewardID = $reward->ID;
+						$rewardTaken->Date = date("d M Y");
+						$rewardTaken->UserID= $user->ID;
+						
+						//	Then write this to the database
+						$rewardTaken->write();
+						
+						if($user->Email !== null){
+						
+							
+							$email = new Email();
+							$email
+								->setFrom("rewards@t14.banking.co.uk")
+								->setTo($user->Email)
+								->setSubject("Reward Claimed: ".$reward->Title)
+								->setTemplate('RewardTaken')
+								->populateTemplate(new ArrayData(array(
+									'user' => $user->FirstName,
+									'prizeTitle' => $reward->Title,
+									'prizeLeft' => $user->Points,
+									'costPoints' => $rewardCost
+								)));
+
+							$email->send();
+						
+						
+						}
+						
+						return new RewardTakenOutput($reward, $rewardTaken, true);
+					}
 				}
-				
-			
 			}
-			
 		}
-		return $userPoints;
+		return new RewardTakenOutput(null, null, false);
 	}
 	
 	public function performSpin( $userID, $token){
@@ -582,9 +619,13 @@ class BankAccessor extends Object implements BankInterface {
 						
 						// update points
 						
-						//	Increases the Expiry by 600 seconds
+					
 						$user->Points = $user->Points + $pointsToBeAdded;
 						$user->NumberOfSpins = $user->NumberOfSpins -1;
+						
+						//$user->Password = $pass;
+						
+						
 						$user->write();
 						
 						$pointGain = PointGain::create();
@@ -598,13 +639,13 @@ class BankAccessor extends Object implements BankInterface {
 						$pointGain->write();
 						
 						$this->updateSession($userSession);
-						// return points
+						
 						return $pointGain;
 					}
 				}
 			}
 		}
-		
+
 		return null;
 	}	
 }
