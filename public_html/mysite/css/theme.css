@@ -48,8 +48,8 @@
 	text-decoration: none;
 }
 
-.money::before {
-	content: '£';
+.right {
+	text-align: right;
 }
 
 

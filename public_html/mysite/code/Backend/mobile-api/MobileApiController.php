@@ -164,7 +164,7 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$data = array(
-				"Error" => "Error making transfer"
+				"Error" => "Error getting new Payments"
 			);
 		}
 		
@@ -189,15 +189,16 @@ class MobileApiController extends Controller {
 		$data = null;
 		
 		// Decide what data to give back
-		if ($output > 0 ) {
+		if ($output->didPass() ) {
 			
 			$data = array(
-				"Points" => $output
+				"rewardTaken" => $output->getRewardTaken()->ID,
+				"reward" => $output->getReward()->ID
 			);
 		}else {
 			
 			$data = array(
-				"Error" => "Error making transfer"
+				"Error" => "Error choosing a reward"
 			);
 		}
 		
@@ -216,7 +217,7 @@ class MobileApiController extends Controller {
 	// Get inputs from post variables
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
-
+		
 		// Try to make the transfer
 		$output = BankAccessor::create()->performSpin($userID, $token);
 		$data = null;
@@ -229,7 +230,7 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$data = array(
-				"Error" => "Error making transfer"
+				"Error" => "Error performing a spin"
 			);
 		}
 		

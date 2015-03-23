@@ -66,15 +66,14 @@ class LoginController extends Controller {
 		// Attempt the login
 		$output = WebApi::create()->login($user, $pass);
 		
-		
 		if ($output->didPass() == false) {
+			
 			
 			// If the login failed, inform the user
 			$form->addErrorMessage('Failed', "Failed To Authenticate", 'Unlucky Pal');
 			return $this->redirectBack();
 		}
 		else {
-			
 			// If the login failed, redirect back to /banking
 			return $this->redirect("banking/");
 		}

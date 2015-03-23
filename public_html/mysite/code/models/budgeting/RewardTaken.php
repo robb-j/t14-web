@@ -7,7 +7,6 @@
  class RewardTaken extends DataObject {
 	 
 	 private static $db = array(
-	 	"Title" => "Varchar(30)",
 		"Date" => "Date"
 	 );
 	 

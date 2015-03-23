@@ -32,7 +32,7 @@ class BankAccessorTest extends SapphireTest {
 	//	#### Tests for Login using the web ####
 	//	#######################################
 	
-	/*public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
+	public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
 	
 		$accessor = new BankAccessor();
 		$expected = "myPerson";
@@ -102,13 +102,13 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','myPerson');
 		
 		$this->assertEquals($expected, $accessor->login("WrongUser","WrongPassword",null,true)->getUser());
-    }*/
+    }
 
 	//	##############################################
 	//	#### Tests for Login using the mobile app ####
 	//	##############################################
 	
-	/*public function testLoginCorrectUsernameCorrectPasswordCorrectIndexesCorrectMobileBool() {
+	public function testLoginCorrectUsernameCorrectPasswordCorrectIndexesCorrectMobileBool() {
 	
 		$accessor = new BankAccessor();
 		$expected = "myPerson";
@@ -176,13 +176,13 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','myPerson');
 		
 		$this->assertEquals($expected, $accessor->login($user->Username,"Pas",$array,true)->getUser());
-    }*/
+    }
 
 	//	######################################
 	//	#### Tests for LoginOutput object ####
 	//	######################################
 	
-	/*public function testLoginOutputDidPassCorrectInformation() {
+	public function testLoginOutputDidPassCorrectInformation() {
 		
 		$accessor = new BankAccessor();
 		$expected = true;
@@ -216,7 +216,7 @@ class BankAccessorTest extends SapphireTest {
 		$expected = null;
 		
 		$this->assertEquals($expected, $accessor->login($user->Username,"NotPassword",null,false)->getUser());
-    }*/
+    }
 	
 	
 	/* Requires tests for the accounts and the products*/
@@ -224,7 +224,7 @@ class BankAccessorTest extends SapphireTest {
 	
 	
 	
-	/*public function testLoginOutputCorrectInformationGetAToken() {
+	public function testLoginOutputCorrectInformationGetAToken() {
 		
 		$accessor = new BankAccessor();
 		$user = $this->objFromFixture('User','myPerson');
@@ -240,7 +240,7 @@ class BankAccessorTest extends SapphireTest {
 		$expected = null;
 		
 		$this->assertEquals($expected, $accessor->login($user->Username,"NotPassword",null,false)->getToken());
-    }*/
+    }
 	
 	//	#######################################
 	//	#### Tests for Login SQL Injection ####
@@ -273,14 +273,5 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, $accessor->login($user->Username,"Password","DROP TABLE Users",false)->getUser());
     }*/
 	
-	
-	public function testLoadTrans() {
-		
-		$accessor = new BankAccessor();
-		$expected = 1;
-		//$user = $this->objFromFixture('User','myPerson');
-	   
-		$this->assertEquals($expected, $accessor->loadTransactions(2,1,"Mar","2015","TickCjL40xBbSbgLq2fNblrZZ5uVT7EQ0bfb7dSlG6i8KRx2qXD3J8ln2vhj5OsE")->getAccount()->UserID);
-    }
 	
 }
