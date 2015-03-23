@@ -20,8 +20,6 @@ class ProductDetailController extends BankController {
 		Requirements::css('mysite/css/banking/product.css');
 	}
 	
-	
-	
 	public function Content() {
 		
 		// Get the ID of the product to display from the url params
@@ -31,5 +29,7 @@ class ProductDetailController extends BankController {
 		
 		// Render the cotent with the template ProductContent.ss
 		return $this->renderWith("ProductContent");
+		
+		
 	}
 }

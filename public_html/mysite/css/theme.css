@@ -17,11 +17,11 @@
 	margin: 0px;
 }
 
-.page-container currency-red {
+.page-container .currency-red {
 	color: #CC391A;
 }
 
-.page-container currency-green {
+.page-container .currency-green {
 	color: #30A857;
 }
 

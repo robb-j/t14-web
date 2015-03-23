@@ -6,7 +6,8 @@
 		
 		
 		<!-- The Heading -->
-		<div class="row">
+		<div
+		class="row">
 			
 			<!-- The Heading on the left -->
 			<div class="col-xs-9"> <h2> Information </h2></div>
@@ -21,14 +22,12 @@
 		
 		<!-- The Table of Accounts -->
 		<div class="accountdetail-table data-table">
-			
 				<div class="account-detail">
 					
 						<div class="row">
-							
 							<!-- The name of the Account -->
 							<div class="col-xs-6">
-								<div class="accountdetail-name"><p> $Account.AccountType </p></div>
+								<div class="accountdetail-name"><p > $Account.AccountType </p></div>
 							</div>
 							
 							<!-- Information of the account-->
@@ -38,12 +37,12 @@
 							
 							<!-- Full details of balance of account-->
 							<div class="col-xs-3">
-								<div class="accountdetail-balance"> <p> $Account.Balance </p> <p> $Account.OverdraftLimit </p> <p id="Available"></p> </div>
+								<div class="accountdetail-balance"> 
+								<p class="$CurrencyClass($Account.Balance)"> $Account.Balance </p> 
+								<p class="$CurrencyClass($Account.OverdraftLimit)"> $Account.OverdraftLimit </p> 
+								<p class="$CurrencyClass($AvailableBalance)"> $AvailableBalance </p> 
+								</div>
 							</div>
-							
-							<script>
-								document.getElementById("Available").innerHTML = $Account.Balance + $Account.OverdraftLimit;
-							</script>
 							
 						</div>
 					
@@ -57,7 +56,7 @@
 	<div class="accountdetailtransactions-section main-section">
 		
 		<!-- The Heading -->
-		<h2> TRANSACTIONS $MyFuction() </h2>
+		<h2> TRANSACTIONS </h2>
 		
 		<!-- The Drop Down Bar -->
 		<div class="dropdown">
@@ -96,21 +95,14 @@
 					
 						<!-- The amount on the right -->
 						<div class="col-xs-2">
-							<div class="transaction-amount"><p id="changetogreen"> $Amount </p></div>
+						<div class="transaction-amount"><p class="$Top.CurrencyClass($Amount)"> $Amount </p></div>
 						</div>
-						
-						<script>
-						if ($Amount > 0) {
-							var balance = document.getElementById("changetogreen");
-							balance.style.color = 'green';
-						}
-						</script>
 						
 					</div>
 							
 				</div>
-				
 			<% end_loop %>
+			
 		</div>
 	</div>
 
