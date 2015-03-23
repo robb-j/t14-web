@@ -30,18 +30,6 @@ class AccountDetailController extends BankController {
 	
 	public function AvailableBalance() {
 		
-	return $this->Account->Balance + $this->Account->OverdraftLimit;
-	}
-	
-	public function CurrencyClass($value) {
-		
-		if ($value > 0.0) {
-			
-			return "currency-green";
-		}
-		else {
-			
-			return "currency-red";
-		}
+		return $this->Account->Balance + $this->Account->OverdraftLimit;
 	}
 }

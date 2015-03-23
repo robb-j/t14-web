@@ -36,4 +36,16 @@ class BankController extends Controller {
 			return $this->renderWith("Page");
 		}
 	}
+	
+	public function CurrencyClass($value) {
+		
+		if ($value > 0.0) {
+			
+			return "currency-green";
+		}
+		else {
+			
+			return "currency-red";
+		}
+	}
 }
