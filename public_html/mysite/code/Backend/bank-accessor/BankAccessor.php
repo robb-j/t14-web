@@ -74,9 +74,9 @@ class BankAccessor extends Object implements BankInterface {
 		
 		//	Gets the user session that is associated with the token	
 		$userSession = $this->getUserSession($token);
-		
+		$theAccount = Account::get()->byID($sanitisedAccountID);
 		//	If the session exists get the UserID associated with the session
-		if($userSession != null){
+		if($userSession != null && $theAccount != null){
 		
 			$actaulUserID = $userSession->UserID;
 
@@ -84,7 +84,8 @@ class BankAccessor extends Object implements BankInterface {
 				If the userID given is the same as the one in the database and the user owns the account
 				then load the transactions associated with the account given from the specified month
 			*/
-			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,Account::get()->byID($sanitisedAccountID)->UserID)=== 0){
+			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,$sanitisedAccountID)=== 0
+			&& is_numeric($sanitisedMonth) && is_numeric($sanitisedYear) &&  $sanitisedMonth >=1 && $sanitisedMonth<=12 && $sanitisedYear >0){
 				
 				//	Gets the last day in the month specified 
 				$lastDay = cal_days_in_month(CAL_GREGORIAN, $sanitisedMonth, $sanitisedYear);
@@ -145,13 +146,13 @@ class BankAccessor extends Object implements BankInterface {
 					$accountAOwner = $accountA->UserID;
 					$accountBOwner = $accountB->UserID;
 					
-					if( $userID =!($accountAOwner && $accountBOwner)){
+					if( $actaulUserID !== $accountAOwner || $actaulUserID !== $accountBOwner){
 						
 						// If they are not return a failed TransferOutput
 						return new TransferOutput(null,null,null,false,null,null);
 					}
 				}
-
+			
 				// Check the user has available funds left in accountA inc overdraft
 				if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
 				
@@ -204,17 +205,20 @@ class BankAccessor extends Object implements BankInterface {
 	//	This function compiles an array list of all the products a user doesn't currently have
 	public function getNewProductsForUser($user){
 	
-		if($user != null){
 		
+		if($user != null &&  is_object( $user)){
+			$sanitisedUser =Convert::raw2sql($user->Username);
+			echo "in here";
 			//	This query gets a list off all products the user has and removes them from the list of all products
 			$products = DB::query('SELECT P.ID
 								   FROM Product P 
                                    Where P.ID NOT IN  
 								   (Select Product.ID 
 								   From Product, User, Account
-								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username = \'' . Convert::raw2sql($user->Username)  . '\' )');
+								   Where Product.ID = Account.ProductID AND User.ID = Account.UserID AND User.Username = \'' . $sanitisedUser  . '\' )');
 
 			// This ceates and array list with the products from the above query
+
 			$arrayList = new ArrayList();	
 			
 			foreach($products as $row) {

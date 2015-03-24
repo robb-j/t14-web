@@ -7,4 +7,118 @@ User:
     LastFullCategorise:18 Mar 2015
     Password:Password
     DOB:18 Mar 2015
-    
+  my2ndPerson:
+    Username:my2ndPerson
+    FirstName:Person2ForeName
+    Surname:Person2Surname
+    Email:me2@me.com
+    LastFullCategorise:15 Jan 2015
+    Password:Pass
+    DOB:15 Jan 2015
+  myThirdPerson:
+    Username:myThirdperson
+    FirstName:myThirdpersonForename
+    Surname:myThirdPersonSurname
+    Email:me2@me.com
+    LastFullCategorise:15 Jan 2015
+    Password:Password
+    DOB:15 Jan 2015
+  allProductsPerson:
+    Username:allProductsPersonForname
+    FirstName:allProductsPersonSurname
+    Surname:allProductsPerson
+    Email:me2@me.com
+    LastFullCategorise:15 Jan 2015
+    Password:Pass
+    DOB:15 Jan 2015
+Account:
+  accountOne:
+    Type:TypeOne
+    OverdraftLimit: 500
+    Balance: 600
+    UserID: 1
+    ProductID: 1
+  accountTwo:
+    Type:TypeTwo
+    OverdraftLimit: 1000
+    Balance: 50
+    UserID: 1
+    ProductID: 2
+  accountThree:
+    Type:TypeThree
+    OverdraftLimit: 600
+    Balance: 90
+    UserID: 2
+    ProductID: 1
+  accountFour:
+    Type:TypeThree
+    OverdraftLimit: 600
+    Balance: 90
+    UserID: 4
+    ProductID: 1
+  accountFive:
+    Type:TypeThree
+    OverdraftLimit: 600
+    Balance: 90
+    UserID: 4
+    ProductID: 2
+  accountSix:
+    Type:TypeThree
+    OverdraftLimit: 600
+    Balance: 90
+    UserID: 4
+    ProductID: 3
+  accountSeven:
+    Type:TypeOne
+    OverdraftLimit: 500
+    Balance: 600
+    UserID: 3
+    ProductID: 1
+  accountEight:
+    Type:TypeTwo
+    OverdraftLimit: 1000
+    Balance: 50
+    UserID: 3
+    ProductID: 2
+Product:
+  productOne:
+    Title:Prod1
+    Content: ProductOne
+  productTwo:
+    Title:Prod2
+    Content: ProductTwo
+  productThree:
+    Title:Prod3
+    Content: ProductThree
+Transaction:
+  transOne:
+    Amount:500
+    Payee:Spotify
+    AccountID: 1
+    Date: 1 Mar 2015
+  transTwo:
+    Amount:20
+    Payee:normal
+    AccountID: 1
+    Date: 3 Mar 2015
+  transThree:
+    Amount:15
+    Payee:Asda
+    AccountID: 1
+    Date: 2 Jan 2015
+  transFour:
+    Amount:50
+    Payee:UniShop
+    AccountID: 2
+    Date: 1 Mar 2015
+  transFive:
+    Amount:70
+    Payee:Mam
+    AccountID: 3
+    Date: 1 Mar 2015
+UserSession:
+  myPersonSessionOne:
+    UserID: 1
+    Expiry:1577836800
+    Token: w8O3z6KEhq4MqYaBCz9LAQI8wqWfYGY8VNZjPWIMPM31qZNfyeeyVlKMuZEaFw1s
+  
