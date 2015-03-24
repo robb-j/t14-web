@@ -65,18 +65,21 @@
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something here</a></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+			<% loop $Account.Transactions %>
+				<div class="transaction-dropdownMenu data-row <% if Last %>last-row<% end_if %>">
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> $Date </a></li>
+				</div>
+			<% end_loop %>
 		</ul>
 		</div>
 	
 		<!-- The List of Transactions -->
 		<div class="transaction-table data-table">
-			
-			
+		
+		<p> $TestString </p>
+		
 			<!-- Loop through the account's transactions -->
+			
 			<% loop $Account.Transactions %>
 			
 				<div class="transaction-row data-row <% if Last %>last-row<% end_if %>">

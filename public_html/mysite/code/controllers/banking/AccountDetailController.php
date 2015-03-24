@@ -20,6 +20,7 @@ class AccountDetailController extends BankController {
 		
 		// Add some javascript
 		Requirements::javascript("mysite/js/libs/jquery.js");
+		Requirements::javascript("mysite/js/libs/bootstrap.js");
 		Requirements::javascript("mysite/js/AccountDetail.js");
 	}
 	
@@ -27,9 +28,9 @@ class AccountDetailController extends BankController {
 		
 		$id = $this->request->param('ID');
 		$this->Account = Account::get()->byId($id);
+		$myString = 'Test'‏;
 		
-		//return "Hello World, I made a controller";
-		return $this->renderWith("AccountDetailContent");
+		return $this->customise(array('TestString' => $myString,))->renderWith("AccountDetailContent");
 	}
 	
 	public function AvailableBalance() {

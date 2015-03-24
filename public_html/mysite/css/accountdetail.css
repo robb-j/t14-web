@@ -27,6 +27,11 @@ margin-right: 70px;
 bottom: 40px;
 }
 
+.dropdown-menu {
+position: relative;
+top: 80px;
+}
+
 .transaction-table.data-table .transaction-row.data-row .row .col-xs-4 .transaction-date p{
 position: relative;
 font-size: 20px;

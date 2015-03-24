@@ -1,5 +1,6 @@
 (function($) {
     $(document).ready(function(){
-        alert("WAAZZUUUUPPPP");
+        $('.dropdown-toggle').dropdown();
     })
 })(jQuery);
+
