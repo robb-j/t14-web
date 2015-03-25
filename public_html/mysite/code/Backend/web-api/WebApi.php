@@ -89,5 +89,16 @@ class WebApi extends Object{
 		return BankAccessor::create()->performSpin( $userID, Cookie::get('BankingSession') );
 	}
 	
+	public function getAllRewards(){
+	
+		return BankAccessor::create()->getAllRewards( );
+	}
+	
+	public function performSpin($userID){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->getLastPoints( $userID, Cookie::get('BankingSession') );
+	}
+	
 }
 ?>

@@ -652,5 +652,44 @@ class BankAccessor extends Object implements BankInterface {
 
 		return null;
 	}	
+	
+	public function getAllRewards(){
+		return Reward::get();
+	}
+	
+	public function getLastPoints($userID, $token){
+	
+		//	Gets the user session from the token
+		$userSession = $this->getUserSession($token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		if($userSession != null ){
+		
+			$actualUserID = $userSession->UserID;
+			
+			if(strcmp($actualUserID, $sanitisedUserID) === 0){
+			
+				$arrayList = new ArrayList();	
+				
+				$pointsGained = PointGain::get()->filter(array(
+					'UserID' => $sanitisedUserID
+				))->sort('ID', 'DESC');
+				
+				if(sizeof($pointsGained) > 7 ){
+					$size = 7;
+				}else{
+					$size = sizeof($pointsGained);
+				}
+				
+				for( $i=0; $i<$size; $i++){
+					$arrayList->push($pointsGained[$i]);
+				
+				}
+				return $arrayList;
+			}
+		}
+		
+		return array();
+	}
 }
 ?>
