@@ -9,7 +9,7 @@ class MobileApiController extends Controller {
 
 	//	Sets the list of allowed actions
 	private static $allowed_actions = array(
-        'login', 'loadTransactions','makeTransfer','logout','newPayments','chooseReward', "performSpin","getAllRewards","getLastPoints"
+        'login', 'loadTransactions','makeTransfer','logout',"getStatementDates",'newPayments','chooseReward', "performSpin","getAllRewards","getLastPoints"
     );
     
 	//	Initialises the API
@@ -139,6 +139,38 @@ class MobileApiController extends Controller {
 		
 		//	Logout the user
 		$output = BankAccessor::create()->logout($userID ,$token);
+	}
+	
+	public function getStatementDates(SS_HTTPRequest $request){
+	
+	// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$accountID = $request->postVar("accountID");
+		$token = $request->postVar("token");
+
+		// Try to make the transfer
+		$output = BankAccessor::create()->getStatementDates($userID, $accountID, $token);
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output)>0) {
+			
+			$data = array(
+				"Dates" => $output
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error making transfer"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	
+	
 	}
 	
 	//	####################################

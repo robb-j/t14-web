@@ -44,8 +44,10 @@ class BankAccessor extends Object implements BankInterface {
 				if( !$this->checkIfUserLoggedIn($user)){
 					
 					$token = $this->generateToken();
-
+					
 					$this->createSession($user, $token);
+					
+					
 					
 					return new LoginOutput($user, $user->Accounts(), $this->getNewProductsForUser($user), $token, true,"Success");
 				}else{
@@ -84,7 +86,7 @@ class BankAccessor extends Object implements BankInterface {
 				If the userID given is the same as the one in the database and the user owns the account
 				then load the transactions associated with the account given from the specified month
 			*/
-			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,$sanitisedAccountID)=== 0
+			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,$theAccount->UserID)=== 0
 			&& is_numeric($sanitisedMonth) && is_numeric($sanitisedYear) &&  $sanitisedMonth >=1 && $sanitisedMonth<=12 && $sanitisedYear >0){
 				
 				//	Gets the last day in the month specified 
@@ -260,6 +262,60 @@ class BankAccessor extends Object implements BankInterface {
 		
 		//	return a failed logout 
 		return false;
+	}
+	
+	public function getStatementDates($userID, $accountID, $token){
+	
+	//	This stops SQL injection
+		$sanitisedUserID = Convert::raw2sql($userID);
+		$sanitisedAccountID = Convert::raw2sql($accountID);
+
+		
+		//	Gets the user session that is associated with the token	
+		$userSession = $this->getUserSession($token);
+		$theAccount = Account::get()->byID($sanitisedAccountID);
+		
+		//	If the session exists get the UserID associated with the session
+		if($userSession != null && $theAccount != null){
+		
+			$actaulUserID = $userSession->UserID;
+	
+			//	If the userID given is the same as the one in the database and the user owns the account
+			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,$theAccount->UserID)=== 0){
+			
+				if(	$theAccount->FirstTransaction !=null){
+				
+					$allTransactions = Transaction::get()->filter(array(
+						'AccountID' => $sanitisedAccountID
+					))->sort('Date');
+					
+					$allDates = new ArrayList();
+					
+					foreach($allTransactions as $transaction){
+						$found = false;
+						$count = 0;
+						$arrayExploded = explode('-',$transaction->Date);
+						
+						while ($found !== true && $count < sizeof($allDates)){
+						
+							if ($allDates[$count]->getMonth() === $arrayExploded[1] &&  $allDates[$count]->getYear() === $arrayExploded[0]){
+								$found = true;
+							}
+							$count++;
+						}
+						if($found !=true){
+							$allDates->push(new DateObject($arrayExploded[2],$arrayExploded[1],$arrayExploded[0]));
+						
+						}
+					}
+					return $allDates;
+				}
+
+	
+			}
+		}
+		return array();
+	
 	}
 	
 	//	##############################################

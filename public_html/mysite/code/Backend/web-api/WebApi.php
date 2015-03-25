@@ -67,6 +67,13 @@ class WebApi extends Object{
 		return false;
 	}
 	
+	public function getStatementDates($userID,$accountID){
+	
+	
+		return BankAccessor::create()->getStatementDates( $userID, $accountID, Cookie::get('BankingSession')
+	
+	}
+	
 	//	####################################
 	//	#### Intermediate  Requirements ####
 	//	####################################
