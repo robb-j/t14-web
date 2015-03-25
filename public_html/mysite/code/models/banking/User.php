@@ -54,7 +54,7 @@ class User extends DataObject {
 					//	Sets the initialisation vector
 					$crypt->IV($iv);
 					
-					echo "  The field =|".$this->getField("Password")."|";
+					
 					//	Encrypts the data getting added to the Password field
 					$encrypted = $crypt->encrypt($this->getField("Password"));
 
@@ -76,7 +76,7 @@ class User extends DataObject {
 				//	Sets the initialisation vector
 				$crypt->IV($iv);
 				
-				echo "  The field =|".$this->getField("Password")."|";
+				
 				//	Encrypts the data getting added to the Password field
 				$encrypted = $crypt->encrypt($this->getField("Password"));
 

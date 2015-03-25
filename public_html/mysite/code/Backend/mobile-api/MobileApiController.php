@@ -9,7 +9,7 @@ class MobileApiController extends Controller {
 
 	//	Sets the list of allowed actions
 	private static $allowed_actions = array(
-        'login', 'loadTransactions','makeTransfer','logout','newPayments','chooseReward', "performSpin"
+        'login', 'loadTransactions','makeTransfer','logout','newPayments','chooseReward', "performSpin","getAllRewards","getLastPoints"
     );
     
 	//	Initialises the API
@@ -214,7 +214,7 @@ class MobileApiController extends Controller {
 	
 	public function performSpin(SS_HTTPRequest $request){
 	
-	// Get inputs from post variables
+		// Get inputs from post variables
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 		
@@ -226,6 +226,57 @@ class MobileApiController extends Controller {
 		if ($output != null ) {
 			$data = array(
 				"Points" => $output->Points
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error performing a spin"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	}
+	
+	public function getAllRewards(){
+	
+		$output = BankAccessor::create()->getAllRewards();
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output) > 0 ) {
+			$data = array(
+				"Rewards" => $output
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error performing a spin"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	
+	}
+	
+	public function getLastPoints(SS_HTTPRequest $request){
+		
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		
+		$output = BankAccessor::create()->getLastPoints($userID, $token);
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output) > 0 ) {
+			$data = array(
+				"LastPoints" => $output
 			);
 		}else {
 			

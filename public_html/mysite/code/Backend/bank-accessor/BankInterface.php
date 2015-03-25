@@ -16,6 +16,8 @@ interface BankInterface {
 	public function updateBudget( $userID, $token, $budgetAmount, $categoryName, $groupName);
 	public function chooseReward( $userID, $token, $rewardID );
 	public function performSpin( $userID, $token);
+	public function getAllRewards();
+	public function getLastPoints($userID, $token);
 	
 	//	Advanced requirements
 	
