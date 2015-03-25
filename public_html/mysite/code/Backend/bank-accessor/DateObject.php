@@ -30,6 +30,12 @@
 		public function getFormat() {
 			return $this->day." ".$this->month." ".$this->year;
 		}
+		
+		public function getLongFormat(){
+		
+			return date('d F Y', strtotime("$this->day-$this->month-$this->year"));
+		
+		}
 
 		
 		//These are private as once they are set we don't want them to be able to change
