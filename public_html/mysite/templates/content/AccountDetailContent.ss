@@ -67,28 +67,26 @@
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 			<% loop $Account.Transactions %>
 				<div class="transaction-dropdownMenu data-row <% if Last %>last-row<% end_if %>">
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> $Date </a></li>
+				<li role="presentation"><a role="menuitem" tabindex="-1" href="banking/account/{$Top.Account.ID}/{$Date.Format(n)}/{$Date.Format(y)}"> $Date.Long </a></li>
 				</div>
 			<% end_loop %>
 		</ul>
 		</div>
-	
+
 		<!-- The List of Transactions -->
 		<div class="transaction-table data-table">
-		
-		<p> $TestString </p>
-		
+
 			<!-- Loop through the account's transactions -->
-			
-			<% loop $Account.Transactions %>
-			
+
+			<% loop $FilteredTransactions %>
+
 				<div class="transaction-row data-row <% if Last %>last-row<% end_if %>">
-					
+
 					<div class="row">
-							
+						
 						<!-- The date of the transaction on the left -->
 						<div class="col-xs-4">
-							<div class="transaction-date"><p> $Date </p></div>
+							<div class="transaction-date"><p> $Date.Long </p></div>
 						</div>
 							
 						<!-- The payee in the middle, aligned to the left -->

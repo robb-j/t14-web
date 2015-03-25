@@ -27,10 +27,24 @@ class AccountDetailController extends BankController {
 	public function Content() {
 		
 		$id = $this->request->param('ID');
-		$this->Account = Account::get()->byId($id);
-		$myString = 'Test'‏;
+		$account = Account::get()->byId($id);
+		$this->Account = $account;
+		$month = $this->request->param('Month');
+		$year = $this->request->param('Year');
 		
-		return $this->customise(array('TestString' => $myString,))->renderWith("AccountDetailContent");
+		if ($month == null) {
+			$month = date('m');
+		}
+		
+		if ($year == null) {
+			$year = date('y');
+		}
+		
+		$api = new WebApi();
+		$trans = $api->loadTransaction($account->UserID, $id, $month, $year);
+		$this->FilteredTransactions = $trans->getTransactions();
+		
+		return $this->renderWith("AccountDetailContent");
 	}
 	
 	public function AvailableBalance() {
