@@ -43,7 +43,7 @@
 							<!-- Show the sidebar on the left -->
 							<div class="col-xs-3">
 								<div class="sidebar-container">
-									<% include Sidebar CurrentUser=$CurrentUser %>
+									<% include Sidebar CurrentUser=$CurrentUser, MainController=$Top %>
 								</div>
 							</div>
 							

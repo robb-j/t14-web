@@ -16,7 +16,7 @@ class AccountDetailController extends BankController {
 		
 		
 		// Add some custom CSS
-		Requirements::css('mysite/css/accountdetail.css');
+		Requirements::css('mysite/css/banking/accountdetail.css');
 		
 		// Add some javascript
 		Requirements::javascript("mysite/js/libs/jquery.js");
@@ -55,6 +55,10 @@ class AccountDetailController extends BankController {
 		
 		// Get the filtering dates
 		$this->FilterDates = $api->getStatementDates($account->UserID, $account->ID);
+		
+		
+		// Give the template the current filter, if we have one
+		$this->CurrentFilter = new DateObject("1", $month, $year);
 		
 		return $this->renderWith("AccountDetailContent");
 	}

@@ -26,11 +26,11 @@
 					
 					<div class="row">
 						<div class="col-xs-7">
-							<p> $AccountType </p>
+							<p> <a class="link-subtle" href="banking/account/$ID"> $AccountType </a></p>
 						</div>
 						
 						<div class="col-xs-5">
-							<p class="item-right money"> $Balance </p>
+							<p class="item-right $MainController.CurrencyClass($Balance)"> $MainController.FormatCurrency($Balance) </p>
 						</div>
 					</div>
 					

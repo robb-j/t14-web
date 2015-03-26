@@ -6,7 +6,9 @@
 			<div class="col-xs-4"> <p> To Account </p> </div>
 			
 			<div class="col-xs-8"> 
-				$Fields.dataFieldByName(AccountTo)
+				<div class="account-to-field">
+					$Fields.dataFieldByName(AccountTo)
+				</div>
 			</div>
 			
 		</div>
@@ -19,17 +21,20 @@
 			<div class="col-xs-4"> <p> Amount </p> </div>
 			
 			<div class="col-xs-8"> 
-				$Fields.dataFieldByName(Amount)
+				<div class="amount-field">
+					$Fields.dataFieldByName(Amount)
+				</div>
 			</div>
 			
 		</div>
 		
 	</div>
 	
-	
-	$Fields.dataFieldByName(SecurityID)
-	$Fields.dataFieldByName(AccountFrom)
-	$Fields.dataFieldByName(UserID)
+	<div class="hidden-fields">
+		$Fields.dataFieldByName(SecurityID)
+		$Fields.dataFieldByName(AccountFrom)
+		$Fields.dataFieldByName(UserID)
+	</div>
 	
 	
 	<% if $Message %>
@@ -41,10 +46,14 @@
 	
 	<div class="data-row last-row">
 		
-		<% loop $Actions %> $Field <% end_loop %>
-		
-		
-		<a href="banking/account/$FromAccount.ID" />
+		<div class="form-buttons">
+			
+			<div class="transfer-form-button">
+				<% loop $Actions %>
+					$Field
+				<% end_loop %>
+			</div>
+		</div>
 		
 	</div>
 </form>

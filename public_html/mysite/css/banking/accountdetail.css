@@ -1,52 +1,36 @@
-.accountdetail-name{
-position: absolute;
-font-size: 40px;
-}
-
-.accountdetail-information {
-position: relative;
-float: left;
+.account-detail .accountdetail-name p {
+font-size: 32px;
 }
 
 .accountdetail-balance{
-position: relative;
-float: right;
 text-align: right;
-color: green;
 }
 
-.accountdetail-information, .accountdetail-balance{
-margin-top:30px;
+.account-detail .accountdetail-information p, .account-detail .accountdetail-balance p {
 font-size: 20px;
 }
 
-.dropdown {
-height:10px;
-float: right;
-margin-right: 70px;
-bottom: 40px;
+.accountdetail-information, .accountdetail-balance {
+margin-top:10px;
+font-size: 20px;
 }
 
-.dropdown-menu {
-position: relative;
-top: 80px;
+.dropdown .dropdown-menu a {
+	padding-left: 10px;
+	font-size: 18px;
 }
 
-.transaction-table.data-table .transaction-row.data-row .row .col-xs-4 .transaction-date p{
-position: relative;
+.transaction-table.data-table .transaction-row .transaction-date p{
 font-size: 20px;
 color: gray;
 }
 
-.transaction-table.data-table .transaction-row.data-row .row .col-xs-6 .transaction-payee p{
-position: relative;
+.transaction-table.data-table .transaction-row .transaction-payee p{
 font-size: 20px;
-font-family: Trebuchet MS;
 text-align: left;
 }
 
-.transaction-table.data-table .transaction-row.data-row .row .col-xs-2 .transaction-amount p{
-position: relative;
+.transaction-table.data-table .transaction-row .transaction-amount p{
 float: right;
 font-size: 20px;
 }

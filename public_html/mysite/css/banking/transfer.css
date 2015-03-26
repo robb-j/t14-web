@@ -1,0 +1,46 @@
+.transfer-content .transfer-table p.from-account {
+	color: #777;
+}
+
+
+.transfer-content .transfer-table p.message {
+	margin: 15px 25px 0px 25px;
+}
+
+
+.transfer-content .transfer-table select, .transfer-content .transfer-table input {
+	min-width: 250px;
+	font-size: 16px;
+	margin-top: 10px;
+}
+
+
+.transfer-content .transfer-table input.text {
+	/*border-radius: 4px;
+	border: 1px solid black;*/
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+
+.transfer-content .transfer-table .form-buttons {
+	text-align: center;
+}
+
+
+.transfer-content .transfer-table .form-buttons .transfer-form-button input {
+	
+	background: white;
+	border: 2px solid #CCC;
+	min-width: 120px;
+	padding: 5px 10px;
+	border-radius: 4px;
+	font-size: 20px;
+	margin: 10px;
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+
+.transfer-content .transfer-table .form-buttons .transfer-form-button input#Form_BankTransferForm_action_submitTransferForm {
+	color: white;
+	background: #159867;
+}

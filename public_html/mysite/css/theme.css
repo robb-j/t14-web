@@ -5,7 +5,7 @@
  * 	Page Styles
  */
 .page-container h2 {
-	margin: 0px 50px 5px 50px;
+	margin-bottom: 5px;
 	font-family: 'Open Sans', 'Helvetica Neue';
 	letter-spacing: 10;
 	text-transform: uppercase;
@@ -37,11 +37,17 @@
 	background: #ECF0F2;
 	border: 1px solid #AAA;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 5px 10px;
 	text-align: center;
 	text-decoration: none;
 	font-family: 'Open Sans', 'Helvetica Neue';
 	max-width: 120px;
+}
+
+.page-container .right-button {
+	margin-top: 20px;
+	margin-bottom: 10px;
+	float: right;
 }
 
 .light-button a:hover {
@@ -87,8 +93,9 @@
 #nav-text{
 	font-size:14px;
 	color:#7e7e7e;
-	margin:5px 0 0 10px;
+	margin:15px 0 0 0px;
 	padding:0;
+	font-size: 22px;
 }
 
 .navigation-bar a{
@@ -109,12 +116,18 @@
 	font-weight: bold;
 }
 
+.navigation-bar .nav-links {
+	padding-bottom: 15px;
+}
+
+
+
+
+
 
 /*
  * 	The Sidebar
  */
- 
- 
 .sidebar p.sidebar-link {
 	text-align: center;
 	width: 100%;
@@ -134,7 +147,6 @@
 }
 
 .sidebar-container .sidebar .sidebar-section {
-	
 	margin: 0px 10px 25px 10px;
 	padding-bottom: 25px;
 	border-bottom: 3px solid #1D654A;
@@ -146,6 +158,10 @@
 	font-size: 16px;
 }
 
+.sidebar-container .sidebar a.link-subtle {
+	color: #666666;
+}
+
 .sidebar-container .sidebar h3, .sidebar-container .sidebar h2 {
 	color: black;
 	text-align: center;
@@ -154,16 +170,11 @@
 }
 
 .sidebar-container .sidebar .sidebar-row {
-	
 	margin-bottom: 5px;
 }
 
 .sidebar .accounts-table .sidebar-row.item-right {
 	text-align: right;
-}
-
-.sidebar .accounts-table .sidebar-row .money::before {
-	content: '£';
 }
 
 
@@ -185,15 +196,12 @@
 	margin-bottom: 100px;
 }
 .main-section {
-	
-	margin-top: 50px;
+	margin-bottom: 0px;
+	margin: 50px;
 }
 
 .main-section .data-table {
-	
-	margin: 0px 50px;
 	background-color: #ECF0F2;
-	
 	padding: 0px 15px;
 }
 
@@ -207,6 +215,6 @@
 	border-bottom: 0px;
 }
 
-.main-section .data-table .data-row p {
+.data-row p {
 	font-size: 28px;
 }

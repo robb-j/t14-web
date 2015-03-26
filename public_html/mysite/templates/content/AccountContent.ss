@@ -34,7 +34,7 @@
 							
 							<!-- The Balance of the account on the right -->
 							<div class="col-xs-3">
-								<div class="account-balance"><p class="$Top.CurrencyClass($Balance) right"> £$Balance </p></div>
+								<div class="account-balance"><p class="$Top.CurrencyClass($Balance) right"> $Top.FormatCurrency($Balance) </p></div>
 							</div>
 						</div>
 					</a>

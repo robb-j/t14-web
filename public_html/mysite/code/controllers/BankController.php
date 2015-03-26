@@ -20,6 +20,8 @@ class BankController extends Controller {
 		
 		// Get the session token, if there is one
 		$this->CurrentUser = BankAccessor::create()->getCurrentUser();
+		
+		Currency::setCurrencySymbol("£");
 	}
 	
 	
@@ -46,6 +48,18 @@ class BankController extends Controller {
 		else {
 			
 			return "currency-red";
+		}
+	}
+	
+	public function FormatCurrency($value) {
+		
+		if ($value > 0.0) {
+			
+			return "£" . number_format($value, 2);
+		}
+		else {
+			
+			return "-£" . number_format(abs($value), 2);
 		}
 	}
 }

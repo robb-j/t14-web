@@ -16,6 +16,8 @@ class TransferController extends BankController {
 	public function init() {
 		
 		parent::init();
+		
+		Requirements::css("mysite/css/banking/transfer.css");
 	}
 	
 	public function Content() {
@@ -63,6 +65,7 @@ class TransferController extends BankController {
 		
 		// Create the Action for the submission
 		$actions = new FieldList(
+			FormAction::create("cancelTransferForm")->setTitle("Cancel"),
             FormAction::create("submitTransferForm")->setTitle("Transfer")
         );
 		
@@ -79,6 +82,12 @@ class TransferController extends BankController {
 		// Return a new form, SS renders it nicely
 		return $form;
 		
+	}
+	
+	
+	public function NavigateBack() {
+		
+		return $this->redirect("banking/account/" . $FromAccount->ID);
 	}
 	
 	
@@ -100,6 +109,13 @@ class TransferController extends BankController {
 			$form->addErrorMessage('Transfer Failed', "Transfer Failed", "");
 			return $this->redirectBack();
 		}
+	}
+	
+	public function cancelTransferForm($data, Form $form) {
+		
+		$fromID = $data["AccountFrom"];
+		
+		return $this->redirect("banking/account/" . $fromID);
 	}
 	
 	
