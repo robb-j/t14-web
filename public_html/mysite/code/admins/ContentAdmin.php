@@ -6,7 +6,7 @@
 class ContentAdmin extends ModelAdmin {
 
 	private static $managed_models = array(
-		"User", "Product", "Reward"
+		"User", "Product", "Reward", "ATM"
 	);
 	
 	private static $url_segment = "edit";
