@@ -210,7 +210,6 @@ class BankAccessor extends Object implements BankInterface {
 		
 		if($user != null &&  is_object( $user)){
 			$sanitisedUser =Convert::raw2sql($user->Username);
-			echo "in here";
 			//	This query gets a list off all products the user has and removes them from the list of all products
 			$products = DB::query('SELECT P.ID
 								   FROM Product P 
@@ -535,6 +534,7 @@ class BankAccessor extends Object implements BankInterface {
 		
 		if($userSession != null ){
 		
+			$this->updateSession($userSession);
 			$actualUserID = $userSession->UserID;
 			
 			if(strcmp($actualUserID, $sanitisedUserID) === 0){
@@ -584,6 +584,8 @@ class BankAccessor extends Object implements BankInterface {
 		
 		if($userSession != null ){
 		
+			// Update the user session
+			$this->updateSession($userSession);
 			$actualUserID = $userSession->UserID;
 			
 			if(strcmp($actualUserID, $sanitisedUserID) === 0){
@@ -645,7 +647,8 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedUserID = Convert::raw2sql($userID);
 		
 		if($userSession != null ){
-		
+			// Update the user session
+			$this->updateSession($userSession);
 			$actualUserID = $userSession->UserID;
 			
 			if(strcmp($actualUserID, $sanitisedUserID) === 0){
@@ -721,6 +724,8 @@ class BankAccessor extends Object implements BankInterface {
 		
 		if($userSession != null ){
 		
+			// Update the user session
+			$this->updateSession($userSession);
 			$actualUserID = $userSession->UserID;
 			
 			if(strcmp($actualUserID, $sanitisedUserID) === 0){
