@@ -4,7 +4,6 @@
 	<!-- The Accounts Detail section -->
 	<div class="accounts-section main-section">
 		
-		
 		<!-- The Heading -->
 		<div
 		class="row">
@@ -60,17 +59,19 @@
 		
 		<!-- The Drop Down Bar -->
 		<div class="dropdown">
-		<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-			Select a statement
-			<span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-			<% loop $Account.Transactions %>
-				<div class="transaction-dropdownMenu data-row <% if Last %>last-row<% end_if %>">
-				<li role="presentation"><a role="menuitem" tabindex="-1" href="banking/account/{$Top.Account.ID}/{$Date.Format(n)}/{$Date.Format(y)}"> $Date.Long </a></li>
-				</div>
-			<% end_loop %>
-		</ul>
+			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+				Select a statement <span class="caret"></span>
+			</button>
+			
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				<% loop $FilterDates %>
+					<div class="transaction-dropdownMenu data-row <% if Last %>last-row<% end_if %>">
+						<li role="presentation">
+							<p><a role="menuitem" tabindex="-1" href="banking/account/{$Top.Account.ID}/{$Month}/{$Year}"> $MonthAndYear </a></p>
+						</li>
+					</div>
+				<% end_loop %>
+			</ul>
 		</div>
 
 		<!-- The List of Transactions -->

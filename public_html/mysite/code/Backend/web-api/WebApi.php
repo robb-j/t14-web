@@ -70,7 +70,7 @@ class WebApi extends Object{
 	public function getStatementDates($userID,$accountID){
 	
 	
-		return BankAccessor::create()->getStatementDates( $userID, $accountID, Cookie::get('BankingSession')
+		return BankAccessor::create()->getStatementDates( $userID, $accountID, Cookie::get('BankingSession'));
 	
 	}
 	

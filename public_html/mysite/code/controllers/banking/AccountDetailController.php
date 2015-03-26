@@ -26,12 +26,19 @@ class AccountDetailController extends BankController {
 	
 	public function Content() {
 		
+		
+		// Get the Account
 		$id = $this->request->param('ID');
 		$account = Account::get()->byId($id);
 		$this->Account = $account;
+		
+		
+		// Get provided month & year
 		$month = $this->request->param('Month');
 		$year = $this->request->param('Year');
 		
+		
+		// If not provided, use today
 		if ($month == null) {
 			$month = date('m');
 		}
@@ -40,9 +47,14 @@ class AccountDetailController extends BankController {
 			$year = date('y');
 		}
 		
+		// Get the relevant transactions
 		$api = new WebApi();
 		$trans = $api->loadTransaction($account->UserID, $id, $month, $year);
 		$this->FilteredTransactions = $trans->getTransactions();
+		
+		
+		// Get the filtering dates
+		$this->FilterDates = $api->getStatementDates($account->UserID, $account->ID);
 		
 		return $this->renderWith("AccountDetailContent");
 	}
