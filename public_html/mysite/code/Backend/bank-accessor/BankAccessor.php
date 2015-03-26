@@ -75,7 +75,7 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedYear = Convert::raw2sql($year);
 		
 		//	Gets the user session that is associated with the token	
-		$userSession = $this->getUserSession($token);
+		$userSession = $this->checkUserSession($userID,$token);
 		$theAccount = Account::get()->byID($sanitisedAccountID);
 		//	If the session exists get the UserID associated with the session
 		if($userSession != null && $theAccount != null){
@@ -86,8 +86,8 @@ class BankAccessor extends Object implements BankInterface {
 				If the userID given is the same as the one in the database and the user owns the account
 				then load the transactions associated with the account given from the specified month
 			*/
-			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,$theAccount->UserID)=== 0
-			&& is_numeric($sanitisedMonth) && is_numeric($sanitisedYear) &&  $sanitisedMonth >=1 && $sanitisedMonth<=12 && $sanitisedYear >0){
+			if ( strcmp($actaulUserID,$theAccount->UserID)=== 0 && is_numeric($sanitisedMonth) && 
+			is_numeric($sanitisedYear) &&  $sanitisedMonth >=1 && $sanitisedMonth<=12 && $sanitisedYear >0){
 				
 				//	Gets the last day in the month specified 
 				$lastDay = cal_days_in_month(CAL_GREGORIAN, $sanitisedMonth, $sanitisedYear);
@@ -127,7 +127,7 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedToken = Convert::raw2sql($token);
 
 		//	Gets the user session that is associated with the token	
-		$userSession = $this->getUserSession($token);
+		$userSession = checkUserSession($userID,$token);
 		
 		//	If the token is associated with an account, both accountID's are not null, the amount is >0 and they aren't the same accounts
 		if($userSession != null && $sanitisedAccountAID != null && $sanitisedAccountBID != null && $sanitisedAmount>0 && $sanitisedAmount !=null && $sanitisedAccountAID != $sanitisedAccountBID ){
@@ -135,46 +135,43 @@ class BankAccessor extends Object implements BankInterface {
 			//	Get the userID from the session
 			$actaulUserID = $userSession->UserID;
 
-			//	If the given user is the same one associated with the session
-			if (strcmp($actaulUserID,$sanitisedUserID)===0){
-				
-				//	Gets the accounts
-				$accountA = Account::get()->byID($sanitisedAccountAID);
-				$accountB = Account::get()->byID($sanitisedAccountBID);
-		
-				//	Check if the accounts are owned by the same person
-				if($accountA != null && $accountA != null){
-				
-					$accountAOwner = $accountA->UserID;
-					$accountBOwner = $accountB->UserID;
-					
-					if( $actaulUserID !== $accountAOwner || $actaulUserID !== $accountBOwner){
-						
-						// If they are not return a failed TransferOutput
-						return new TransferOutput(null,null,null,false,null,null);
-					}
-				}
+			//	Gets the accounts
+			$accountA = Account::get()->byID($sanitisedAccountAID);
+			$accountB = Account::get()->byID($sanitisedAccountBID);
+	
+			//	Check if the accounts are owned by the same person
+			if($accountA != null && $accountA != null){
 			
-				// Check the user has available funds left in accountA inc overdraft
-				if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
+				$accountAOwner = $accountA->UserID;
+				$accountBOwner = $accountB->UserID;
 				
-				
-					// Transfer the money to and from the accounts
-					$accountA->Balance = $accountA->Balance - $amount;
-					$accountA->write();
-					$accountB->Balance = $accountB->Balance + $amount;
-					$accountB->write();
+				if( $actaulUserID !== $accountAOwner || $actaulUserID !== $accountBOwner){
 					
-					//	Create a transaction for each of the accounts 
-					$this->createTransaction(0-$amount, $accountB->AccountType,$accountA);
-					$this->createTransaction(0+$amount, $accountA->AccountType,$accountB);
-
-					// Update the user session
-					$this->updateSession($userSession);
-					
-					// Returns a successful TransferOutput
-					return new TransferOutput($accountA,$accountB,$sanitisedAmount,true,$accountA->Balance, $accountB->Balance );
+					// If they are not return a failed TransferOutput
+					return new TransferOutput(null,null,null,false,null,null);
 				}
+			}
+		
+			// Check the user has available funds left in accountA inc overdraft
+			if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
+			
+			
+				// Transfer the money to and from the accounts
+				$accountA->Balance = $accountA->Balance - $amount;
+				$accountA->write();
+				$accountB->Balance = $accountB->Balance + $amount;
+				$accountB->write();
+				
+				//	Create a transaction for each of the accounts 
+				$this->createTransaction(0-$amount, $accountB->AccountType,$accountA);
+				$this->createTransaction(0+$amount, $accountA->AccountType,$accountB);
+
+				// Update the user session
+				$this->updateSession($userSession);
+				
+				// Returns a successful TransferOutput
+				return new TransferOutput($accountA,$accountB,$sanitisedAmount,true,$accountA->Balance, $accountB->Balance );
+				
 			}
 		}
 		
@@ -271,7 +268,7 @@ class BankAccessor extends Object implements BankInterface {
 
 		
 		//	Gets the user session that is associated with the token	
-		$userSession = $this->getUserSession($token);
+		$userSession = $this->checkUserSession($userID,$token);
 		$theAccount = Account::get()->byID($sanitisedAccountID);
 		
 		//	If the session exists get the UserID associated with the session
@@ -280,7 +277,7 @@ class BankAccessor extends Object implements BankInterface {
 			$actaulUserID = $userSession->UserID;
 	
 			//	If the userID given is the same as the one in the database and the user owns the account
-			if (strcmp($actaulUserID,$sanitisedUserID)===0 && strcmp($actaulUserID,$theAccount->UserID)=== 0){
+			if (strcmp($actaulUserID,$theAccount->UserID)=== 0){
 			
 				if(	$theAccount->FirstTransaction !=null){
 				
@@ -492,13 +489,32 @@ class BankAccessor extends Object implements BankInterface {
 		return true;
 	}
 	
+	private function checkUserSession($userID, $token){
+	
+		//	Gets the user session that is associated with the token	
+		$userSession = UserSession::get()->filter(array(
+			'Token' => Convert::raw2sql($token)
+			))[0]; 
+			
+		if($userSession !== null && $userSession->UserID !== null &&
+		   $userID != null && strcmp($userSession->UserID,$userID)===0 &&
+		   $userSession->Expiry !== null && 
+		   DateTime::createFromFormat("U", "$userSession->Expiry")->getTimestamp()> time()){
+		   
+			return $userSession;
+		}else{
+		
+			return null;
+		}
+	}
+	
 	//	Creates a new Transaction for an account, with the amount, the payee and the account needing the new transaction
 	private function createTransaction($amount, $payee, $account){
 	
 		//	Create a new row and fills in the relevant fields 
 		$transaction = Transaction::create();
 		$transaction->Amount = $amount;
-		$transaction->Payee = $payee;
+		$transaction->Payee = "Transfer to account ".$payee;
 		$transaction->Date = date("d M Y");
 		$transaction->AccountID = $account->ID;
 		
@@ -526,41 +542,44 @@ class BankAccessor extends Object implements BankInterface {
 	//	#### Intermediate Requirements public functions ####
 	//	####################################################
 	
+	//	Gets all of the Transactions without a category
 	public function newPayments( $userID, $token ){
 	
 		//	Gets the user session from the token
-		$userSession = $this->getUserSession($token);
+		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
 		
+		//	If the session exists and is valid
 		if($userSession != null ){
 		
+			//	Update the session 
 			$this->updateSession($userSession);
-			$actualUserID = $userSession->UserID;
+
+				
+			$user = User::get()->byID($sanitisedUserID);
 			
-			if(strcmp($actualUserID, $sanitisedUserID) === 0){
+			if ($user != null){
 				
-				$user = User::get()->byID($actualUserID);
-				
-				if ($user != null){
+				//	Complies an array of all the users transactions without a category
+				$arrayList = new ArrayList();	
+				$accounts = $user->Accounts();
+				foreach( $accounts  as $row) {
+			
+					$theRowID =  $row->ID;
 					
-					$arrayList = new ArrayList();	
-					$accounts = $user->Accounts();
-					foreach( $accounts  as $row) {
-				
-						$theRowID =  $row->ID;
-						
-						$transactions = Transaction::get()->filter(array(
-							'AccountID' => $theRowID,
-							'CategoryID' => 0
-						));
-						
-						foreach($transactions as $transaction){
-							$arrayList->push($transaction);
-						}
+					$transactions = Transaction::get()->filter(array(
+						'AccountID' => $theRowID,
+						'CategoryID' => 0
+					));
+					
+					foreach($transactions as $transaction){
+						$arrayList->push($transaction);
 					}
-			
-					return $arrayList;
-				}		
+				}
+		
+				//	Returns the array
+				return $arrayList;
+					
 			}
 		}
 		return new ArrayList();
@@ -574,10 +593,11 @@ class BankAccessor extends Object implements BankInterface {
 	
 	}
 	
+	//	This lets the user choose a reward and spend their points
 	public function chooseReward( $userID, $token, $rewardID ){
 	
 		//	Gets the user session from the token
-		$userSession = $this->getUserSession($token);
+		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
 		$sanitisedRewardID = Convert::raw2sql($rewardID);
 		$reward = Reward::get()->byID($sanitisedRewardID);
@@ -586,125 +606,126 @@ class BankAccessor extends Object implements BankInterface {
 		
 			// Update the user session
 			$this->updateSession($userSession);
-			$actualUserID = $userSession->UserID;
+				
+			$user = User::get()->byID($sanitisedUserID);
 			
-			if(strcmp($actualUserID, $sanitisedUserID) === 0){
+			if ($user !== null && $reward !== null){
 				
-				$user = User::get()->byID($actualUserID);
+				//	Get info about the users Points and Cost of the reward
+				$userPoints = $user->Points;
+				$rewardCost = $reward->Cost;
 				
-				if ($user !== null && $reward !== null){
+				//	If they have enough points
+				if($userPoints >= $rewardCost ){
+				
+					//	Deduct the points
+					$user->Points = $user->Points - $rewardCost;
+					$user->write();
+				
+					//	Create a new row and fills in the relevant fields 
+					$rewardTaken = RewardTaken::create();
+					$rewardTaken->RewardID = $reward->ID;
+					$rewardTaken->Date = date("d M Y");
+					$rewardTaken->UserID= $user->ID;
 					
+					//	Then write this to the database
+					$rewardTaken->write();
 					
-					$userPoints = $user->Points;
-					$rewardCost = $reward->Cost;
-					if($userPoints >= $rewardCost ){
+					//	if the user has provided an email
+					if($user->Email !== null){
 					
-						$user->Points = $user->Points - $rewardCost;
-						$user->write();
-					
-						//	Create a new row and fills in the relevant fields 
-						$rewardTaken = RewardTaken::create();
-						$rewardTaken->RewardID = $reward->ID;
-						$rewardTaken->Date = date("d M Y");
-						$rewardTaken->UserID= $user->ID;
-						
-						//	Then write this to the database
-						$rewardTaken->write();
-						
-						if($user->Email !== null){
-						
-							
-							$email = new Email();
-							$email
-								->setFrom("rewards@t14.banking.co.uk")
-								->setTo($user->Email)
-								->setSubject("Reward Claimed: ".$reward->Title)
-								->setTemplate('RewardTaken')
-								->populateTemplate(new ArrayData(array(
-									'user' => $user->FirstName,
-									'prizeTitle' => $reward->Title,
-									'prizeLeft' => $user->Points,
-									'costPoints' => $rewardCost
-								)));
+						//	Create an email form the template and send it 
+						$email = new Email();
+						$email
+							->setFrom("rewards@t14.banking.co.uk")
+							->setTo($user->Email)
+							->setSubject("Reward Claimed: ".$reward->Title)
+							->setTemplate('RewardTaken')
+							->populateTemplate(new ArrayData(array(
+								'user' => $user->FirstName,
+								'prizeTitle' => $reward->Title,
+								'prizeLeft' => $user->Points,
+								'costPoints' => $rewardCost
+							)));
 
-							$email->send();
-						
-						
-						}
-						
-						return new RewardTakenOutput($reward, $rewardTaken, true);
+						$email->send();
+					
+					
 					}
+					
+					//	Return the new reward
+					return new RewardTakenOutput($reward, $rewardTaken, true);
+					
 				}
 			}
 		}
 		return new RewardTakenOutput(null, null, false);
 	}
 	
+	//	This allows the user to perform a spin to get points
 	public function performSpin( $userID, $token){
 	
 		//	Gets the user session from the token
-		$userSession = $this->getUserSession($token);
+		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
 		
 		if($userSession != null ){
 			// Update the user session
 			$this->updateSession($userSession);
-			$actualUserID = $userSession->UserID;
 			
-			if(strcmp($actualUserID, $sanitisedUserID) === 0){
 				
-				$user = User::get()->byID($actualUserID);
+			$user = User::get()->byID($sanitisedUserID);
+			
+			if ($user != null){
 				
-				if ($user != null){
+				//	If the user has enough spins left
+				if( $user->NumberOfSpins > 0){
+				
+					//	Get a random number between 0-100 and get the relevant points to add
+					$result = mt_rand( 0 , 100);
 					
-					if( $user->NumberOfSpins > 0){
+					if ($result >=0 && $result <=50) {
 					
-						// do spin
-						$result = mt_rand( 0 , 100);
-						if ($result >=0 && $result <=50) {
-						
-							$pointsToBeAdded = 20;
-						} elseif ($result > 50 && $result <=75) {
-						
-							$pointsToBeAdded = 40;
-						} elseif ($result >75 && $result <=88) {
-						
-							$pointsToBeAdded = 60;
-						}elseif ($result >88 && $result <=95) {
-						
-							$pointsToBeAdded = 80;
-						}elseif ($result >95 && $result <=100) {
-						
-							$pointsToBeAdded = 100;
-						}else{
-							return null;
-						}
-						
-						// update points
-						
+						$pointsToBeAdded = 20;
+					} elseif ($result > 50 && $result <=75) {
 					
-						$user->Points = $user->Points + $pointsToBeAdded;
-						$user->NumberOfSpins = $user->NumberOfSpins -1;
-						
-						//$user->Password = $pass;
-						
-						
-						$user->write();
-						
-						$pointGain = PointGain::create();
-						$pointGain->Title = "Spin";
-						$pointGain->Description = "Gain of " . $pointsToBeAdded . " points";
-						$pointGain->Date = date("d M Y");
-						$pointGain->Points = $pointsToBeAdded;
-						$pointGain->UserID = $actualUserID;
-						
-						//	Then write this to the database
-						$pointGain->write();
-						
-						$this->updateSession($userSession);
-						
-						return $pointGain;
+						$pointsToBeAdded = 40;
+					} elseif ($result >75 && $result <=88) {
+					
+						$pointsToBeAdded = 60;
+					}elseif ($result >88 && $result <=95) {
+					
+						$pointsToBeAdded = 80;
+					}elseif ($result >95 && $result <=100) {
+					
+						$pointsToBeAdded = 100;
+					}else{
+						return null;
 					}
+					
+					//	Update the users points and reduce the number of spins
+					$user->Points = $user->Points + $pointsToBeAdded;
+					$user->NumberOfSpins = $user->NumberOfSpins -1;
+
+					$user->write();
+					
+					//	Create a new row in the pointsGain table
+					$pointGain = PointGain::create();
+					$pointGain->Title = "Spin";
+					$pointGain->Description = "Gain of " . $pointsToBeAdded . " points";
+					$pointGain->Date = date("d M Y");
+					$pointGain->Points = $pointsToBeAdded;
+					$pointGain->UserID = $sanitisedUserID;
+					
+					//	Then write this to the database
+					$pointGain->write();
+					
+					//	Update the session
+					$this->updateSession($userSession);
+					
+					//	Returns the number of points gained
+					return $pointGain;
+					
 				}
 			}
 		}
@@ -712,42 +733,47 @@ class BankAccessor extends Object implements BankInterface {
 		return null;
 	}	
 	
+	//	Get a list of all the rewards we offer
 	public function getAllRewards(){
 		return Reward::get();
 	}
 	
+	//	Get the last n set of points the user gained
 	public function getLastPoints($userID, $token){
 	
 		//	Gets the user session from the token
-		$userSession = $this->getUserSession($token);
+		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
 		
 		if($userSession != null ){
 		
 			// Update the user session
 			$this->updateSession($userSession);
-			$actualUserID = $userSession->UserID;
 			
-			if(strcmp($actualUserID, $sanitisedUserID) === 0){
 			
-				$arrayList = new ArrayList();	
-				
-				$pointsGained = PointGain::get()->filter(array(
-					'UserID' => $sanitisedUserID
-				))->sort('ID', 'DESC');
-				
-				if(sizeof($pointsGained) > 7 ){
-					$size = 7;
-				}else{
-					$size = sizeof($pointsGained);
-				}
-				
-				for( $i=0; $i<$size; $i++){
-					$arrayList->push($pointsGained[$i]);
-				
-				}
-				return $arrayList;
+			$arrayList = new ArrayList();	
+			
+			//	Get all of the points and sort by the ID
+			$pointsGained = PointGain::get()->filter(array(
+				'UserID' => $sanitisedUserID
+			))->sort('ID', 'DESC');
+			
+			//	If they have gained less than 7 sets set to current max
+			if(sizeof($pointsGained) > 7 ){
+				$size = 7;
+			}else{
+				$size = sizeof($pointsGained);
 			}
+			
+			//	Push the first n to the array
+			for( $i=0; $i<$size; $i++){
+				$arrayList->push($pointsGained[$i]);
+			
+			}
+			
+			//	Return the array of last points gained
+			return $arrayList;
+			
 		}
 		
 		return array();
