@@ -44,16 +44,36 @@ class MobileApiController extends Controller {
 
 		// Try to sign in with them
 		$output = BankAccessor::create()->login($username,$password,$indexes,true);
+		
 		$data = null;
 		
 		// Decide what data to give back
 		if ($output->didPass()) {
+		
+			$categories = BankAccessor::create()->getUserCategories($output->GetUser()->ID, $output->getToken());
 			
 			$data = array(
 				"User" => $output->GetUser(),
 				"NewProducts" => $output->getAllProducts(),
 				"Token" => $output->getToken(),
-				"Accounts" => $output->getAccounts()
+				"Accounts" => $output->getAccounts(),
+				
+				"Groups" => BudgetGroup::get()->filter(array(
+								'UserID' => $output->GetUser()->ID
+							)),
+							
+				"Categories" =>	$categories,
+				
+				"Recent Gains" => PointGain::get()->filter(array(
+								'UserID' => $output->GetUser()->ID
+							))->sort('ID', 'DESC')->limit(7),
+				
+				"Recent Rews" => RewardTaken::get()->filter(array(
+								'UserID' => $output->GetUser()->ID
+							))->sort('ID', 'DESC')->limit(7),
+				
+				"Rewards" => Reward::get()
+
 			);
 		}else {
 			

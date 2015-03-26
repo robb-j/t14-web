@@ -81,7 +81,6 @@ class BankAccessor extends Object implements BankInterface {
 		if($userSession != null && $theAccount != null){
 		
 			$actaulUserID = $userSession->UserID;
-
 			/*	
 				If the userID given is the same as the one in the database and the user owns the account
 				then load the transactions associated with the account given from the specified month
@@ -127,7 +126,7 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedToken = Convert::raw2sql($token);
 
 		//	Gets the user session that is associated with the token	
-		$userSession = checkUserSession($userID,$token);
+		$userSession = $this->checkUserSession($userID,$token);
 		
 		//	If the token is associated with an account, both accountID's are not null, the amount is >0 and they aren't the same accounts
 		if($userSession != null && $sanitisedAccountAID != null && $sanitisedAccountBID != null && $sanitisedAmount>0 && $sanitisedAmount !=null && $sanitisedAccountAID != $sanitisedAccountBID ){
@@ -776,6 +775,35 @@ class BankAccessor extends Object implements BankInterface {
 			
 		}
 		
+		return array();
+	}
+	
+	public function getUserCategories($userID, $token){
+		//Get a list of all of the groups
+		// Get every category for every group
+	
+	//	Gets the user session from the token
+		$userSession = $this->checkUserSession($userID,$token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		if($userSession != null ){
+		
+			$groups = BudgetGroup::get()->filter(array(
+							'UserID' => $sanitisedUserID 
+						));
+			$arrayList = new ArrayList();	
+			foreach( $groups as $group){
+				$categories= Category::get()->filter(array(
+								'GroupID' => Convert::raw2sql($group->ID)
+				));
+				foreach( $categories as $catgory){
+					$arrayList->push($catgory);
+				}
+			}
+			return $arrayList;
+		
+		
+		}
 		return array();
 	}
 }
