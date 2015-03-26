@@ -106,12 +106,12 @@
 						</div>
 							
 						<!-- The payee in the middle, aligned to the left -->
-						<div class="col-xs-7">
+						<div class="col-xs-6">
 							<div class="transaction-payee"><p> $Payee </p></div>
 						</div>
 					
 						<!-- The amount on the right -->
-						<div class="col-xs-2">
+						<div class="col-xs-3">
 							<div class="transaction-amount"><p class="$Top.CurrencyClass($Amount)"> $Top.FormatCurrency($Amount) </p></div>
 						</div>
 						

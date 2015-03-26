@@ -83,11 +83,12 @@
 	min-width: 960px;
 }
 
-#logo {
-	position:relative;
-	padding-right:0;
-	padding-left:7%;
-	
+.navigation-bar .horse-logo {
+	text-align: right;
+	padding-top: 10px;
+}
+.navigation-bar .horse-logo a img {
+	height: 80px;
 }
 
 #nav-text{

@@ -1,4 +1,4 @@
-  <div class="navigation-bar">
+<div class="navigation-bar">
    <div class="navigation-bar-inner">
 		<div class="row">
 			
@@ -7,10 +7,14 @@
 			
 			
 			<!-- try just make it 1 and 2 left-->
-			<div class="col-xs-2" id="logo">
-				<a href="banking">
-					<img src="mysite/images/logo.png" alt="Lloyd's logo" >
-				</a>
+			<div class="col-xs-2">
+				<div class="horse-logo">
+					<p>
+						<a href="banking">
+							<img class="logo" src="mysite/images/logo.png" alt="Lloyd's logo" >
+						</a>
+					</p>
+				</div>
 			</div>	
 		
 			<div class="col-xs-6">

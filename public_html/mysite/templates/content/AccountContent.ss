@@ -28,12 +28,12 @@
 						<div class="row">
 							
 							<!-- The name of the Account -->
-							<div class="col-xs-9">
+							<div class="col-xs-8">
 								<div class="account-name"><p> $AccountType </p></div>
 							</div>
 							
 							<!-- The Balance of the account on the right -->
-							<div class="col-xs-3">
+							<div class="col-xs-4">
 								<div class="account-balance"><p class="$Top.CurrencyClass($Balance) right"> $Top.FormatCurrency($Balance) </p></div>
 							</div>
 						</div>
