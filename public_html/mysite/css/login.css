@@ -1,29 +1,71 @@
+body {
+	overflow: hidden; 
+}
 
+.login{
+
+}
 
 .bank-login-form {
-	
-	
+	width:100%; 
+	min-height:760px;
+    background:#FFF url("../images/login-background.jpg") center center no-repeat;
+    background-attachment: fixed;
+    background-size:100% auto;
+	border-bottom: 7px solid #1D654A;
 }
 
-.form-outer {
-	
-	
+.login-header {
+	min-width:960px;
+	height:110px;
+	border-bottom: 7px solid #1D654A;
+	width: 98%;
+	margin: auto;
 }
+
+.login-header h1 {
+	padding-left:3%;
+	padding-top: 1.5%;
+	text-align: left;
+}
+
+.login-header-logo {
+	padding-top:10px;
+}
+
+.login-header img {
+	height: 80px;
+}
+
 
 .form-inner {
-	
-	
+	background-color:#1C936B;
+	margin:auto;
+	border-left: 6px solid #1D654A;
+	border-bottom: 6px solid #1D654A;
+	border-right: 6px solid #1D654A;
+	min-height: 250px;
 }
 
-h1 {
-	
-	text-align: center;
+.form-inner h2{
+	color:#FFFFFF;
+	margin:0px;
+	text-align:center;
+	padding: 30px 0;
+}
+
+.form-inner p{
+	text-align:center;
+}
+
+label.left {
+	display:none;
 }
 
 input {
-	
 	display: block;
-	width: 100%;
+	margin:auto;
+	width: 80%;
 	height: 34px;
 	padding: 6px 12px;
 	font-size: 14px;
@@ -36,10 +78,20 @@ input {
 }
 
 input[type="submit"] {
-	
-	width:50%;
-	margin: 10px auto;
+	width:35%;
+	margin: 25px auto;
 	color: #333;
 	background-color: #fff;
 	border-color: #adadad;
+	
 }
+
+input[type="text"], [type="password"] {
+	width:80%;
+	margin:auto;
+}
+
+.middleColumn {
+	padding: 5px;
+}
+
