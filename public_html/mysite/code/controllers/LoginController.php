@@ -70,7 +70,7 @@ class LoginController extends Controller {
 			
 			
 			// If the login failed, inform the user
-			$form->addErrorMessage('Failed', "Failed To Authenticate", 'Unlucky Pal');
+			$form->addErrorMessage('Failed', $output->getReason(), 'Failed To Authenticate');
 			return $this->redirectBack();
 		}
 		else {
