@@ -9,6 +9,7 @@
 	 private static $db = array(
 		"Title" => "Varchar(30)",
 		"Description" => "Text",
-		"Cost" => "Int"
+		"Cost" => "Int",
+		"EmailContent" => "HTMLText"
 	 );
  }
