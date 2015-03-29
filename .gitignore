@@ -1,6 +1,6 @@
 php.ini
 /public_html/assets/*
-_ss_environment.php
+public_html/_ss_environment.php
 /tools/phing-metadata
 /public_html/silverstripe-cache
 .DS_Store
