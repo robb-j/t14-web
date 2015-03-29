@@ -12,3 +12,8 @@ _ss_environment.php
 config.codekit
 silverstripe.log
 node_modules
+.bash_history
+.bashrc
+.ssh/
+/mysql_backups
+.lesshst
