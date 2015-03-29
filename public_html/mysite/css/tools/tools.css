@@ -1,0 +1,26 @@
+.tools-container .tools-tabbar {
+}
+
+.tools-container .tools-tabbar .tabbar-item {
+	border-bottom: 1px solid #676767;
+	border-right: 1px solid #676767;
+	background: #EDF1F3;
+	height: auto;
+	width: 50%;
+	float: left;
+}
+
+.tools-container .tools-tabbar .tabbar-item p {
+	text-align: center;
+	padding: 20px;
+	font-size: 28px;
+}
+
+.tools-container .tools-tabbar .tabbar-item.active {
+	background: #159968;
+	color: white;
+}
+
+.tools-container .tools-tabbar .tabbar-item.active p a {
+	color: white;
+}

@@ -37,7 +37,7 @@
 			<div class="main-container-outer">
 				<div class="container">
 					<div class="main-container">
-						<div class="row">
+						<div class="row no-gutter">
 							
 							
 							<!-- Show the sidebar on the left -->
