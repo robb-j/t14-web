@@ -1,4 +1,5 @@
 php.ini
+/.htaccess
 /public_html/assets/*
 public_html/_ss_environment.php
 /tools/phing-metadata
