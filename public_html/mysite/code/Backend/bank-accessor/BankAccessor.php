@@ -584,12 +584,179 @@ class BankAccessor extends Object implements BankInterface {
 		return new ArrayList();
 	}
 	
-	public function categorizePayments( $userID, $token, $categorizedItems ){
+	public function categorisePayments( $userID, $token, $categorisedItems ){
+		
+		//	Gets the user session from the token
+		$userSession = $this->checkUserSession($userID,$token);
+		$sanitisedUserID = Convert::raw2sql($userID);
 	
+		if($userSession !== null){
+		
+			$catArray = array();
+			foreach ($categorisedItems as $transID => $catID) {
+				
+				$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
+				$category = Category::get()->byID(Convert::raw2sql($catID));
+				
+				if ($transaction !== null && $category !== null && $transaction->Account()->UserID === $sanitisedUserID && $category->BudgetGroup()->UserID === $sanitisedUserID){
+					
+					$transaction->CategoryID = Convert::raw2sql($catID);
+					$transaction->write();
+					
+					$category->Balance = $category->Balance  + 	$transaction->Amount;
+					$category->write();
+					
+				}
+				if (!in_array($catID, $catArray)){
+					$catArray->Push($catID);
+				}
+			}
+			
+			$newSpin = false;
+			$currentSpins = 0;
+			
+			if( sizeof(newPayments( $userID, $token )) === 0 ){
+				$user = User::get()->byID($sanitisedUserID);
+				$newSpin = true;
+				
+				if($user != null){
+					
+					$user->NumberOfSpins = $user->NumberOfSpins +1;
+					$user->LastFullCateforise = date("d M Y");
+					$user->write();
+					
+					$currentSpins = $user->NumberOfSpins;
+				}
+			}
+				
+			foreach ($catArray  as $catID) {
+			
+				$catID->Balance = Category::get()->byID(Convert::raw2sql($catID))->Balance;
+			}
+			return new CategoriseOutput($catArray, $newSpin, $currentSpins, true);
+		}
+		
+		return new CategoriseOutput(null, null, null, false);
 	}
 	
-	public function updateBudget( $userID, $token, $budgetAmount, $categoryName, $groupName){
+	public function updateBudget( $userID, $token, $updatedGroupNames, $updatedCategoryNames, $updatedCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups){
 	
+		//Check user session
+		$userSession = $this->checkUserSession($userID,$token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+	
+		if($userSession !== null){
+			// do $updatedGroupNames, 
+			foreach ($updatedGroupNames as $groupID => $newName) {
+			
+				$group =  BudgetGroup::get()->byID(Convert::raw2sql($groupID));
+				if($group !== null && $group->UserID === $sanitisedUserID ){
+					$group->Title = Convert::raw2sql($newName);
+					$group->write;
+				}
+			}
+			// do $updatedCategoryNames,
+			foreach ($updatedCategoryNames as $catID => $newName) {
+			
+				$category =  Category::get()->byID(Convert::raw2sql($catID));
+				if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+					$category->Title = Convert::raw2sql($newName);
+					$category->write;
+				}
+			}
+			// do $updatedCategoryBudget, 
+			foreach ($updatedCategoryBudget as $catID => $newBudget) {
+			
+				$category =  Category::get()->byID(Convert::raw2sql($catID));
+				if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+					$category->Budgeted = Convert::raw2sql($newBudget);
+					$category->write;
+				}
+			}
+			// do $deletedCategories, 
+			foreach ($deletedCategories as $catID) {
+			
+				$category =  Category::get()->byID(Convert::raw2sql($catID));
+				if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+					$category->delete();
+				}
+			}
+			// do $deletedGroups,
+			foreach ($$deletedGroups as $groupID){
+				if( $groupID !== null && $groupID->UserID === $sanitisedUserID ){
+					$categories = Category::get()->filter(array(
+						"Groups" => $groupID
+					));
+					if (sizeof($categories)>0){
+						foreach ($categories as $catID) {
+					
+							$category =  Category::get()->byID(Convert::raw2sql($catID));
+							if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+								$category->delete();
+							}
+						}
+					}
+					$groupID->delete();
+				}
+			}
+			// do $newCategories, 
+			foreach ($newCategory as $category) {
+			
+				$newName = Convert::raw2sql($category["Name"]);
+				$newBudget = Convert::raw2sql($category["Budget"]);
+				$newGroup = Convert::raw2sql($category["GroupID"]);
+				
+				if($newName !== null && $newBudget !== null && $newGroup !== null){
+				
+					$group = BudgetGroup::get()->byID($newGroup);
+					if($group !== null && $group->UserID === $sanitisedUserID){
+					
+						$theNewCat = Category::create();
+						$theNewCat->Title = $newName;
+						$theNewCat->Budget = $newBudget;
+						$theNewCat->GroupID = $newGroup;
+						$theNewCat->Balance = 0;
+
+						//	Then write this to the database
+						$theNewCat->write();
+					
+					}
+				
+				
+				}
+			}
+			
+			// do $newGroups
+			foreach ($newGroups as $newGroupTitle => $newCategories) {
+			
+				if($newGroupTitle !== null){
+					//Create group
+					$theNewGroup = BudgetGroup::create();
+					$theNewGroup->Title = Convert::raw2sql($newGroupTitle);
+					$theNewGroup->UserID = $sanitisedUserID;
+					
+					//	Then write this to the database
+					$theNewGroup->write();
+					
+					foreach ($newCategories as $newCategory){
+						
+						$newName = Convert::raw2sql($category["Name"]);
+						$newBudget = Convert::raw2sql($category["Budget"]);
+						if( $newName !== null && $newBudget != null){
+							
+							$theNewCat = Category::create();
+							$theNewCat->Title = $newName;
+							$theNewCat->Budget = $newBudget;
+							$theNewCat->GroupID = $theNewGroup->ID;
+							$theNewCat->Balance = 0;
+
+							//	Then write this to the database
+							$theNewCat->write();
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	//	This lets the user choose a reward and spend their points
@@ -805,6 +972,35 @@ class BankAccessor extends Object implements BankInterface {
 		
 		}
 		return array();
+	}
+	
+	//	################################################
+	//	#### Advanced Requirements public functions ####
+	//	################################################
+	
+	public function loadATMs($userID, $token){
+
+		//	Gets the user session from the token
+		$userSession = $this->checkUserSession($userID,$token);
+		
+		if($userSession != null ){
+		
+			return ATM::get();
+		}
+		
+		return array();
+	}
+	
+	public function loadHeatMap($userID, $token, $accounts, $duration){
+	
+		//	Get the user sessions 
+		$userSession = $this->checkUserSession($userID,$token);
+		
+		if($userSession != null ){
+		
+			
+		
+		}
 	}
 }
 ?>

@@ -224,10 +224,79 @@ class MobileApiController extends Controller {
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
+	}
 	
+	public function categorisePayments(SS_HTTPRequest $request){
 	
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$categorises = $request->postVar("categories");
+		$token = $request->postVar("token");
+
+		// Try to make the transfer
+		$output = BankAccessor::create()->categorisePayments($userID,$token, $categorises);
+		$data = null;
+		
+		// Decide what data to give back
+		if ($output->didPass()) {
+			
+			$data = array(
+				"changedCategorys" => $output->getChangedCategorys(),
+				"newSpin" => $output->allowedNewSpin(),
+				"numberOfSpins" => $output->allowedNewSpin(),
+				"successful" => $this->didPass()
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error categorising new payments"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
 	
 	}
+	
+	public function updateBudget(SS_HTTPRequest $request){
+		
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		$updatedGroupNames = $request->postVar("groupNames");
+		$updatedCategoryNames = $request->postVar("categoryNames");
+		$updatedCategoryBudget = $request->postVar("budgetAmount");
+		
+
+		// Try to make the transfer
+		$output = BankAccessor::create()->updateBudget( $userID, $token, $updatedGroupNames, $updatedCategoryNames, $updatedCategoryBudget, null, null, null, null);
+		$data = null;
+		
+		// Decide what data to give back
+		if ($output->didPass()) {
+			
+			$data = array(
+				"changedCategorys" => $output->getChangedCategorys(),
+				"newSpin" => $output->allowedNewSpin(),
+				"numberOfSpins" => $output->allowedNewSpin(),
+				"successful" => $this->didPass()
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error categorising new payments"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+		
+	}
+	
 	
 	public function chooseReward(SS_HTTPRequest $request){
 	

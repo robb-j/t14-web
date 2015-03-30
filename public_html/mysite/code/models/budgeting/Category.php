@@ -8,7 +8,8 @@
 	 
 	 private static $db = array(
 		"Title" => "Varchar(24)",
-		"Budgeted" => "Currency"
+		"Budgeted" => "Currency",
+		"Balance" => "Currency"
 	 );
 	 
 	 private static $has_one = array(
