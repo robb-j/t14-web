@@ -14,7 +14,7 @@
 			
 			<!-- Add a transfer button -->
 			<div class="col-xs-3">
-				<div class="light-button right-button"> <a href="banking/transfer/$Account.ID"> Transfer </a> </div>
+				<a class="control-button cb-light cb-small cb-right" href="banking/transfer/$Account.ID"> Transfer </a>
 			</div>
 			
 		</div>

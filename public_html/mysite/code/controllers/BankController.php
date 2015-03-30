@@ -41,25 +41,25 @@ class BankController extends Controller {
 	
 	public function CurrencyClass($value) {
 		
-		if ($value > 0.0) {
+		if ($value < 0.0) {
 			
-			return "currency-green";
+			return "currency-red";
 		}
 		else {
 			
-			return "currency-red";
+			return "currency-green";
 		}
 	}
 	
 	public function FormatCurrency($value) {
 		
-		if ($value > 0.0) {
+		if ($value < 0.0) {
 			
-			return "£" . number_format($value, 2);
+			return "-£" . number_format(abs($value), 2);
 		}
 		else {
 			
-			return "-£" . number_format(abs($value), 2);
+			return "£" . number_format($value, 2);
 		}
 	}
 }

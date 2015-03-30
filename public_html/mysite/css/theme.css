@@ -33,27 +33,6 @@
 	background: #EEEEEE;
 }
 
-.light-button {
-	background: #ECF0F2;
-	border: 1px solid #AAA;
-	border-radius: 5px;
-	padding: 5px 10px;
-	text-align: center;
-	text-decoration: none;
-	font-family: 'Open Sans', 'Helvetica Neue';
-	max-width: 120px;
-}
-
-.page-container .right-button {
-	margin-top: 20px;
-	margin-bottom: 10px;
-	float: right;
-}
-
-.light-button a:hover {
-	text-decoration: none;
-}
-
 .right {
 	text-align: right;
 }
@@ -62,6 +41,59 @@
     padding-right:0;
     padding-left:0;
 }
+
+.no-gutter .row {
+	/*margin: 0px;*/
+}
+
+
+
+
+
+
+/*
+ * 	Buttons
+ */
+.control-button {
+	border: 1px solid #AAA;
+	border-radius: 5px;
+	padding: 10px;
+	text-align: center;
+	text-decoration: none;
+	font-family: 'Open Sans', 'Helvetica Neue';
+	font-weight: 400;
+	font-size: 18px;
+	display: block;
+	margin: 10px;
+}
+
+.control-button.cb-light {
+	background: #ECF0F2;
+	color: #5C5C5C;
+}
+
+.control-button.cb-green {
+	background: #239369;
+	color: white;
+}
+
+.control-button.cb-right {
+	float
+}
+
+.control-button.cb-fill {
+	width: 100%;
+}
+
+.control-button.cb-small {
+	padding: 5px 10px;
+}
+
+.control-button.cb-right { margin-right: 0px; }
+.control-button.cb-left { margin-left: 0px; }
+.control-button.cb-top { margin-top: 0px; }
+.control-button.cb-bottom { margin-bottom: 0px; }
+
 
 
 
@@ -215,6 +247,14 @@
 	border-bottom: 3px solid #1D654A;
 	padding: 20px 0px;
 	margin: 0px 25px;
+}
+
+.main-section .data-table .data-row.small-row {
+	padding: 15px 0px;
+}
+
+.main-section .data-table .data-row.small-row p {
+	font-size: 18px;
 }
 
 .main-section .data-table .data-row.last-row {
