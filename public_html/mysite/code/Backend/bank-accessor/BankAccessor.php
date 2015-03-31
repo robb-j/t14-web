@@ -756,6 +756,13 @@ class BankAccessor extends Object implements BankInterface {
 					}
 				}
 			}
+			
+			$user = User::get()->byID($sanitisedUserID );
+			if ($user !== null){
+			
+				$user->LastBudgetUpdate = date("d M Y");
+				$user->write();
+			}
 		}
 	}
 	
@@ -991,16 +998,68 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
-	public function loadHeatMap($userID, $token, $accounts, $duration){
+	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate){
 	
 		//	Get the user sessions 
 		$userSession = $this->checkUserSession($userID,$token);
+		$sanitisedUserID = Convert::raw2sql($userID);
 		
 		if($userSession != null ){
-		
 			
-		
+			if($startDate === null){
+				$startDate = '1970-01-0 00:00:00';
+			}
+			if($endDate === null){
+			
+				$endDate = date("Y-m-d",time()).' 23:59:59';
+			}
+			
+			$transactions = array();
+			foreach( $accounts as $account){
+				$theAccount = Account::get()->byID(Convert::raw2sql($account));
+				
+				if($theAccount !== null && $theAccount->UserID = $sanitisedUserID){
+				
+					$accountTransactions = Transaction::get()->filter(array(
+						"AccountID" => Convert::raw2sql(Convert::raw2sql($account)),
+						'Date:GreaterThan' => $startDate,
+						'Date:LessThan' => $endDate
+					));
+					
+					foreach($accountTransactions as $transaction){
+						
+						$transactions->push($transaction);
+					}
+				}
+			}
+			if(sizeof($transactions) >0){
+				$groups = array();
+				
+				$groups->push( new HeatMapGroup($transactions[0]->Longitude,$transactions[0]->Latitude,20));
+				$groups[0]->addAmount($transactions[0]->Amount);
+				for($i = 1 ; $i<sizeof($transactions) ; $i++){
+					
+					for($j = 0 ; $j <sizeof($groups); $j++){
+						
+						if($groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
+							$groups[$j]->addAmount($transactions[$i]->Amount);
+							break;
+						}elseif($j = sizeof($groups)-1){
+							$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
+							$groups[$j+1]->addAmount($transactions[$i]->Amount);
+						}
+					}
+				
+				
+				
+				
+				}
+				
+				return $groups;
+			}
 		}
+		
+		return null;
 	}
 }
 ?>

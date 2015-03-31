@@ -21,6 +21,6 @@ interface BankInterface {
 	
 	//	Advanced requirements
 	public function loadATMs($userID, $token);
-	public function loadHeatMap($userID, $token, $accounts, $duration);
+	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate);
 }
 ?>

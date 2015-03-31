@@ -4,13 +4,15 @@
 		private $lng;
 		private $lat;
 		private $amount;
+		private $radius
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function __construct( $lng, $lat){
+		public function __construct( $lng, $lat, $radius){
 		
 			$this->setLng($lng);
 			$this->setLat($lat);
-
+			$this->setRad($radius);
+			
 		}
 		
 		
@@ -32,7 +34,13 @@
 		// Getters
 		public function getAmount(){
 			
-			return $this->Amount;
+			return $this->amount;
+			
+		}
+		
+		public function getRadius(){
+			
+			return $this->radius;
 			
 		}
 		
@@ -47,7 +55,7 @@
 		
 		public function addAmount($amount){
 		
-			$this->Amount + $amount;
+			$this->amount + $amount;
 		}
 		
 		
@@ -58,10 +66,15 @@
 		
 		}
 		
-		//These are private as once they are set we don't want them to be able to change
 		private function setlat($lat){
 			
 			$this->lat = $lat;
+		
+		}
+		
+		private function setRad($rad){
+			
+			$this->radius = $rad;
 		
 		}
 		

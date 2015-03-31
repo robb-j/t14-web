@@ -19,7 +19,8 @@ class User extends DataObject {
 		'DOB' => 'Date',
 		'Password' => 'Varchar(30)',
 		'NumberOfSpins' => 'Int',
-		'Points' => 'Int'
+		'Points' => 'Int',
+		'LastBudgetUpdate' => 'Date'
     );
 	private static $has_many =  array(
 		'Accounts' => 'Account',
