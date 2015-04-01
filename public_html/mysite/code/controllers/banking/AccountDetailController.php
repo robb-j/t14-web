@@ -26,19 +26,17 @@ class AccountDetailController extends BankController {
 	
 	public function Content() {
 		
-		
-		// Get the Account
-		$id = $this->request->param('ID');
-		$account = Account::get()->byId($id);
-		$this->Account = $account;
+		// Create a WebApi to access the database
+		$api = new WebApi();
 		
 		
-		// Get provided month & year
+		// Get the params from the URL
+		$accountID = $this->request->param('ID');
 		$month = $this->request->param('Month');
 		$year = $this->request->param('Year');
 		
 		
-		// If not provided, use today
+		// If dates are not provided, use today
 		if ($month == null) {
 			$month = date('m');
 		}
@@ -47,20 +45,31 @@ class AccountDetailController extends BankController {
 			$year = date('y');
 		}
 		
+		
 		// Get the relevant transactions
-		$api = new WebApi();
-		$trans = $api->loadTransaction($account->UserID, $id, $month, $year);
-		$this->FilteredTransactions = $trans->getTransactions();
+		$output = $api->loadTransaction($this->CurrentUser->ID, $accountID, $month, $year);
 		
 		
-		// Get the filtering dates
-		$this->FilterDates = $api->getStatementDates($account->UserID, $account->ID);
-		
-		
-		// Give the template the current filter, if we have one
-		$this->CurrentFilter = new DateObject("1", $month, $year);
-		
-		return $this->renderWith("AccountDetailContent");
+		if ($output->didPass()) {
+			
+			$this->FilteredTransactions = $output->getTransactions();
+			$this->Account = $output->getAccount();
+			
+			
+			// Get the filtering dates
+			$this->FilterDates = $api->getStatementDates($this->CurrentUser->ID, $accountID);
+			
+			
+			// Give the template the current filter, if we have one
+			$this->CurrentFilter = new DateObject("1", $month, $year);
+			
+			
+			return $this->renderWith("AccountDetailContent");
+		}
+		else {
+			
+			return "<div class='main-section'><h3> Failed to access Account: " . $output->getReason() . "</h3></div>";
+		}
 	}
 	
 	public function AvailableBalance() {

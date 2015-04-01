@@ -92,11 +92,18 @@
 		<!-- The List of Transactions -->
 		<div class="transaction-table data-table">
 
-			<!-- Loop through the account's transactions -->
+			<% if $FilteredTransactions.Count == 0 %>
+				
+				<div class="data-row small-row last-row">
+					<p> Sorry, we couldn't find any transactions </p>
+				</div>
+				
+			<% end_if %>
 
+			<!-- Loop through the account's transactions -->
 			<% loop $FilteredTransactions %>
 
-				<div class="transaction-row data-row <% if Last %>last-row<% end_if %>">
+				<div class="transaction-row data-row small-row <% if Last %>last-row<% end_if %>">
 
 					<div class="row">
 						

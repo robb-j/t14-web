@@ -109,7 +109,7 @@ class BankAccessor extends Object implements BankInterface {
 		}
 		
 		//	Returns a failed TransactionOutput object
-		return new TransactionOutput(null,null);
+		return new TransactionOutput(null,null, false, "You do not own this Account");
 	}
 	
 	/*
