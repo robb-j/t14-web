@@ -14,6 +14,7 @@ class MobileApiController extends Controller {
     
 	//	Initialises the API
     public function init() {
+	
 	    parent::init();
 	    
 	    $this->serializer = new SimpleSerializer();
@@ -64,11 +65,11 @@ class MobileApiController extends Controller {
 							
 				"Categories" =>	$categories,
 				
-				"Recent Gains" => PointGain::get()->filter(array(
+				"RecentGains" => PointGain::get()->filter(array(
 								'UserID' => $output->GetUser()->ID
 							))->sort('ID', 'DESC')->limit(7),
 				
-				"Recent Rews" => RewardTaken::get()->filter(array(
+				"RecentRewards" => RewardTaken::get()->filter(array(
 								'UserID' => $output->GetUser()->ID
 							))->sort('ID', 'DESC')->limit(7),
 				
@@ -189,14 +190,13 @@ class MobileApiController extends Controller {
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
-	
-	
 	}
 	
 	//	####################################
 	//	#### Intermediate  Requirements ####
 	//	####################################
 	
+	//	Get all of the payments without a category
 	public function newPayments(SS_HTTPRequest $request){
 	
 		// Get inputs from post variables
@@ -226,6 +226,7 @@ class MobileApiController extends Controller {
 		return $this->response;
 	}
 	
+	//	Lets the user categorise their payments
 	public function categorisePayments(SS_HTTPRequest $request){
 	
 		// Get inputs from post variables
@@ -260,6 +261,7 @@ class MobileApiController extends Controller {
 	
 	}
 	
+	//	Allows the user to update the information in their budget
 	public function updateBudget(SS_HTTPRequest $request){
 		
 		// Get inputs from post variables
@@ -297,7 +299,7 @@ class MobileApiController extends Controller {
 		
 	}
 	
-	
+	//	Lets the user choose a reward from a list
 	public function chooseReward(SS_HTTPRequest $request){
 	
 	// Get inputs from post variables
@@ -313,8 +315,8 @@ class MobileApiController extends Controller {
 		if ($output->didPass() ) {
 			
 			$data = array(
-				"rewardTaken" => $output->getRewardTaken()->ID,
-				"reward" => $output->getReward()->ID
+				"rewardTaken" => $output->getRewardTaken(),
+				"reward" => $output->getReward()
 			);
 		}else {
 			
@@ -327,12 +329,9 @@ class MobileApiController extends Controller {
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
-	
-	
-	
-	
 	}
 	
+	//	Gets the user to perform a spin
 	public function performSpin(SS_HTTPRequest $request){
 	
 		// Get inputs from post variables
@@ -346,7 +345,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if ($output != null ) {
 			$data = array(
-				"Points" => $output->Points
+				"points" => $output->Points
 			);
 		}else {
 			
@@ -361,6 +360,7 @@ class MobileApiController extends Controller {
 		return $this->response;
 	}
 	
+	//	Get a list of all rewards offered
 	public function getAllRewards(){
 	
 		$output = BankAccessor::create()->getAllRewards();
@@ -369,12 +369,12 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"Rewards" => $output
+				"rewards" => $output
 			);
 		}else {
 			
 			$data = array(
-				"Error" => "Error performing a spin"
+				"Error" => "Error getting all rewards"
 			);
 		}
 		
@@ -385,6 +385,7 @@ class MobileApiController extends Controller {
 	
 	}
 	
+	//	Gets the last n points the user earned
 	public function getLastPoints(SS_HTTPRequest $request){
 		
 		// Get inputs from post variables
@@ -397,12 +398,12 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"LastPoints" => $output
+				"lastPoints" => $output;
 			);
 		}else {
 			
 			$data = array(
-				"Error" => "Error performing a spin"
+				"Error" => "Error getting last points"
 			);
 		}
 		
@@ -410,11 +411,97 @@ class MobileApiController extends Controller {
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
-	
-	
-	
-	
 	}
 	
+	//	Gets all of the users budget categories
+	public function getUserCategories(SS_HTTPRequest $request){
+		
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		
+		$output = BankAccessor::create()->getUserCategories($userID, $token);
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output) > 0 ) {
+			$data = array(
+				"categories" => $output;
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error getting categories"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	}
+	
+	//	################################
+	//	#### Advanced  Requirements ####
+	//	################################
+	
+	//	Loads all of the ATM's stored
+	public function loadATMs(SS_HTTPRequest $request){
+		
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		
+		$output = BankAccessor::create()->loadATMs($userID, $token);
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output) > 0 ) {
+			$data = array(
+				"ATMs" => $output;
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error getting ATM's"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	}
+	
+	//	Creates a heatmap for the users transactions 
+	public function loadHeatMap(SS_HTTPRequest $request){
+		
+		// Get inputs from post variables
+		$userID = $request->postVar("userID");
+		$token = $request->postVar("token");
+		$accounts = $request->postVar("accounts");
+		$startDate = $request->postVar("startDate");
+		$endDate = $request->postVar("endDate");
+		
+		$output = BankAccessor::create()->loadHeatMap($userID, $token, $accounts, $startDate, $endDate);
+		$data = null;
+		
+		// Decide what data to give back
+		if (sizeof($output) > 0 ) {
+			$data = array(
+				"heatMapPoints" => $output;
+			);
+		}else {
+			
+			$data = array(
+				"Error" => "Error getting HeatMap"
+			);
+		}
+		
+		// Put the data into the response & return it
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
+	}
 }
 ?>

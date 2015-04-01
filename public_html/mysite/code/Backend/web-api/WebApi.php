@@ -69,9 +69,7 @@ class WebApi extends Object{
 	
 	public function getStatementDates($userID,$accountID){
 	
-	
 		return BankAccessor::create()->getStatementDates( $userID, $accountID, Cookie::get('BankingSession'));
-	
 	}
 	
 	//	####################################
@@ -91,14 +89,13 @@ class WebApi extends Object{
 	
 	public function updateBudget($userID,$newGroupNames, $newCategoryNames, $newCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups){
 	
+		return BankAccessor::create()->updateBudget($userID,Cookie::get('BankingSession'),$newGroupNames, $newCategoryNames, $newCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups);
 	}
-
 	
 	public function chooseReward($userID, $rewardID){
 	
 		//	Adds the token from the cookie "Cookie::get('BankingSession')"
 		return BankAccessor::create()->chooseReward( $userID, Cookie::get('BankingSession') , $rewardID);
-	
 	}
 	
 	public function performSpin($userID){
@@ -118,5 +115,26 @@ class WebApi extends Object{
 		return BankAccessor::create()->getLastPoints( $userID, Cookie::get('BankingSession') );
 	}
 	
+	public function getUserCategories($userID){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->getUserCategories( $userID, Cookie::get('BankingSession') );
+	}
+	
+	//	################################
+	//	#### Advanced  Requirements ####
+	//	################################
+	
+	public function loadATMs($userID){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->loadATMs( $userID, Cookie::get('BankingSession') );
+	}
+	
+	public function loadHeatMap($userID, $accounts, $startDate, $endDate){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->loadHeatMap( $userID, Cookie::get('BankingSession'), $accounts, $startDate, $endDate );
+	}
 }
 ?>
