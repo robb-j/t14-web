@@ -203,7 +203,7 @@ class MobileApiController extends Controller {
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 
-		// Try to make the transfer
+		// Try to get all uncategorised payments
 		$output = BankAccessor::create()->newPayments($userID, $token);
 		$data = null;
 		
@@ -234,7 +234,7 @@ class MobileApiController extends Controller {
 		$categorises = $request->postVar("categories");
 		$token = $request->postVar("token");
 
-		// Try to make the transfer
+		// Try to categorise payments
 		$output = BankAccessor::create()->categorisePayments($userID,$token, $categorises);
 		$data = null;
 		
@@ -272,7 +272,7 @@ class MobileApiController extends Controller {
 		$updatedCategoryBudget = $request->postVar("budgetAmount");
 		
 
-		// Try to make the transfer
+		// Try to update the users budget
 		$output = BankAccessor::create()->updateBudget( $userID, $token, $updatedGroupNames, $updatedCategoryNames, $updatedCategoryBudget, null, null, null, null);
 		$data = null;
 		
@@ -280,9 +280,8 @@ class MobileApiController extends Controller {
 		if ($output->didPass()) {
 			
 			$data = array(
-				"changedCategorys" => $output->getChangedCategorys(),
-				"newSpin" => $output->allowedNewSpin(),
-				"numberOfSpins" => $output->allowedNewSpin(),
+				"changedCategorys" => $output->getUpdatedCats(),
+				"changedGroups" => $output->getUpdatedGroups(),
 				"successful" => $this->didPass()
 			);
 		}else {
@@ -307,7 +306,7 @@ class MobileApiController extends Controller {
 		$token = $request->postVar("token");
 		$rewardID = $request->postVar("rewardID");
 
-		// Try to make the transfer
+		// Try to choose a reward for the user 
 		$output = BankAccessor::create()->chooseReward($userID, $token, $rewardID);
 		$data = null;
 		
@@ -338,7 +337,7 @@ class MobileApiController extends Controller {
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 		
-		// Try to make the transfer
+		// Try to perform a spin
 		$output = BankAccessor::create()->performSpin($userID, $token);
 		$data = null;
 		
@@ -363,6 +362,7 @@ class MobileApiController extends Controller {
 	//	Get a list of all rewards offered
 	public function getAllRewards(){
 	
+		//	get all rewards offered
 		$output = BankAccessor::create()->getAllRewards();
 		$data = null;
 		
@@ -392,6 +392,7 @@ class MobileApiController extends Controller {
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 		
+		//	Get the last n points gained by the user
 		$output = BankAccessor::create()->getLastPoints($userID, $token);
 		$data = null;
 		
@@ -420,6 +421,7 @@ class MobileApiController extends Controller {
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 		
+		//	Get the list of all user categories
 		$output = BankAccessor::create()->getUserCategories($userID, $token);
 		$data = null;
 		
@@ -452,6 +454,7 @@ class MobileApiController extends Controller {
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
 		
+		//	Load all of the ATM locations
 		$output = BankAccessor::create()->loadATMs($userID, $token);
 		$data = null;
 		
@@ -483,6 +486,7 @@ class MobileApiController extends Controller {
 		$startDate = $request->postVar("startDate");
 		$endDate = $request->postVar("endDate");
 		
+		//	Generate a heat map for the user 
 		$output = BankAccessor::create()->loadHeatMap($userID, $token, $accounts, $startDate, $endDate);
 		$data = null;
 		

@@ -584,6 +584,7 @@ class BankAccessor extends Object implements BankInterface {
 		return new ArrayList();
 	}
 	
+	//	Allows the user to categorise all of their payments 
 	public function categorisePayments( $userID, $token, $categorisedItems ){
 		
 		//	Gets the user session from the token
@@ -593,20 +594,28 @@ class BankAccessor extends Object implements BankInterface {
 		if($userSession !== null){
 		
 			$catArray = array();
+			
+			//	For every item in the key value array
 			foreach ($categorisedItems as $transID => $catID) {
 				
+				//	Get the corresponding transaction and category objects
 				$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
 				$category = Category::get()->byID(Convert::raw2sql($catID));
 				
+				//	If the objects are not null and the account and budget are owned by the user
 				if ($transaction !== null && $category !== null && $transaction->Account()->UserID === $sanitisedUserID && $category->BudgetGroup()->UserID === $sanitisedUserID){
 					
+					//	Change the categoryID
 					$transaction->CategoryID = Convert::raw2sql($catID);
 					$transaction->write();
 					
+					//	Increase the balance of the category
 					$category->Balance = $category->Balance  + 	$transaction->Amount;
 					$category->write();
 					
 				}
+				
+				//	Compiles an array of the categories edited
 				if (!in_array($catID, $catArray)){
 					$catArray->Push($catID);
 				}
@@ -614,9 +623,12 @@ class BankAccessor extends Object implements BankInterface {
 			
 			$newSpin = false;
 			$currentSpins = 0;
+			$user = User::get()->byID($sanitisedUserID);
 			
-			if( sizeof(newPayments( $userID, $token )) === 0 ){
-				$user = User::get()->byID($sanitisedUserID);
+			//	If the user has categorised all their payments  and they haven't done a categorise today
+			if( sizeof(newPayments( $userID, $token )) === 0 && $user->LastFullCategorise < date("Y M d")){
+				
+				//	Give the user an new spin
 				$newSpin = true;
 				
 				if($user != null){
@@ -628,17 +640,20 @@ class BankAccessor extends Object implements BankInterface {
 					$currentSpins = $user->NumberOfSpins;
 				}
 			}
-				
+			
+			//	return a list of the categories edited
 			foreach ($catArray  as $catID) {
 			
 				$catID->Balance = Category::get()->byID(Convert::raw2sql($catID))->Balance;
 			}
+			
 			return new CategoriseOutput($catArray, $newSpin, $currentSpins, true);
 		}
 		
 		return new CategoriseOutput(null, null, null, false);
 	}
 	
+	//	Allows the user to update their budget
 	public function updateBudget( $userID, $token, $updatedGroupNames, $updatedCategoryNames, $updatedCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups){
 	
 		//Check user session
@@ -646,71 +661,117 @@ class BankAccessor extends Object implements BankInterface {
 		$sanitisedUserID = Convert::raw2sql($userID);
 	
 		if($userSession !== null){
-			// do $updatedGroupNames, 
+		
+			$returnGroups = array();
+			
+			//	For every group that needs to be changed updated their name 
+			//	based on the key value array which maps GroupIDs to the new name
 			foreach ($updatedGroupNames as $groupID => $newName) {
 			
 				$group =  BudgetGroup::get()->byID(Convert::raw2sql($groupID));
+				
+				//	If the user owns the group
 				if($group !== null && $group->UserID === $sanitisedUserID ){
+					
 					$group->Title = Convert::raw2sql($newName);
 					$group->write;
+					$returnGroups->push($group);
 				}
 			}
-			// do $updatedCategoryNames,
+			
+			$returnCats = array();
+			
+			//	For every Category that needs to be changed updated their name 
+			//	based on the key value array which maps CategoryIDs to the new name
 			foreach ($updatedCategoryNames as $catID => $newName) {
 			
 				$category =  Category::get()->byID(Convert::raw2sql($catID));
+				
+				//	If the user owns the category
 				if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+				
 					$category->Title = Convert::raw2sql($newName);
 					$category->write;
+					$returnCats->push($category);
 				}
 			}
-			// do $updatedCategoryBudget, 
+			
+			//	For every Category that needs to be changed updated their budget amount 
+			//	based on the key value array which maps CategoryIDs to the new budgeted amount
 			foreach ($updatedCategoryBudget as $catID => $newBudget) {
 			
 				$category =  Category::get()->byID(Convert::raw2sql($catID));
+				
+				//	If the user owns the category
 				if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+				
 					$category->Budgeted = Convert::raw2sql($newBudget);
 					$category->write;
+					$returnCats->push($category);
 				}
 			}
-			// do $deletedCategories, 
+			
+			//	Deleted specified categories based on their categoryID
 			foreach ($deletedCategories as $catID) {
 			
 				$category =  Category::get()->byID(Convert::raw2sql($catID));
+				
+				//	If the user owns the category
 				if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+				
 					$category->delete();
 				}
 			}
-			// do $deletedGroups,
-			foreach ($$deletedGroups as $groupID){
-				if( $groupID !== null && $groupID->UserID === $sanitisedUserID ){
+			
+			//	Delete the specified groups based on the groupID
+			foreach ($deletedGroups as $groupID){
+			
+				$group =  BudgetGroup::get()->byID(Convert::raw2sql($groupID));
+				
+				//	If the user owns the group
+				if( $group !== null && $group->UserID === $sanitisedUserID ){
+				
+					//	Get all of the groups categories 
 					$categories = Category::get()->filter(array(
 						"Groups" => $groupID
 					));
+					
+					//	If their is categories to delete
 					if (sizeof($categories)>0){
+					
+						//	Delete all of the categories 
 						foreach ($categories as $catID) {
 					
 							$category =  Category::get()->byID(Convert::raw2sql($catID));
+							
 							if($category !== null && $category->BudgetGroup()->UserID === $sanitisedUserID ){
+							
 								$category->delete();
 							}
 						}
 					}
+					
 					$groupID->delete();
 				}
 			}
-			// do $newCategories, 
+			
+			//	For every category that has to be created
 			foreach ($newCategory as $category) {
 			
+				//	Get the basic info for the category
 				$newName = Convert::raw2sql($category["Name"]);
 				$newBudget = Convert::raw2sql($category["Budget"]);
 				$newGroup = Convert::raw2sql($category["GroupID"]);
 				
+				//	If all basic info has values
 				if($newName !== null && $newBudget !== null && $newGroup !== null){
 				
 					$group = BudgetGroup::get()->byID($newGroup);
+					
+					//	And the group its to be added to exists and is owned by the user
 					if($group !== null && $group->UserID === $sanitisedUserID){
 					
+						//	Create the new category
 						$theNewCat = Category::create();
 						$theNewCat->Title = $newName;
 						$theNewCat->Budget = $newBudget;
@@ -719,17 +780,16 @@ class BankAccessor extends Object implements BankInterface {
 
 						//	Then write this to the database
 						$theNewCat->write();
-					
 					}
-				
-				
 				}
 			}
 			
-			// do $newGroups
+			//	For each group that is to be created
 			foreach ($newGroups as $newGroupTitle => $newCategories) {
 			
+				//	If the groups has a name
 				if($newGroupTitle !== null){
+				
 					//Create group
 					$theNewGroup = BudgetGroup::create();
 					$theNewGroup->Title = Convert::raw2sql($newGroupTitle);
@@ -738,10 +798,12 @@ class BankAccessor extends Object implements BankInterface {
 					//	Then write this to the database
 					$theNewGroup->write();
 					
+					//	Then create all of the associated categories that have been added
 					foreach ($newCategories as $newCategory){
 						
 						$newName = Convert::raw2sql($category["Name"]);
 						$newBudget = Convert::raw2sql($category["Budget"]);
+						
 						if( $newName !== null && $newBudget != null){
 							
 							$theNewCat = Category::create();
@@ -757,13 +819,18 @@ class BankAccessor extends Object implements BankInterface {
 				}
 			}
 			
+			//	Set the last budget update to today
 			$user = User::get()->byID($sanitisedUserID );
 			if ($user !== null){
 			
 				$user->LastBudgetUpdate = date("d M Y");
 				$user->write();
 			}
+			
+			return new BudgetUpdate($returnGroups,$returnCats, true);
 		}
+		
+		return new BudgetUpdate(null,null, false);
 	}
 	
 	//	This lets the user choose a reward and spend their points
@@ -992,6 +1059,7 @@ class BankAccessor extends Object implements BankInterface {
 		
 		if($userSession != null ){
 		
+			//	Returns all of the ATM's held in the database
 			return ATM::get();
 		}
 		
@@ -1004,61 +1072,83 @@ class BankAccessor extends Object implements BankInterface {
 		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
 		
+		//	If the session exists
 		if($userSession != null ){
 			
+			//	If there is no specified start date use the beginning on unix time
 			if($startDate === null){
+			
 				$startDate = '1970-01-0 00:00:00';
 			}
+			
+			//	If there is no end date specified use today
 			if($endDate === null){
 			
 				$endDate = date("Y-m-d",time()).' 23:59:59';
 			}
 			
 			$transactions = array();
+			
+			//	For every account the user wants the data for
 			foreach( $accounts as $account){
+			
+				//	Get the account object
 				$theAccount = Account::get()->byID(Convert::raw2sql($account));
 				
+				//	If the account object it not null and is owned by the user
 				if($theAccount !== null && $theAccount->UserID = $sanitisedUserID){
 				
+					//	Get all of the transactions by that account in the time frame 
 					$accountTransactions = Transaction::get()->filter(array(
+					
 						"AccountID" => Convert::raw2sql(Convert::raw2sql($account)),
 						'Date:GreaterThan' => $startDate,
 						'Date:LessThan' => $endDate
 					));
 					
+					//	Add all of these transactions to an array
 					foreach($accountTransactions as $transaction){
 						
 						$transactions->push($transaction);
 					}
 				}
 			}
+			
+			//	If there was transactions
 			if(sizeof($transactions) >0){
+			
 				$groups = array();
 				
+				//	Add the first transaction to a hew HeatMapGroup 
 				$groups->push( new HeatMapGroup($transactions[0]->Longitude,$transactions[0]->Latitude,20));
+				
+				//	Increase the amount spent in the group 
 				$groups[0]->addAmount($transactions[0]->Amount);
+				
+				//	For every transaction in the array
 				for($i = 1 ; $i<sizeof($transactions) ; $i++){
 					
+					//	At every position in the groups array
 					for($j = 0 ; $j <sizeof($groups); $j++){
 						
+						//	If the transaction is "close" to the centre of the groups first transaction group it with that
 						if($groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
+						
+							
 							$groups[$j]->addAmount($transactions[$i]->Amount);
 							break;
+						
+						//	If at the end of the groups array add to the end position a new group
 						}elseif($j = sizeof($groups)-1){
+						
 							$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
 							$groups[$j+1]->addAmount($transactions[$i]->Amount);
 						}
 					}
-				
-				
-				
-				
 				}
-				
 				return $groups;
 			}
 		}
-		
 		return null;
 	}
 }
