@@ -622,7 +622,7 @@ class BankAccessor extends Object implements BankInterface {
 				}
 				
 				//	Compiles an array of the categories edited
-				if ($catArray->exists($category)) {
+				if (!$catArray->exists($category)) {
 					$catArray->push($category);
 				}
 				
@@ -634,7 +634,7 @@ class BankAccessor extends Object implements BankInterface {
 			$user = User::get()->byID($sanitisedUserID);
 			
 			//	If the user has categorised all their payments  and they haven't done a categorise today
-			if( sizeof($this->newPayments( $userID, $token )) === 0 && $user->LastFullCategorise < date("Y M d")){
+			if( sizeof($this->newPayments( $userID, $token )) === 0 && date('Y-m-d',$user->LastFullCategorise) < date("Y M d")){
 				
 				//	Give the user an new spin
 				$newSpin = true;
