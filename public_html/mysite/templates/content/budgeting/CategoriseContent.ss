@@ -16,7 +16,7 @@
 			<!-- Display if the user has already categorised -->
 			<% if $HasCategorised %>
 				<div class="form-message message-success">
-					<p> You're payments were successfully categorised </p>
+					<p> You're payments were successfully categorised, <a class="link-obvious" href="budgetig/"> back to my Budget</a> </p>
 				</div>
 			<% end_if %>
 			

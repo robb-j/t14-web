@@ -49,8 +49,6 @@ class CategoriseController extends BankController {
 			}
 		}
 		
-		print_r($used);
-		
 		$output = WebApi::create()->categorizePayments($userID, $used);
 		
 		if ($output->didPass()) {
