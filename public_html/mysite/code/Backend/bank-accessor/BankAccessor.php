@@ -516,6 +516,7 @@ class BankAccessor extends Object implements BankInterface {
 		$transaction->Payee = "Transfer to account ".$payee;
 		$transaction->Date = date("d M Y");
 		$transaction->AccountID = $account->ID;
+		$transaction->Transfer = 1;
 		
 		//	Then write this to the database
 		$transaction->write();
@@ -568,7 +569,8 @@ class BankAccessor extends Object implements BankInterface {
 					
 					$transactions = Transaction::get()->filter(array(
 						'AccountID' => $theRowID,
-						'CategoryID' => 0
+						'CategoryID' => 0,
+						"Transfer" => 0
 					));
 					
 					foreach($transactions as $transaction){
@@ -1174,7 +1176,7 @@ class BankAccessor extends Object implements BankInterface {
 					for($j = 0 ; $j <sizeof($groups); $j++){
 						
 						//	If the transaction is "close" to the centre of the groups first transaction group it with that
-						if($groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
+						if($transactions[$i]->Longitude != null && $transactions[$i]->Latitude != null && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
 						
 							
 							$groups[$j]->addAmount($transactions[$i]->Amount);
