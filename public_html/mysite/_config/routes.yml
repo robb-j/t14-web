@@ -9,6 +9,7 @@ Director:
     'banking/account/$ID/$Month/$Year': 'AccountDetailController'
     'banking/account/$ID': 'AccountDetailController'
     'banking/transfer/$ID': 'TransferController'
+    'budgeting/edit/group/$ID': 'GroupEditController'
     'budgeting/edit': 'BudgetEditController'
     'budgeting/categorise': 'CategoriseController'
     'rewards/claim': 'ClaimController'

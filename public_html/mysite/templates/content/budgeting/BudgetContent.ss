@@ -76,7 +76,7 @@
 							
 							
 							<!-- The Balance of the Category, formatted as a currency -->
-							<div class="col"> <p class="$Top.CurrencyClass($Budgeted) right"> $Top.FormatCurrency($Budgeted) </p></div>
+							<div class="col-xs-4"> <p class="$Top.CurrencyClass($Budgeted) right"> $Top.FormatCurrency($Budgeted) </p></div>
 							
 						</div>
 						

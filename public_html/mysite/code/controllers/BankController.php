@@ -19,8 +19,15 @@ class BankController extends Controller {
 		
 		parent::init();
 		
+		
+		// Common Requirements
+		Requirements::javascript("mysite/js/libs/jquery.js");
+		Requirements::javascript("mysite/js/libs/bootstrap.js");
+		
+		
 		// Get the session token, if there is one
 		$this->CurrentUser = BankAccessor::create()->getCurrentUser();
+		
 		
 		Currency::setCurrencySymbol("£");
 	}
@@ -40,6 +47,12 @@ class BankController extends Controller {
 		}
 	}
 	
+	
+	
+	
+	/*
+	 *	Get a class to apply to a currency, depending on its value
+	 */
 	public function CurrencyClass($value) {
 		
 		if ($value < 0.0) {
@@ -52,6 +65,10 @@ class BankController extends Controller {
 		}
 	}
 	
+	
+	/*
+	 *	Format a Currency to display nicely
+	 */
 	public function FormatCurrency($value) {
 		
 		if ($value < 0.0) {
@@ -64,6 +81,20 @@ class BankController extends Controller {
 		}
 	}
 	
+	
+	/*
+	 *	A helper function for managing forms
+	 * 	Will call the action of the submit button pressed, like:
+	 * 		<input class="control-button cb-green" type="submit" name="action_submitEdit" value="Save"/>
+	 * 	This will call submitEdit($data) on the attached Controller, where $data is the post data from the form
+	 * 	Should be used with a form of the standard:
+	 *		<form class="banking-form my-cool-form" method="POST" action="MyControllerName/MyFormName" enctype="application/x-www-form-urlencoded">
+	 *	Then the Controller just needs to have the 
+	 *		$allowed_actions = array("MyFormName");
+	 *	and implement the function:
+	 *		public function MyFormName($request) { return parent::HandleForm($request); }
+	 *	Then you can do whatever you want with the post data in the called function and us SS's return->redirect("someplace") if you want
+	 */
 	public function HandleForm($request) {
 		
 		
@@ -74,10 +105,10 @@ class BankController extends Controller {
 		// Get the action clicked
 		foreach($data as $param => $value) {
 			
+			// Find the param that stats with 'action_'
 			if(substr($param,0,7) == 'action_') {
 				
-				
-				// Tidy up if using Get request
+				// Tidy up the name
 				if(strpos($param,'?') !== false) {
 					
 					list($paramName, $paramVars) = explode('?', $paramName, 2);
@@ -86,17 +117,22 @@ class BankController extends Controller {
  					$vars = array_merge((array)$vars, (array)$newRequestParams);
 				}
 				
+				
+				// Get the name, tidied, to call the function back on ourself
 				$action = preg_replace(array('/^action_/','/_x$|_y$/'),'', $param);
 				break;
 			}
 		}
 		
 		
-		// Attempt to run this action on the Controller
 		if ($this->hasMethod($action)) {
+			
+			// Attempt to run this action on the Controller
 			return $this->$action($data);
 		}
 		else {
+			
+			// Otherise, just show an error
 			return "<p> Form Error: Method " . $action . " does not exist on Controller: " . get_class($this) . "</p>";
 		}
 	}

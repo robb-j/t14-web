@@ -18,9 +18,8 @@ class AccountDetailController extends BankController {
 		// Add some custom CSS
 		Requirements::css('mysite/css/banking/accountdetail.css');
 		
+		
 		// Add some javascript
-		Requirements::javascript("mysite/js/libs/jquery.js");
-		Requirements::javascript("mysite/js/libs/bootstrap.js");
 		Requirements::javascript("mysite/js/AccountDetail.js");
 	}
 	
