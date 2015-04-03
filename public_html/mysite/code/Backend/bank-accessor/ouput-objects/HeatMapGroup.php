@@ -1,9 +1,16 @@
 <?php
 	class HeatMapGroup extends Object {
 	
+		//	Longitude
 		private $lng;
+		
+		//	Latitude
 		private $lat;
+		
+		//	Amount spent within the group
 		private $amount;
+		
+		//	The radius defined as "close"
 		private $radius
 		
 		//This constructor takes in these parameters and sets the relevant fields
@@ -12,36 +19,27 @@
 			$this->setLng($lng);
 			$this->setLat($lat);
 			$this->setRad($radius);
-			
 		}
-		
-		
 		
 		// Getters
 		public function getLng(){
 			
 			return $this->lng;
-			
 		}
-		
-		// Getters
+
 		public function getLat(){
 			
 			return $this->lat;
-			
 		}
 		
-		// Getters
 		public function getAmount(){
 			
 			return $this->amount;
-			
 		}
 		
 		public function getRadius(){
 			
 			return $this->radius;
-			
 		}
 		
 		public function close($newLng, $newLat){
@@ -63,21 +61,16 @@
 		private function setlng($lng){
 			
 			$this->lng = $lng;
-		
 		}
 		
 		private function setlat($lat){
 			
 			$this->lat = $lat;
-		
 		}
 		
 		private function setRad($rad){
 			
 			$this->radius = $rad;
-		
 		}
-		
-		
 	}
 ?>

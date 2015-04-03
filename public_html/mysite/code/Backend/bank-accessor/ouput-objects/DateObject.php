@@ -1,8 +1,6 @@
 <?php
 	class DateObject extends ArrayData {
 
-		
-		
 		//This constructor takes in these parameters and sets the relevant fields
 		public function __construct( $day, $month, $year){
 			
@@ -57,6 +55,5 @@
 			
 			$this->setField("Year", $year);
 		}
-
 	}
 ?>

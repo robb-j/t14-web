@@ -21,26 +21,22 @@
 		public function getRewardTaken(){
 			
 			return $this->rewardTaken;
-			
 		}
 		
 		public function getReward(){
 			
 			return $this->reward;
-			
 		}
 		
 		public function didPass(){
 			
 			return $this->didPass;
-			
 		}
 		
 		//These are private as once they are set we don't want them to be able to change
 		private function setRewardTaken($rewardTaken){
 			
 			$this->rewardTaken = $rewardTaken;
-		
 		}
 		
 		private function setReward($reward){

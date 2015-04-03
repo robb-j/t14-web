@@ -1,9 +1,16 @@
 <?php
 	class CategoriseOutput extends ArrayData {
 
+		//	Stores the categories that were edited
 		$changedCategorys;
+		
+		//	If the user get a new spin
 		$newSpin;
+		
+		//	How many spins they currently have
 		$currentSpins;
+		
+		//	Was it successful or not 
 		$successful;
 		
 		//This constructor takes in these parameters and sets the relevant fields
@@ -16,18 +23,22 @@
 		}
 	
 		public function getChangedCategorys() {
+		
 			return $this->changedCategorys;
 		}
 		
 		public function allowedNewSpin() {
+		
 			return $this->newSpin;
 		}
 		
 		public function getCurrentSpins() {
+		
 			return $this->currentSpins;
 		}
 		
 		public function didPass() {
+		
 			return $this->successful;
 		}
 
