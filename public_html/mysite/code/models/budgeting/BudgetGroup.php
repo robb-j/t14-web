@@ -5,16 +5,30 @@
  */
  
  class BudgetGroup extends DataObject {
-	 
-	 private static $db = array(
+	
+	private static $db = array(
 		"Title" => "Varchar(24)"
-	 );
-	 
-	 private static $has_one = array(
+	);
+	
+	private static $has_one = array(
 		"User" => "User" 
-	 );
-	 
-	 private static $has_many = array(
+	);
+	
+	private static $has_many = array(
 		"Categories" => "Category" 
-	 );
- }
+	);
+	
+	
+	public function Balance() {
+		 
+		$sum = 0.0;
+		$allCategories = $this->Categories();
+		
+		foreach ($allCategories as $category ){
+			 
+			$sum = $sum + $category->Balance;
+		}
+		 
+		return $sum;
+	}
+}
