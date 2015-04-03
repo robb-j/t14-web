@@ -2,7 +2,6 @@
 	
 	<div class="main-section">
 		
-		
 		<!-- Display the title, depending to if they have payments to categorise -->
 		<% if $NewPayments %>
 			<h2> Categorise Payments </h2>
@@ -11,26 +10,32 @@
 		<% end_if %>
 		
 		
-		<% if $HasCategorisde %>
-			<div class="form-message message-success">
-				<p> You're payments were successfully categorised </p>
-			</div>
-		<% end_if %>
-		
-		<% if $HasNewSpin %>
-			<div class="form-message message-success">
-				<p> You've been awarded a spin! <a class="link-obvious" href="rewards/claim/"> Use it here </a> </p>
-			</div>
-		<% end_if %>
-		
-		<% if $FormError %>
-			<div class="form-message message-success">
-				<p> You're payments were successfully categorised </p>
-			</div>
-		<% end_if %>
+		<form class="banking-form" method="POST" action="CategoriseController/CategoriseForm" enctype="application/x-www-form-urlencoded">
+			
+			
+			<!-- Display if the user has already categorised -->
+			<% if $HasCategorised %>
+				<div class="form-message message-success">
+					<p> You're payments were successfully categorised </p>
+				</div>
+			<% end_if %>
+			
+			
+			<!-- Display if the user recieved a spin from a categorise -->
+			<% if $HasNewSpin %>
+				<div class="form-message message-success">
+					<p> You've been awarded a spin! <a class="link-obvious" href="rewards/claim/"> Use it here </a> </p>
+				</div>
+			<% end_if %>
+			
+			
+			<!-- Display a form error if there was one -->
+			<% if $FormError %>
+				<div class="form-message message-fail">
+					<p> There was an error with your submission: $FormError </p>
+				</div>
+			<% end_if %>
 	
-		
-		<form class="categorise-form" method="POST" action="CategoriseController/CategoriseForm" enctype="application/x-www-form-urlencoded">
 			
 			<div class="data-table transfer-table">
 				

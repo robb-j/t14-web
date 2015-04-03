@@ -35,19 +35,21 @@ class CategoriseController extends BankController {
 	
 	public function submitCategorise($data) {
 		
-		print_r($data);
 		
 		$userID = $data["UserID"];
-		
 		$used = array();
 		
-		foreach($data as $key => $value) {
+		$categorised = $data["categorise"];
+		
+		foreach($categorised as $key => $value) {
 			
 			if ($value != 'none') {
 				
 				$used[$key] = $value;
 			}
 		}
+		
+		print_r($used);
 		
 		$output = WebApi::create()->categorizePayments($userID, $used);
 		
@@ -57,8 +59,7 @@ class CategoriseController extends BankController {
 			$this->HasCategorised = true;
 		}
 		else {
-			
-			//$this->FormError = $output->getReason();
+			$this->FormError = $output->getReason();
 		}
 		
 		return $this->index();

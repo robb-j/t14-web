@@ -66,9 +66,9 @@ class BankController extends Controller {
 	
 	public function HandleForm($request) {
 		
-		$data = $request->postVars();
 		
-		$categorise = $data["categorise"];
+		// Gets the post values from the request
+		$data = $request->postVars();
 		
 		
 		// Get the action clicked
@@ -92,8 +92,7 @@ class BankController extends Controller {
 		}
 		
 		
-		//print_r($categorise);
-		
+		// Attempt to run this action on the Controller
 		if ($this->hasMethod($action)) {
 			return $this->$action($data);
 		}

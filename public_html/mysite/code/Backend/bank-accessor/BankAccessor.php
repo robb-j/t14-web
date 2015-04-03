@@ -606,7 +606,7 @@ class BankAccessor extends Object implements BankInterface {
 				$category = Category::get()->byID(Convert::raw2sql($catID));
 				
 				//	If the objects are not null and the account and budget are owned by the user
-				if ($transaction !== null && $category !== null && $transaction->Account()->UserID === $sanitisedUserID && $category->BudgetGroup()->UserID === $sanitisedUserID){
+				if ($transaction !== null && $category !== null && $transaction->Account()->UserID === $sanitisedUserID && $category->Group()->UserID === $sanitisedUserID){
 					
 					//	Change the categoryID
 					$transaction->CategoryID = Convert::raw2sql($catID);
@@ -618,11 +618,11 @@ class BankAccessor extends Object implements BankInterface {
 					
 				} else{
 				
-					return new CategoriseOutput(null, null, null, null, false,"Transaction or Category not found for this user");
+					return new CategoriseOutput(null, null, null, null, false, "Transaction or Category not found for this user");
 				}
 				
 				//	Compiles an array of the categories edited
-				if (!in_array($catID, $catArray)){
+				if ($catArray->exists($category)) {
 					$catArray->push($category);
 				}
 				
@@ -649,7 +649,7 @@ class BankAccessor extends Object implements BankInterface {
 				}
 			}
 			
-			return new CategoriseOutput($catArray, $transArray, $newSpin, $currentSpins, true,"Passed");
+			return new CategoriseOutput($catArray, $transArray, $newSpin, $currentSpins, true, "Passed");
 		}
 		
 		return new CategoriseOutput(null, null, null, null, false,"Failed to authenticate user session");
