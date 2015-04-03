@@ -8,7 +8,7 @@ class Transaction extends DataObject {
 		'Date' => 'Date',
 		"Latitude" => "Double",
 		"Longitude" => "Double",
-		"Transfer" => "Boolean"
+		"IsTransfer" => "Boolean"
     );
 	private static $has_one =  array(
 		'Account' => 'Account',
