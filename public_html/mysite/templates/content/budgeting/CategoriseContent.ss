@@ -16,7 +16,7 @@
 			<!-- Display if the user has already categorised -->
 			<% if $HasCategorised %>
 				<div class="form-message message-success">
-					<p> You're payments were successfully categorised, <a class="link-obvious" href="budgetig/"> back to my Budget</a> </p>
+					<p> You're payments were successfully categorised, <a class="link-obvious" href="budgeting/"> back to my Budget</a> </p>
 				</div>
 			<% end_if %>
 			
@@ -24,7 +24,7 @@
 			<!-- Display if the user recieved a spin from a categorise -->
 			<% if $HasNewSpin %>
 				<div class="form-message message-success">
-					<p> You've been awarded a spin! <a class="link-obvious" href="rewards/claim/"> Use it here </a> </p>
+					<p> You've been awarded a spin! <a class="link-obvious" href="rewards/spin"> Use it here </a> </p>
 				</div>
 			<% end_if %>
 			

@@ -39,10 +39,10 @@
 			<div class="col-xs-4">
 				
 				<% if $NumNewPayments %>
-					<a class="control-button cb-green" href="budgeting/categorise"> New Payments ($NumNewPayments) </a>
+					<a class="control-button cb-green cb-top" href="budgeting/categorise"> New Payments ($NumNewPayments) </a>
 				<% end_if %>
 				
-				<a class="control-button cb-light" href="budgeting/edit"> Edit Budget </a>
+				<a class="control-button cb-light cb-top" href="budgeting/edit"> Edit Budget </a>
 				
 			</div>
 			

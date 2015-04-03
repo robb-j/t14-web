@@ -634,7 +634,7 @@ class BankAccessor extends Object implements BankInterface {
 			$user = User::get()->byID($sanitisedUserID);
 			
 			//	If the user has categorised all their payments  and they haven't done a categorise today
-			if( sizeof($this->newPayments( $userID, $token )) === 0 && strtotime($user->LastFullCategorise)) < strtotime(date("Y-m-d"))){
+			if( sizeof($this->newPayments( $userID, $token )) === 0 && strtotime($user->LastFullCategorise) < strtotime(date("Y-m-d"))){
 				
 				//	Give the user an new spin
 				$newSpin = true;
