@@ -38,10 +38,10 @@
 			<!-- The Buttons side -->
 			<div class="col-xs-4">
 				
-				<a class="control-button cb-green" href="budgeting/categorise"> Claim A Reward </a>
+				<a class="control-button cb-green" href="rewards/claim"> Claim A Reward </a>
 				
 				<% if $CurrentUser.NumberOfSpins %>
-					<a class="control-button cb-green" href="budgeting/spin"> Take A Spin ($CurrentUser.NumberOfSpins)</a>
+					<a class="control-button cb-green" href="rewards/spin"> Take A Spin ($CurrentUser.NumberOfSpins)</a>
 				<% end_if %>
 				
 			</div>

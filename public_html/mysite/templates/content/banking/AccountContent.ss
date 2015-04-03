@@ -4,15 +4,7 @@
 	<!-- The Accounts section -->
 	<div class="accounts-section main-section">
 		
-		
-		<!-- The Heading & Transfer button -->
-		<div class="row">
-			
-			<!-- The Heading on the left -->
-			<div class="col-xs-9"> <h2> My Accounts </h2></div>
-			
-		</div>
-		
+		<h2> My Accounts </h2>
 		
 		<!-- The Table of Accounts -->
 		<div class="account-table data-table">
