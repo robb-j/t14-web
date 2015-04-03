@@ -121,6 +121,13 @@ class WebApi extends Object{
 		return BankAccessor::create()->getUserCategories( $userID, Cookie::get('BankingSession') );
 	}
 	
+	public function getLastRewards($userID){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->getLastRewards( $userID, Cookie::get('BankingSession') );
+	
+	}
+	
 	//	################################
 	//	#### Advanced  Requirements ####
 	//	################################

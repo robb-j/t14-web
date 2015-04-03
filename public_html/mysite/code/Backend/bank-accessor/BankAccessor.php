@@ -1019,6 +1019,48 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
+	//	Get the last n set of rewards the user got
+	public function getLastRewards($userID, $token){
+	
+		//	Gets the user session from the token
+		$userSession = $this->checkUserSession($userID,$token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		if($userSession != null ){
+		
+			// Update the user session
+			$this->updateSession($userSession);
+			
+			
+			$arrayList = new ArrayList();	
+			
+			//	Get all of the rewardsTaken and sort by the ID
+			$rewardGained = RewardTaken::get()->filter(array(
+				'UserID' => $sanitisedUserID
+			))->sort('ID', 'DESC');
+			
+			//	If they have gained less than 7 sets set to current max
+			if(sizeof($rewardGained) > 7 ){
+				$size = 7;
+			}else{
+				$size = sizeof($rewardGained);
+			}
+			
+			//	Push the first n to the array
+			for( $i=0; $i<$size; $i++){
+				$arrayList->push($rewardGained[$i]);
+			
+			}
+			
+			//	Return the array of last points gained
+			return $arrayList;
+			
+		}
+		
+		return array();
+	}
+	
+	
 	public function getUserCategories($userID, $token){
 		//Get a list of all of the groups
 		// Get every category for every group
