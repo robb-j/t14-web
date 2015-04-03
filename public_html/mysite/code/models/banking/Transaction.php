@@ -7,7 +7,8 @@ class Transaction extends DataObject {
 		'Payee' => 'Varchar(50)',
 		'Date' => 'Date',
 		"Latitude" => "Double",
-		"Longitude" => "Double"
+		"Longitude" => "Double",
+		"IsTransfer" => "Boolean"
     );
 	private static $has_one =  array(
 		'Account' => 'Account',

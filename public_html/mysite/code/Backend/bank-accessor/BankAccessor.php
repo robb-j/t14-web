@@ -516,6 +516,7 @@ class BankAccessor extends Object implements BankInterface {
 		$transaction->Payee = "Transfer to account ".$payee;
 		$transaction->Date = date("d M Y");
 		$transaction->AccountID = $account->ID;
+		$transaction->IsTransfer = 1;
 		
 		//	Then write this to the database
 		$transaction->write();
@@ -568,7 +569,8 @@ class BankAccessor extends Object implements BankInterface {
 					
 					$transactions = Transaction::get()->filter(array(
 						'AccountID' => $theRowID,
-						'CategoryID' => 0
+						'CategoryID' => 0,
+						"IsTransfer" => 0
 					));
 					
 					foreach($transactions as $transaction){
@@ -614,12 +616,17 @@ class BankAccessor extends Object implements BankInterface {
 					$category->Balance = $category->Balance  + 	$transaction->Amount;
 					$category->write();
 					
+				}else{
+				
+					return new CategoriseOutput(null, null, null, false,"Transaction or Category not found for this user");
 				}
 				
 				//	Compiles an array of the categories edited
 				if (!in_array($catID, $catArray)){
 					$catArray->push($category);
 				}
+				
+				$transArray->push($transaction);
 			}
 			
 			$newSpin = false;
@@ -642,10 +649,10 @@ class BankAccessor extends Object implements BankInterface {
 				}
 			}
 			
-			return new CategoriseOutput($catArray, $newSpin, $currentSpins, true);
+			return new CategoriseOutput($catArray, $newSpin, $currentSpins, true,"Passed");
 		}
 		
-		return new CategoriseOutput(null, null, null, false);
+		return new CategoriseOutput(null, null, null, false,"Failed to authenticate user session");
 	}
 	
 	//	Allows the user to update their budget
@@ -1169,7 +1176,7 @@ class BankAccessor extends Object implements BankInterface {
 					for($j = 0 ; $j <sizeof($groups); $j++){
 						
 						//	If the transaction is "close" to the centre of the groups first transaction group it with that
-						if($groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
+						if($transactions[$i]->Longitude != null && $transactions[$i]->Latitude != null && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
 						
 							
 							$groups[$j]->addAmount($transactions[$i]->Amount);
