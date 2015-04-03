@@ -22,7 +22,7 @@
 		
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function __construct( $changedCategorys, $changedTransactions, $newSpin, $currentSpins, $sucessful, $reason){
+		public function __construct( $changedCategorys, $changedTransactions, $newSpin, $currentSpins, $sucessful = false, $reason){
 			
 			$this->setChangedCategorys($changedCategorys);
 			$this->setChangedTransactions($changedTransactions);
@@ -85,7 +85,7 @@
 		
 		private function setSuccessful($sucessful){
 			
-			$this->sucessful = $sucessful;
+			$this->successful = $sucessful;
 		}
 		
 		private function setReason($reason){
