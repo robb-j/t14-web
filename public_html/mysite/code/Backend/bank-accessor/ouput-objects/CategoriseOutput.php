@@ -2,24 +2,30 @@
 	class CategoriseOutput extends ArrayData {
 
 		//	Stores the categories that were edited
-		$changedCategorys;
+		private $changedCategorys;
+		
+		// Stores the transactions that were edited
+		private $changedTransactions;
 		
 		//	If the user get a new spin
-		$newSpin;
+		private $newSpin;
 		
 		//	How many spins they currently have
-		$currentSpins;
+		private $currentSpins;
 		
 		//	Was it successful or not 
-		$successful;
+		private $successful;
 		
 		//	Reason if it failed
-		$reason;
+		private $reason;
+		
+		
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function __construct( $changedCategorys, $newSpin, $currentSpins, $sucessful, $reason){
+		public function __construct( $changedCategorys, $changedTransactions, $newSpin, $currentSpins, $sucessful, $reason){
 			
 			$this->setChangedCategorys($changedCategorys);
+			$this->setChangedTransactions($changedTransactions);
 			$this->setNewSpin($newSpin);
 			$this->setCurrentSpins($currentSpins);
 			$this->setSuccessful($sucessful);
@@ -29,6 +35,11 @@
 		public function getChangedCategorys() {
 		
 			return $this->changedCategorys;
+		}
+		
+		public function getChangedTransactions() {
+		
+			return $this->changedTransactions;
 		}
 		
 		public function allowedNewSpin() {
@@ -55,6 +66,11 @@
 		private function setChangedCategorys($changedCategorys){
 			
 			$this->changedCategorys = $changedCategorys;
+		}
+		
+		private function setChangedTransactions($changedTransactions){
+			
+			$this->changedTransactions = $changedTransactions;
 		}
 		
 		private function setNewSpin($newSpin){

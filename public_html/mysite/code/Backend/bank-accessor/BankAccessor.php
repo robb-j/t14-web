@@ -616,9 +616,9 @@ class BankAccessor extends Object implements BankInterface {
 					$category->Balance = $category->Balance  + 	$transaction->Amount;
 					$category->write();
 					
-				}else{
+				} else{
 				
-					return new CategoriseOutput(null, null, null, false,"Transaction or Category not found for this user");
+					return new CategoriseOutput(null, null, null, null, false,"Transaction or Category not found for this user");
 				}
 				
 				//	Compiles an array of the categories edited
@@ -649,10 +649,10 @@ class BankAccessor extends Object implements BankInterface {
 				}
 			}
 			
-			return new CategoriseOutput($catArray, $newSpin, $currentSpins, true,"Passed");
+			return new CategoriseOutput($catArray, $transArray, $newSpin, $currentSpins, true,"Passed");
 		}
 		
-		return new CategoriseOutput(null, null, null, false,"Failed to authenticate user session");
+		return new CategoriseOutput(null, null, null, null, false,"Failed to authenticate user session");
 	}
 	
 	//	Allows the user to update their budget

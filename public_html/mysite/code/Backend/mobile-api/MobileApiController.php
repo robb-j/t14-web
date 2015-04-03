@@ -243,6 +243,7 @@ class MobileApiController extends Controller {
 			
 			$data = array(
 				"changedCategorys" => $output->getChangedCategorys(),
+				"changedTransactions" => $output->getChangedTransactions(),
 				"newSpin" => $output->allowedNewSpin(),
 				"numberOfSpins" => $output->allowedNewSpin(),
 				"successful" => $this->didPass()
@@ -250,7 +251,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$data = array(
-				"Error" => "Error categorising new payments"
+				"Error" => "Error categorising new payments",
+				"Reason" => $output->getReason()
 			);
 		}
 		
@@ -399,7 +401,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"lastPoints" => $output;
+				"lastPoints" => $output,
 			);
 		}else {
 			
@@ -428,7 +430,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"categories" => $output;
+				"categories" => $output,
 			);
 		}else {
 			
@@ -461,7 +463,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"ATMs" => $output;
+				"ATMs" => $output,
 			);
 		}else {
 			
@@ -493,7 +495,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"heatMapPoints" => $output;
+				"heatMapPoints" => $output,
 			);
 		}else {
 			
