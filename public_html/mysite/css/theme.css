@@ -81,6 +81,11 @@
 	color: #5C5C5C;
 }
 
+.control-button.cb-white {
+	background: white;
+	color: #5C5C5C;
+}
+
 .control-button.cb-green {
 	background: #239369;
 	color: white;
@@ -268,4 +273,22 @@
 
 .data-row p {
 	font-size: 28px;
+}
+
+
+
+
+
+/*
+ *	General Form Styling
+ */
+form .form-actions {
+	text-align: center;
+	box-sizing: border-box;
+	margin-top: 15px;
+}
+
+form .form-actions .control-button {
+	display: inline;
+	min-width: 150px;
 }

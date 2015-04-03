@@ -593,7 +593,8 @@ class BankAccessor extends Object implements BankInterface {
 	
 		if($userSession !== null){
 		
-			$catArray = array();
+			$catArray = new ArrayList();
+			$transArray = new ArrayList();
 			
 			//	For every item in the key value array
 			foreach ($categorisedItems as $transID => $catID) {
@@ -617,7 +618,7 @@ class BankAccessor extends Object implements BankInterface {
 				
 				//	Compiles an array of the categories edited
 				if (!in_array($catID, $catArray)){
-					$catArray->Push($catID);
+					$catArray->push($category);
 				}
 			}
 			
@@ -626,7 +627,7 @@ class BankAccessor extends Object implements BankInterface {
 			$user = User::get()->byID($sanitisedUserID);
 			
 			//	If the user has categorised all their payments  and they haven't done a categorise today
-			if( sizeof(newPayments( $userID, $token )) === 0 && $user->LastFullCategorise < date("Y M d")){
+			if( sizeof($this->newPayments( $userID, $token )) === 0 && $user->LastFullCategorise < date("Y M d")){
 				
 				//	Give the user an new spin
 				$newSpin = true;
@@ -639,12 +640,6 @@ class BankAccessor extends Object implements BankInterface {
 					
 					$currentSpins = $user->NumberOfSpins;
 				}
-			}
-			
-			//	return a list of the categories edited
-			foreach ($catArray  as $catID) {
-			
-				$catID->Balance = Category::get()->byID(Convert::raw2sql($catID))->Balance;
 			}
 			
 			return new CategoriseOutput($catArray, $newSpin, $currentSpins, true);

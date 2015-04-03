@@ -79,7 +79,7 @@ class TransferController extends BankController {
 		$form->setTemplate("TransferForm");
 		
 		
-		// Return a new form, SS renders it nicely
+		// Return a new form, SS renders it
 		return $form;
 		
 	}
