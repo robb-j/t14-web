@@ -720,9 +720,10 @@ class BankAccessor extends Object implements BankInterface {
 		if($userSession !== null){
 		
 			$group = BudgetGroup::get()->byID(Convert::raw2sql($groupID));
-			if($group != null && (int)$group->UserID === $sanitisedUserID){
 			
-				if($groupName != null && strcmp($group->Title, $groupsName) !== 0 ){
+			if($group !== null && $group->UserID === $sanitisedUserID){
+			
+				if($groupName != null && strcmp($group->Title, $groupName) !== 0 ){
 					$group->Title = $groupName;
 					$group->write();
 				}
@@ -734,7 +735,7 @@ class BankAccessor extends Object implements BankInterface {
 					$newBudget = $infoArray["Budget"];
 					$category = Category::get()->byId(Convert::raw2sql($categoryID));
 					
-					if( $newName === null && $newBudget === null || $category === null || $category->Groups()->UserID !== $sanitisedUserID){
+					if( $newName === null && $newBudget === null || $category === null || $category->Group()->UserID !== $sanitisedUserID){
 						return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format or not belonging to the user or not being found", false);
 					}
 				}
@@ -743,7 +744,7 @@ class BankAccessor extends Object implements BankInterface {
 			
 					$category = Category::get()->byId(Convert::raw2sql($deletedCatIDs));
 					
-					if( $category === null || $category->Groups()->UserID !== $sanitisedUserID){
+					if( $category === null || $category->Group()->UserID !== $sanitisedUserID){
 						return new EditBudgetObject(null, null, null,"Failed due to categories not being found or not being owned by the user", false);
 					}
 				}
@@ -752,7 +753,15 @@ class BankAccessor extends Object implements BankInterface {
 				if(sizeof($result) !== sizeof($newCats)){
 					return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format", false);
 				}
-				$this->deleteCategories($sanitisedUserID,  $deletedCats);
+				foreach ($deletedCats as $toDelCatID) {
+	
+					$toDelCategory =  Category::get()->byID(Convert::raw2sql($toDelCatID));
+					
+					if($toDelCategory !== null && $toDelCategory->Group()->UserID === $userID ){
+					
+						$toDelCategory->delete();
+					}
+				}
 
 				$editedCategoriesArray = new ArrayList();
 				
@@ -762,7 +771,7 @@ class BankAccessor extends Object implements BankInterface {
 					$newBudget = Convert::raw2sql($infoArray["Budget"]);
 					$category = Category::get()->byId(Convert::raw2sql($categoryID));
 					
-					if( $category === null || $category->Groups()->UserID !== $sanitisedUserID){
+					if( $category === null || $category->Group()->UserID !== $sanitisedUserID){
 						
 						if($newName !== null && strcmp($category->Title, $newName) !==0){
 							$category->Title = $newName;

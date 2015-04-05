@@ -1311,7 +1311,7 @@ class BankAccessorTest extends SapphireTest {
 		$categories = array( array("Namess"=>"TestNameOne", "Budgety"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
 		
 		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
-    }*/
+    }
 	
 	public function testCreateGroupCategoriesAdded() {
 		
@@ -1385,5 +1385,26 @@ class BankAccessorTest extends SapphireTest {
 		
 		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
     }*/
+	
+	//	#############################
+	//	#### Tests for EditGroup ####
+	//	#############################
+	
+	public function testEditGroupAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$updatedCategories =  array(3=>array("Name"=>"SomeStuff","Budget"=>10));
+		$newCategories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		$deletedCats = array(1,2);
+		
+		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories,$deletedCats  );
+		echo"  |".$result->getReason()."|";
+		$this->assertEquals($expected, $result->didPass());
+    }
+	
 	
 }
