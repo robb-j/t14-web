@@ -767,9 +767,9 @@ class BankAccessor extends Object implements BankInterface {
 				foreach ($deletedCats as $toDelCatID) {
 	
 					$toDelCategory =  Category::get()->byID(Convert::raw2sql($toDelCatID));
-					
-					if($toDelCategory !== null && $toDelCategory->Group()->UserID === $userID ){
-					
+
+					if($toDelCategory !== null && $toDelCategory->Group()->UserID === $sanitisedUserID ){
+
 						$toDelCategory->delete();
 					}
 				}

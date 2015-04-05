@@ -1209,6 +1209,37 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, $accessor->deleteBudget($user->ID, $session->Token,7 )->didPass());
     }
 	
+	public function testDeleteBudgetGroupGroupDeleted() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$result = $accessor->deleteBudget($user->ID, $session->Token,1 );
+		
+		$group = BudgetGroup::get()->byID(1);
+
+		
+		$this->assertEquals($expected, $group );
+	}
+	
+	public function testDeleteBudgetGroupCategoriesDeleted() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$result = $accessor->deleteBudget($user->ID, $session->Token,1 );
+		
+		$category = Category::get()->byID(1);
+		
+		$this->assertEquals($expected, $category );
+	}	
+		
+	
+	
 	//	##############################################
 	//	#### Tests for DeleteBudget SQL Injection ####
 	//	##############################################
@@ -1337,12 +1368,38 @@ class BankAccessorTest extends SapphireTest {
 		}
 		
     }
+
+	public function testCreateGroupCategoriesAdded() {
+		
+		$accessor = new BankAccessor();
+
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$result = $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  );
+		$groupID = $result->getCreatedGroup()->ID;
+		
+		$theCats = Category::get()->filter(array(
+			"GroupID" =>$groupID
+		));
+		
+		echo " title=|".$theCats[0]->Title."|  Budgeted=|".$theCats[0]->Budgeted."|";
+		if(sizeof($theCats) ===3){
+		
+			$this->assertTrue(true );
+		
+		}else{
+			$this->assertTrue(false );
+		}
+		
+    }
 	
 	//	##############################################
 	//	#### Tests for DeleteBudget SQL Injection ####
 	//	##############################################
 	
-	/*public function testSQLInjectionCreateGroupUserID() {
+	public function testSQLInjectionCreateGroupUserID() {
 		
 		$accessor = new BankAccessor();
 		$expected = false;
@@ -1390,14 +1447,14 @@ class BankAccessorTest extends SapphireTest {
 	//	#### Tests for EditGroup ####
 	//	#############################
 	
-	public function testEditGroupAllCorrect() {
+	/*public function testEditGroupAllCorrect() {
 		
 		$accessor = new BankAccessor();
 		$expected = true;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		
-		$updatedCategories =  array(3=>array("Name"=>"SomeStuff","Budget"=>10));
+		$updatedCategories =  array( 3 => array("Name"=>"SomeStuff","Budget"=>10));
 		$newCategories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
 		$deletedCats = array(1,2);
 		
@@ -1413,7 +1470,7 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		
-		$updatedCategories =  array(1=>array("Name"=>"Martin","Budget"=>10));
+		$updatedCategories =  array( 1 => array( "Name" => "Martin" , "Budget" => 10 ), 3 => array("Name"=> "SomeStuff", "Budget"=> 10) );
 		$newCategories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
 		$deletedCats = array();
 
@@ -1425,6 +1482,42 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, strcmp($theCats->Title,"Martin") );
     }
 	
+	public function testEditGroupChangeCategoryBudget() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$updatedCategories =  array( 1 => array( "Name" => "Martin" , "Budget" => 500 ) );
+		$newCategories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		$deletedCats = array();
+
+		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
+		
+		$theCats = Category::get()->byID(1);
+		echo "|".$theCats->Budgeted."|";
+		
+		$this->assertEquals($expected, ((int)$theCats->Budgeted - 500) );
+    }*/
+	
+	public function testEditGroupCheckDeletedCats() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$updatedCategories =  array( 1 => array( "Name" => "Martin" , "Budget" => 500 ) );
+		$newCategories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		$deletedCats = array(2,3);
+
+		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
+		
+		$theCats = Category::get()->byID(2);
+		
+		$this->assertEquals($expected, $theCats );
+    }
 	
 	
 }
