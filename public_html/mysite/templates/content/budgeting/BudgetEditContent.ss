@@ -6,9 +6,24 @@
 		<!-- The Title -->
 		<h2> Edit Your Budget </h2>
 		
+		<!-- Display a form error if there was one -->
+		<% if $ErrorMessage %>
+			<div class="form-message message-fail">
+				<p> There was an error: $ErrorMessage </p>
+			</div>
+		<% end_if %>
+		
+		
+		<!-- Display a message if it was successfuly deleted -->
+		<% if $SuccessMessage  %>
+			<div class="form-message message-success">
+				<p> $SuccessMessage </p>
+			</div>
+		<% end_if %>
 		
 		<!-- A Table for each Groups -->
 		<div class="data-table">
+			
 			
 			<!-- A Row for each of the User's Group -->
 			<% loop $CurrentUser.Groups %>

@@ -16,7 +16,6 @@ class BudgetEditController extends BankController {
 	
 	public function Content() {
 		
-		
 		if (array_key_exists("delete", $this->request->getVars())) {
 			
 			$this->DeleteID = $this->request->getVars()["delete"];
@@ -28,14 +27,24 @@ class BudgetEditController extends BankController {
 	
 	public function DeleteGroup() {
 		
-		
 		if (array_key_exists("group", $this->request->getVars())) {
 			
 			$groupID = $this->request->getVars()["group"];
 			
-			return "<p> Delete Group: " . $groupID . "</p>";
+			$output = WebApi::create()->deleteBudget($this->CurrentUser->ID, $groupID);
+			
+			
+			if ($output->didPass() == false) {
+				
+				$this->ErrorMessage = $output->getReason();
+				return $this->index();
+			}
+			else {
+				
+				$this->SuccessMessage = "Group successfully deleted";
+			}
 		}
 		
-		//return $this->redirect("budgeting/edit");
+		return $this->index();
 	}
 }

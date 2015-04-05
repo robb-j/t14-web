@@ -21,7 +21,7 @@
 			// If its an existing category, add an input to tell the form to delete it
 			if (type === 'existing') {
 				
-				$("form.group-edit-form .removed-categories").append("<input type='hidden' name='removed[" + id + "]' value='true' />");
+				$("form.group-edit-form .removed-categories").append("<input type='hidden' name='RemovedCategories[" + id + "]' value='true' />");
 			}
 			
         });
