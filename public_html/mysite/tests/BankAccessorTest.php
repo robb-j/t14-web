@@ -28,13 +28,17 @@ class BankAccessorTest extends SapphireTest {
 		// Something that happens after EACH test
 		parent::tearDown();
 	}
+	/*
 	
+		Basic Tests
+		
+	*/
 	
 	//	#######################################
 	//	#### Tests for Login using the web ####
 	//	#######################################
 	
-	public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
+	/*public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
 	
 		$accessor = new BankAccessor();
 		$user = $this->objFromFixture('User','myThirdPerson');
@@ -224,7 +228,7 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','myThirdPerson');
 		
 		$accounts = $accessor->login($user->Username,"Password",null,false)->getAccounts();
-		if(sizeof($accounts)===2 && $accounts[0]->UserID = 4 && $accounts[1]->UserID = 4){
+		if(sizeof($accounts)===2 && (int)$accounts[0]->UserID === 3 && (int)$accounts[1]->UserID === 3){
 			$this->assertTrue(true);
 		}else{
 			$this->assertTrue(false);
@@ -251,7 +255,7 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','myThirdPerson');
 		$products =$accessor->login($user->Username,"Password",null,false)->getAllProducts();
 
-		if(sizeof($products)===1 && $products[0]->ID = 3 ){
+		if(sizeof($products)===1 && (int)$products[0]->ID === 3 ){
 			$this->assertTrue(true);
 		}else{
 			$this->assertTrue(false);
@@ -680,5 +684,706 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','allProductsPerson');
 
 		$this->assertEquals($expected, sizeof($accessor->getNewProductsForUser($user."; DROP TABLE User")));
+    }*/
+	
+	/*
+	
+		Intermediate tests
+		
+	*/
+	/*
+	//	#################################
+	//	#### Tests for getLastPoints ####
+	//	#################################
+	
+	public function testGetLastPointsAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = 7;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,sizeof($accessor->GetLastPoints($user->ID,$session->Token)));
+		
     }
+	
+	public function testGetLastPointIncorrectUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,sizeof($accessor->GetLastPoints(99,$session->Token)));
+	
+    }
+	
+	public function testGetLastPointsIncorrectToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,sizeof($accessor->GetLastPoints($user->ID,"rubbish")));
+		
+    }
+	
+	public function testGetLastPointsLessThanSevenPointsGainedObjects() {
+		
+		$accessor = new BankAccessor();
+		$expected = 1;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		
+		$this->assertEquals($expected,sizeof($accessor->GetLastPoints($user->ID,$session->Token)));
+		
+    }
+	
+	public function testGetLastPointsNoPointsGainedObjects() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','noAccountsPerson');
+		$session =$this->objFromFixture('UserSession','noAccountsPersonSession');
+		
+		$this->assertEquals($expected,sizeof($accessor->GetLastPoints($user->ID,$session->Token)));
+		
+    }
+	
+	//	####################################################
+	//	#### Tests for CategorisePayments SQL Injection ####
+	//	####################################################
+	
+	public function testSQLInjectionGetLastPointsUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, sizeof($accessor->getLastPoints($user->ID."; DROP TABLE User",$session->Token)));
+    }
+	
+	public function testSQLInjectionGetLastPointsToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, sizeof($accessor->getLastPoints($user->ID,$session->Token."; DROP TABLE User")));
+    }
+	
+	//	###############################
+	//	#### Tests for newPayments ####
+	//	###############################
+	
+	public function testNewPaymentsAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = 4;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)));
+		
+    }
+	
+	public function testNewPaymentsNoTransactions() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)));
+		
+    }
+	
+	public function testNewPaymentsNoAccounts() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','noAccountsPerson');
+		$session =$this->objFromFixture('UserSession','noAccountsPersonSession');
+		
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)));
+		
+    }
+	
+	public function testNewPaymentsIncorrectUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,sizeof($accessor->newPayments(5,$session->Token)));
+		
+    }
+	
+		public function testNewPaymentsIncorrectUserToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,"rubbish")));
+		
+    }
+	
+	//	####################################################
+	//	#### Tests for CategorisePayments SQL Injection ####
+	//	####################################################
+	
+	public function testSQLInjectionNewPaymentsUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, sizeof($accessor->newPayments($user->ID."; DROP TABLE User",$session->Token)));
+    }
+	
+	public function testSQLInjectionNewPaymentsToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, sizeof($accessor->newPayments($user->ID,$session->Token."; DROP TABLE User")));
+    }
+	
+
+	
+	
+	//	################################
+	//	#### Tests for ChooseReward ####
+	//	################################
+	
+	public function testChooserewardAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,$accessor->chooseReward($user->ID,$session->Token,1)->didPass());
+		
+    }
+	
+	public function testChooserewardWrongID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,$accessor->chooseReward(9,$session->Token,1)->didPass());
+		
+    }
+	
+	public function testChooserewardWrongToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,$accessor->chooseReward($user->ID,"Rubbish",1)->didPass());
+		
+    }
+	
+	public function testChooserewardNoSuchReward() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,$accessor->chooseReward($user->ID,$session->Token,99)->didPass());
+		
+    }
+	
+	public function testChooserewardNotenoughPoints() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals($expected,$accessor->chooseReward($user->ID,$session->Token,3)->didPass());
+		
+    }
+	
+	public function testChooserewardNoEmailGiven() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		
+		$this->assertEquals($expected,$accessor->chooseReward($user->ID,$session->Token,1)->didPass());
+		
+    }
+	
+	//	####################################################
+	//	#### Tests for CategorisePayments SQL Injection ####
+	//	####################################################
+	
+	/*public function testSQLInjectionChooseRewardUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->chooseReward($user->ID."; DROP TABLE User",$session->Token,1)->didPass());
+    }
+	
+	public function testSQLInjectionChooseRewardToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->chooseReward($user->ID,$session->Token."; DROP TABLE User",1)->didPass());
+    }
+	
+	public function testSQLInjectionChooseRewardRewardID() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->chooseReward($user->ID,$session->Token,"1; DROP TABLE User")->didPass());
+    }
+	
+	
+	//	###############################
+	//	#### Tests for PerformSpin ####
+	//	###############################
+	
+	public function testPerformSpinAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = 3;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->PerformSpin($user->ID,$session->Token)->Points;
+		if((int)$result > 0){
+			
+			$this->assertTrue(true);
+		}else{
+			$this->assertTrue(false);
+		}
+    }
+	
+	public function testPerformSpinWrongUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$this->assertEquals($expected,$accessor->PerformSpin(99,$session->Token));
+    }
+	public function testPerformSpinWrongSessionToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$this->assertEquals($expected,$accessor->PerformSpin($user->ID,"Somerubish"));
+    }
+	
+	
+	
+	public function testPerformSpinNoSpinsLeft() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		
+		$this->assertEquals($expected, $accessor->PerformSpin($user->ID,$session->Token));
+    }
+	
+	public function testPerformSpinAllCorrectPointsAdded() {
+		
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$previous = $user->Points;
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->PerformSpin($user->ID,$session->Token);
+		$newPoints = $this->objFromFixture('User','myPerson')->Points;
+
+		if((int)$newPoints > (int)$previous){
+			
+			$this->assertTrue(true);
+		}else{
+			$this->assertTrue(false);
+		}
+    }
+	
+	public function testPerformSpinAllCorrectSpinsReduced() {
+		
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$previous = $user->NumberOfSpins;
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->PerformSpin($user->ID,$session->Token);
+		$newSpins = $this->objFromFixture('User','myPerson')->NumberOfSpins;
+		
+		if((int)$newSpins===( ((int)$previous) -1)){
+			
+			$this->assertTrue(true);
+		}else{
+			$this->assertTrue(false);
+		}
+    }
+
+	//	####################################################
+	//	#### Tests for CategorisePayments SQL Injection ####
+	//	####################################################
+	
+		public function testSQLInjectionPerformSpinUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->PerformSpin($user->ID."; DROP TABLE User",$session->Token));
+    }
+	
+	public function testSQLInjectionPerformSpinToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = null;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->PerformSpin($user->ID,$session->Token."; DROP TABLE User"));
+    }
+
+	//	#################################
+	//	#### Tests for GetAllRewards ####
+	//	#################################
+	
+	public function testGetAllRewards() {
+		
+		$accessor = new BankAccessor();
+		$expected = 3;
+
+		$this->assertEquals($expected, sizeof($accessor->getAllRewards()));
+    }
+	
+	//	######################################
+	//	#### Tests for categorisePayments ####
+	//	######################################
+	
+	public function testCategorisePaymentsAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( 1=>1, 2=>1, 3=>1, 4=>1);
+
+		$this->assertEquals($expected, $accessor->categorisePayments($user->ID, $session->Token,$categories )->didPass());
+    }
+	
+	public function testCategorisePaymentsPaymentsDontExist() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$categories = array( 88=>1, 99=>1, 66=>1, 55=>1);
+
+		$this->assertEquals($expected, $accessor->categorisePayments($user->ID, $session->Token,$categories )->didPass());
+    }
+	
+	public function testCategorisePaymentsPaymentsDontBelongToUser() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$categories = array( 1=>1, 2=>1, 3=>1, 4=>1);
+
+		$this->assertEquals($expected, $accessor->categorisePayments($user->ID, $session->Token,$categories )->didPass());
+    }
+	
+	//	####################################################
+	//	#### Tests for CategorisePayments SQL Injection ####
+	//	####################################################
+	
+	public function testSQLInjectionCategorisePaymentsUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( 1=>1, 2=>1, 3=>1, 4=>1);
+
+		$this->assertEquals($expected, $accessor->CategorisePayments($user->ID."; DROP TABLE User",$session->Token,$categories )->didPass());
+    }
+	
+	public function testSQLInjectionCategorisePaymentsToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( 1=>1, 2=>1, 3=>1, 4=>1);
+
+		$this->assertEquals($expected, $accessor->CategorisePayments($user->ID,$session->Token."; DROP TABLE User",$categories )->didPass());
+    }
+	
+	public function testSQLInjectionCategorisePaymentsCatItems() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( 1=>1, 2=>1, 3=>1, 4=>1, "; DROP TABLE User");
+
+		$this->assertEquals($expected, $accessor->CategorisePayments($user->ID,$session->Token,$categories )->didPass());
+    }
+	
+	
+	//	################################
+	//	#### Tests for deleteBudget ####
+	//	################################
+	
+	public function testDeleteBudgetAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID, $session->Token,1 )->didPass());
+    }
+	
+	public function testDeleteBudgetWrongUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$this->assertEquals($expected, $accessor->deleteBudget(9, $session->Token,1 )->didPass());
+    }
+	
+	public function testDeleteBudgetWrongToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID, "rubish",1 )->didPass());
+    }
+	
+	public function testDeleteBudgetDoesntOwnGroup() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID, $session->Token,1 )->didPass());
+    }
+	
+	public function testDeleteBudgetGroupDoesntExist() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID, $session->Token,7 )->didPass());
+    }
+	
+	//	##############################################
+	//	#### Tests for DeleteBudget SQL Injection ####
+	//	##############################################
+	
+	public function testSQLInjectionDeleteBudgetUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID."; DROP TABLE User",$session->Token,1 )->didPass());
+    }
+	
+	public function testSQLInjectionDeleteBudgetToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID,$session->Token."; DROP TABLE User",1 )->didPass());
+    }
+	
+	public function testSQLInjectionDeleteBudgetGroupID() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+
+		$this->assertEquals($expected, $accessor->deleteBudget($user->ID,$session->Token,"1; DROP TABLE User" )->didPass());
+    }
+*/
+	//	###############################
+	//	#### Tests for CreateGroup ####
+	//	###############################
+	
+	/*public function testCreateGroupAllCorrect() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
+    }
+	
+	public function testCreategroupWrongUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup(99, $session->Token,"NewName",	$categories  )->didPass());
+    }
+	
+	public function testCreateGroupWrongToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, "Rubish","NewName",	$categories  )->didPass());
+    }
+	
+	public function testCreateGroupNameNull() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,null,	$categories  )->didPass());
+    }
+	
+	public function testCreateGroupNoCategories() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = null;
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
+    }
+	
+	public function testCreateGroupCatsWrongFormat() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$categories = array( array("Namess"=>"TestNameOne", "Budgety"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
+    }*/
+	
+	public function testCreateGroupCategoriesAdded() {
+		
+		$accessor = new BankAccessor();
+
+		$user = $this->objFromFixture('User','allProductsPerson');
+		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$result = $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  );
+		$groupID = $result->getCreatedGroup()->ID;
+		
+		$theCats = Category::get()->filter(array(
+			"GroupID" =>$groupID
+		));
+		
+		if(sizeof($theCats) ===3){
+		
+			$this->assertTrue(true );
+		
+		}else{
+			$this->assertTrue(false );
+		}
+		
+    }
+	
+	//	##############################################
+	//	#### Tests for DeleteBudget SQL Injection ####
+	//	##############################################
+	
+	/*public function testSQLInjectionCreateGroupUserID() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID."; DROP TABLE User", $session->Token,"NewName",	$categories  )->didPass());
+    }
+	
+	public function testSQLInjectionCreateGroupToken() {
+		
+		$accessor = new BankAccessor();
+		$expected = false;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token."; DROP TABLE User","NewName",	$categories  )->didPass());
+    }
+	
+	public function testSQLInjectionCreateGroupGroupName() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName; DROP TABLE User",	$categories  )->didPass());
+    }
+	
+		public function testSQLInjectionCreateGroupCategories() {
+		
+		$accessor = new BankAccessor();
+		$expected = true;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$categories = array( array("Name"=>"TestNameOne; DROP TABLE User", "Budget"=>"50; DROP TABLE User"), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		
+		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
+    }*/
+	
 }

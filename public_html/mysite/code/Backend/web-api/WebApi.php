@@ -84,12 +84,26 @@ class WebApi extends Object{
 	
 	public function categorizePayments($userID,$categorisation){
 	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
 		return BankAccessor::create()->categorisePayments($userID, Cookie::get('BankingSession'),$categorisation);
 	}
+
+	public function deleteBudget($userID, $groupID){
 	
-	public function updateBudget($userID,$newGroupNames, $newCategoryNames, $newCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups){
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->deleteBudget($userID,Cookie::get('BankingSession'),$groupID);
+	}
 	
-		return BankAccessor::create()->updateBudget($userID,Cookie::get('BankingSession'),$newGroupNames, $newCategoryNames, $newCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups);
+	public function editGroups($userID, $groupID, $groupName, $updatedCategories, $newCats, $deletedCats){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->editGroups($userID,Cookie::get('BankingSession'),$groupID, $groupName, $updatedCategories, $newCats, $deletedCats);
+	}
+	
+	public function createGroup($userID, $groupName, $newCategories){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()-> createGroup($userID,Cookie::get('BankingSession'),$groupName, $newCategories);
 	}
 	
 	public function chooseReward($userID, $rewardID){
