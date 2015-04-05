@@ -1406,5 +1406,25 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, $result->didPass());
     }
 	
+	public function testEditGroupChangeCategoryName() {
+		
+		$accessor = new BankAccessor();
+		$expected = 0;
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$updatedCategories =  array(1=>array("Name"=>"Martin","Budget"=>10));
+		$newCategories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
+		$deletedCats = array();
+
+		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
+		
+		$theCats = Category::get()->byID(1);
+		echo "|".$theCats->Title."|";
+		
+		$this->assertEquals($expected, strcmp($theCats->Title,"Martin") );
+    }
+	
+	
 	
 }
