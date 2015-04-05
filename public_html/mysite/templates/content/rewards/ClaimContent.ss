@@ -59,7 +59,7 @@
 							<div class="col-xs-8"> <p> $Description </p></div>
 							
 							<!-- Number of points needed -->
-							<div class="col-xs-1"> <p class="currency-green"> $Cost </p></div>
+							<div class="col-xs-1"> <% if $Cost >= $CurrentUser.Points %> <p> $Cost </p> <% end_if %> </div>
 							
 						</div>
 					</div>

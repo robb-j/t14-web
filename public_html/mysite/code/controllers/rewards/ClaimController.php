@@ -10,6 +10,13 @@ class ClaimController extends BankController {
 	// Set the tab title
 	public $TabTitle = "rewards";
 	
+	public function CostClass($points, $cost) {
+		
+		if ($points > $cost) {
+			
+			return "currency-green";
+		}
+	}
 	
 	public function Content() {
 		
