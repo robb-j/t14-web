@@ -1343,31 +1343,6 @@ class BankAccessorTest extends SapphireTest {
 		
 		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
     }
-	
-	public function testCreateGroupCategoriesAdded() {
-		
-		$accessor = new BankAccessor();
-
-		$user = $this->objFromFixture('User','allProductsPerson');
-		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
-		$categories = array( array("Name"=>"TestNameOne", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
-		
-		$result = $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  );
-		$groupID = $result->getCreatedGroup()->ID;
-		
-		$theCats = Category::get()->filter(array(
-			"GroupID" =>$groupID
-		));
-		
-		if(sizeof($theCats) ===3){
-		
-			$this->assertTrue(true );
-		
-		}else{
-			$this->assertTrue(false );
-		}
-		
-    }
 
 	public function testCreateGroupCategoriesAdded() {
 		
