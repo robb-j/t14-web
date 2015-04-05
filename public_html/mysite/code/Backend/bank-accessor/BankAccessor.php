@@ -731,11 +731,20 @@ class BankAccessor extends Object implements BankInterface {
 				//check all to edit categogres belong to the user and exist same with deleting ones
 				foreach ($updatedCategories as $categoryID => $infoArray){
 			
-					$newName = $infoArray["Name"];
-					$newBudget = $infoArray["Budget"];
+					if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Name"])  is_numeric($newCategory["Budget"])){
+					
+						$newName = Convert::raw2sql($newCategory["Name"]);
+						$newBudget = Convert::raw2sql($newCategory["Budget"]);
+						
+					}else{
+					
+						return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+					}
+					
 					$category = Category::get()->byId(Convert::raw2sql($categoryID));
 					
 					if( $newName === null && $newBudget === null || $category === null || $category->Group()->UserID !== $sanitisedUserID){
+					
 						return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format or not belonging to the user or not being found", false);
 					}
 				}
@@ -750,9 +759,11 @@ class BankAccessor extends Object implements BankInterface {
 				}
 				
 				$result = $this->createCategories($groupID, $newCats);
+				
 				if(sizeof($result) !== sizeof($newCats)){
 					return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format", false);
 				}
+				
 				foreach ($deletedCats as $toDelCatID) {
 	
 					$toDelCategory =  Category::get()->byID(Convert::raw2sql($toDelCatID));
@@ -771,7 +782,7 @@ class BankAccessor extends Object implements BankInterface {
 					$newBudget = Convert::raw2sql($infoArray["Budget"]);
 					$category = Category::get()->byId(Convert::raw2sql($categoryID));
 					
-					if( $category === null || $category->Group()->UserID !== $sanitisedUserID){
+					if( $category !== null && $category->Group()->UserID === $sanitisedUserID){
 						
 						if($newName !== null && strcmp($category->Title, $newName) !==0){
 							$category->Title = $newName;
@@ -810,7 +821,7 @@ class BankAccessor extends Object implements BankInterface {
 				
 				foreach ($newCategories as $newCategory){
 			
-					if(isset($newCategory["Name"]) && isset($newCategory["Budget"])){
+					if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Name"])  is_numeric($newCategory["Budget"])){
 					
 						$newName = Convert::raw2sql($newCategory["Name"]);
 						$newBudget = Convert::raw2sql($newCategory["Budget"]);
@@ -1136,8 +1147,14 @@ class BankAccessor extends Object implements BankInterface {
 		//	Then create all of the associated categories that have been added
 		foreach ($newCategories as $newCategory){
 			
-			$newName = Convert::raw2sql($newCategory["Name"]);
-			$newBudget = Convert::raw2sql($newCategory["Budget"]);
+			if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Name"])  is_numeric($newCategory["Budget"])){
+					
+				$newName = Convert::raw2sql($newCategory["Name"]);
+				$newBudget = Convert::raw2sql($newCategory["Budget"]);
+			}else{
+			
+				return array();
+			}
 			
 			if( $newName === null || $newBudget === null){
 				return array();
