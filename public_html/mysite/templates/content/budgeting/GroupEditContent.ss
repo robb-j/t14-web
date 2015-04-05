@@ -50,34 +50,37 @@
 					</div>
 				</div>
 				
+				
 				<!-- For each existing category, add a row to the table -->
-				<% loop $Group.Categories %>
-					<div class="data-row small-row <% if Last %>last-row<% end_if %>">
-						<div class="row">
-							
-							<!-- The Name Field-->
-							<div class="col-xs-7">
-								<input class="form-control" name="CategoryNames[$ID]" value="$Title"/>
-							</div>
-							
-							
-							<!-- The Budget Field -->
-							<div class="col-xs-3">
-								<div class="input-group">
-									<div class="input-group-addon">£</div>
-									<input class="form-control" name="CategoryBudgets[$ID]" value="$Balance"/>
+				<% if $Mode = edit %>
+					<% loop $Group.Categories %>
+						<div class="data-row small-row <% if Last %>last-row<% end_if %>">
+							<div class="row">
+								
+								<!-- The Name Field-->
+								<div class="col-xs-7">
+									<input class="form-control" name="CategoryNames[$ID]" value="$Title"/>
 								</div>
+								
+								
+								<!-- The Budget Field -->
+								<div class="col-xs-3">
+									<div class="input-group">
+										<div class="input-group-addon">£</div>
+										<input class="form-control" name="CategoryBudgets[$ID]" value="$Balance"/>
+									</div>
+								</div>
+								
+								
+								<!-- A Button to delete this Category -->
+								<div class="col-xs-2">
+									<a href="#" data-category="$ID" data-type="existing" class="category-delete control-button cb-small cb-no-mar cb-red"> X </a>
+								</div>
+								
 							</div>
-							
-							
-							<!-- A Button to delete this Category -->
-							<div class="col-xs-2">
-								<a href="#" data-category="$ID" data-type="existing" class="category-delete control-button cb-small cb-no-mar cb-red"> X </a>
-							</div>
-							
-						</div>
-					</div>	
-				<% end_loop %>
+						</div>	
+					<% end_loop %>
+				<% end_if %>
 				
 				
 				<!-- Holders for js insererted html -->
