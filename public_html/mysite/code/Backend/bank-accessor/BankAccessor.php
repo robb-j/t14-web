@@ -1,5 +1,9 @@
 <?php
 
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
+ 
 /*
 	This phpCrypt program is open source software found at https://github.com/gilfether/phpcrypt
 	"phpCrypt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version."
@@ -729,17 +733,23 @@ class BankAccessor extends Object implements BankInterface {
 	
 		if($userSession !== null){
 		
+			//	Get the Group the user wants to edit
 			$group = BudgetGroup::get()->byID(Convert::raw2sql($groupID));
 			
+			//	If the group exists and the user owns it 
 			if($group !== null && $group->UserID === $sanitisedUserID){
-			
+		
+				//	If they want to change the title of the group change it 
 				if($groupName != null && strcmp($group->Title, $groupName) !== 0 ){
+				
 					$group->Title = $groupName;
 					$group->write();
 				}
 				
+				//	If there are categories to update
 				if(sizeof($updatedCategories)>0){
-					//check all to edit categogres belong to the user and exist same with deleting ones
+				
+					//	Check all the inputs and check them
 					foreach ($updatedCategories as $categoryID => $infoArray){
 				
 						if(isset($infoArray["Name"]) && isset($infoArray["Budget"]) &&  is_numeric($infoArray["Budget"])){
@@ -760,8 +770,11 @@ class BankAccessor extends Object implements BankInterface {
 						}
 					}
 				}
-			
+				
+				//	If there are categories to delete
 				if(sizeof($deletedCats)>0){
+				
+					//	Check the inputs
 					foreach ( $deletedCats as  $deletedCatIDs){
 				
 						$category = Category::get()->byId(Convert::raw2sql($deletedCatIDs));
@@ -771,16 +784,26 @@ class BankAccessor extends Object implements BankInterface {
 						}
 					}
 				}
+				
 				$result = new ArrayList();
+				
+				//	If there are new categories to create
 				if(sizeof($newCats)>0){
+				
+					//	Create them
 					$result = $this->createCategories($groupID, $newCats);
 					
+					//	If 1 or more category couldn't be made error
 					if(sizeof($result) !== sizeof($newCats)){
-					return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format", false);
-				}
+					
+						return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format", false);
+					}
 				}
 				
+				//	If there are categories to delete
 				if(sizeof($deletedCats)>0){
+				
+					//	Delete the categories
 					foreach ($deletedCats as $toDelCatID) {
 		
 						$toDelCategory =  Category::get()->byID(Convert::raw2sql($toDelCatID));
@@ -794,7 +817,10 @@ class BankAccessor extends Object implements BankInterface {
 				
 				$editedCategoriesArray = new ArrayList();
 				
+				//	If there are categories to update
 				if(sizeof($updatedCategories)>0){
+				
+					//	Update all of the categories
 					foreach ($updatedCategories as $categoryID => $infoArray){
 				
 						$newName = Convert::raw2sql($infoArray["Name"]);
@@ -839,7 +865,10 @@ class BankAccessor extends Object implements BankInterface {
 			//	If the groups has a name
 			if($groupName !== null){
 				
+				//	If there are categories
 				if(sizeof($newCategories)>0){
+				
+					//	Check the inputs of the categories
 					foreach ($newCategories as $newCategory){
 				
 						if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Budget"])){
@@ -866,11 +895,14 @@ class BankAccessor extends Object implements BankInterface {
 				$theNewGroup->write();
 				$result = new ArrayList();
 				
+				//	If there are categories create them
 				if(sizeof($newCategories)>0){
 				
 					$result = $this->createCategories($theNewGroup->ID, $newCategories);
 					
+					//	If not all categories could be created
 					if(sizeof($result) !== sizeof($newCategories)){
+					
 						return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
 					}
 				}
@@ -1109,24 +1141,31 @@ class BankAccessor extends Object implements BankInterface {
 	
 	
 	public function getUserCategories($userID, $token){
-		//Get a list of all of the groups
-		// Get every category for every group
+
 	
 	//	Gets the user session from the token
 		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
 		
 		if($userSession != null ){
-		
+			
+			//	Get all groups the user owns 
 			$groups = BudgetGroup::get()->filter(array(
 							'UserID' => $sanitisedUserID 
-						));
+					  ));
+					  
 			$arrayList = new ArrayList();	
+			
+			//	For every group get all categories 
 			foreach( $groups as $group){
-				$categories= Category::get()->filter(array(
+			
+				$categories = Category::get()->filter(array(
 								'GroupID' => Convert::raw2sql($group->ID)
-				));
+							  ));
+				
+				//	Push all of the categories to an array 
 				foreach( $categories as $catgory){
+				
 					$arrayList->push($catgory);
 				}
 			}
@@ -1135,9 +1174,8 @@ class BankAccessor extends Object implements BankInterface {
 			$this->updateSession($userSession);
 			
 			return $arrayList;
-		
-		
 		}
+		
 		return array();
 	}
 	
@@ -1151,7 +1189,10 @@ class BankAccessor extends Object implements BankInterface {
 		foreach ($categories as $catID) {
 	
 			$category =  Category::get()->byID(Convert::raw2sql($catID->ID));
+			
+			//	Check the inputs
 			if($category === null || $category->Group()->UserID !== $userID ){
+			
 				return false;
 			}
 		}
@@ -1161,6 +1202,7 @@ class BankAccessor extends Object implements BankInterface {
 	
 			$category =  Category::get()->byID(Convert::raw2sql($catID->ID));
 			
+			//	If the user own the category and exists delete it 
 			if($category !== null && $category->Group()->UserID === $userID ){
 			
 				$category->delete();
@@ -1171,34 +1213,44 @@ class BankAccessor extends Object implements BankInterface {
 	
 	private function createCategories($groupID, $newCategories){
 	
+		//	If there are categories to make
 		if(sizeof($newCategories)>0){
-			//	Then create all of the associated categories that have been added
+		
+			//	Check all of the inputs
 			foreach ($newCategories as $newCategory){
 				
+				//	Check the inputs
 				if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Budget"])){
 						
 					$newName = Convert::raw2sql($newCategory["Name"]);
 					$newBudget = Convert::raw2sql($newCategory["Budget"]);
 				}else{
 				
+					//	If they are wrong return an empty array
 					return array();
 				}
 				
+				//	If either are not null return an empty array
 				if( $newName === null || $newBudget === null){
+				
 					return array();
 				}
 			}
 		
 		
 			$newCatObjects = new ArrayList();
+			
 			//	Then create all of the associated categories that have been added
 			foreach ($newCategories as $newCategory){
 
+				//	Get the params
 				$newName = Convert::raw2sql($newCategory["Name"]);
 				$newBudget = Convert::raw2sql($newCategory["Budget"]);
 				
+				//	If there are params
 				if( $newName !== null && $newBudget !== null){
 					
+					//	Create the category
 					$theNewCat = Category::create();
 					$theNewCat->Title = $newName;
 					$theNewCat->Budgeted = $newBudget;
@@ -1207,6 +1259,8 @@ class BankAccessor extends Object implements BankInterface {
 
 					//	Then write this to the database
 					$theNewCat->write();
+					
+					//	push to the array of created Categories
 					$newCatObjects->push($theNewCat);
 				}
 			}
@@ -1257,7 +1311,7 @@ class BankAccessor extends Object implements BankInterface {
 				$endDate = date("Y-m-d",time()).' 23:59:59';
 			}
 			
-			$transactions = array();
+			$transactions = new ArrayList();
 			
 			//	For every account the user wants the data for
 			foreach( $accounts as $account){
@@ -1266,14 +1320,14 @@ class BankAccessor extends Object implements BankInterface {
 				$theAccount = Account::get()->byID(Convert::raw2sql($account));
 				
 				//	If the account object it not null and is owned by the user
-				if($theAccount !== null && $theAccount->UserID = $sanitisedUserID){
+				if($theAccount !== null && $theAccount->UserID === $sanitisedUserID){
 				
 					//	Get all of the transactions by that account in the time frame 
 					$accountTransactions = Transaction::get()->filter(array(
 					
-						"AccountID" => Convert::raw2sql(Convert::raw2sql($account)),
-						'Date:GreaterThan' => $startDate,
-						'Date:LessThan' => $endDate
+						"AccountID" => Convert::raw2sql($account),
+						'Date:GreaterThan' =>  Convert::raw2sql($startDate),
+						'Date:LessThan' =>  Convert::raw2sql($endDate)
 					));
 					
 					//	Add all of these transactions to an array
@@ -1283,11 +1337,12 @@ class BankAccessor extends Object implements BankInterface {
 					}
 				}
 			}
-			
+
 			//	If there was transactions
 			if(sizeof($transactions) >0){
 			
-				$groups = array();
+				
+				$groups = new ArrayList();
 				
 				//	Add the first transaction to a hew HeatMapGroup 
 				$groups->push( new HeatMapGroup($transactions[0]->Longitude,$transactions[0]->Latitude,20));
@@ -1297,6 +1352,8 @@ class BankAccessor extends Object implements BankInterface {
 				
 				//	For every transaction in the array
 				for($i = 1 ; $i<sizeof($transactions) ; $i++){
+				
+					$found= false;
 					
 					//	At every position in the groups array
 					for($j = 0 ; $j <sizeof($groups); $j++){
@@ -1306,14 +1363,15 @@ class BankAccessor extends Object implements BankInterface {
 						
 							
 							$groups[$j]->addAmount($transactions[$i]->Amount);
+							$found = true;
 							break;
 						
 						//	If at the end of the groups array add to the end position a new group
-						}elseif($j = sizeof($groups)-1){
-						
-							$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
-							$groups[$j+1]->addAmount($transactions[$i]->Amount);
 						}
+					}
+					if(!$found){
+						$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
+						$groups[sizeof($groups) -1]->addAmount($transactions[$i]->Amount);
 					}
 				}
 				

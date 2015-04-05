@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
 	class BudgetUpdate extends Object {
 		
 		//	The updated groups

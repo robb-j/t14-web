@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
 	class RewardTakenOutput extends Object {
 		
 		// The account that transactions were loaded for

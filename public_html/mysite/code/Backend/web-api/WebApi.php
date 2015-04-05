@@ -1,5 +1,9 @@
 <?php
 
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
+ 
 /*	
 	This converts the information given from the website into what is needed by BankAccessor
 */

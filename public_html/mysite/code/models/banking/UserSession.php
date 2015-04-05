@@ -1,5 +1,8 @@
 <?php
 
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
 class UserSession extends DataObject {
 
     private static $db = array(

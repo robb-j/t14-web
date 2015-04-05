@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
 	class EditBudgetObject extends ArrayData {
 
 		//	Stores the group that was edited

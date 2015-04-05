@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
 	class TransferOutput extends Object {
 		
 		// The account that transactions were loaded for

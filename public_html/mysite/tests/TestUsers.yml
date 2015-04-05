@@ -1,3 +1,7 @@
+
+# 
+# Created by Martin Smith - Mar 2015
+#
 User:
   myPerson:
     Username:myPerson
@@ -37,6 +41,14 @@ User:
     Username:noAccounts
     FirstName:noAccountsPersonSurname
     Surname:noAccountsPerson
+    Email:me2@me.com
+    LastFullCategorise:15 Jan 2015
+    Password:Pass
+    DOB:15 Jan 2015	
+  heatMapPerson:
+    Username:HeatMapPerson
+    FirstName:HeatMapPersonForename
+    Surname:HeatMapPersonSurname
     Email:me2@me.com
     LastFullCategorise:15 Jan 2015
     Password:Pass
@@ -90,6 +102,24 @@ Account:
     Balance: 50
     UserID: 3
     ProductID: 2
+  accountNine:
+    Type:TypeThree
+    OverdraftLimit: 600
+    Balance: 90
+    UserID: 6
+    ProductID: 3
+  accountTen:
+    Type:TypeOne
+    OverdraftLimit: 500
+    Balance: 600
+    UserID: 6
+    ProductID: 1
+  accountEleven:
+    Type:TypeTwo
+    OverdraftLimit: 1000
+    Balance: 50
+    UserID: 6
+    ProductID: 2
 Product:
   productOne:
     Title:Prod1
@@ -106,16 +136,22 @@ Transaction:
     Payee:Spotify
     AccountID: 1
     Date: 1 Mar 2015
+    Latitude:54.979187
+    Longitude: -1.614661
   transTwo:
     Amount:20
     Payee:normal
     AccountID: 1
     Date: 3 Mar 2015
+    Latitude:54.979287
+    Longitude: -1.614761
   transThree:
     Amount:15
     Payee:Asda
     AccountID: 1
     Date: 2 Jan 2015
+    Latitude:24.979287
+    Longitude:-10.614761
   transFour:
     Amount:50
     Payee:UniShop
@@ -132,6 +168,97 @@ Transaction:
     AccountID: 1
     Date: 1 Mar 2015
     Category: 1
+    Latitude:34.979287
+    Longitude:-14.614761
+	
+  trans7:
+    Amount:500
+    Payee:Spotify
+    AccountID: 9
+    Date: 1 Feb 2014
+    Latitude: 54.979187
+    Longitude: -1.614661
+  trans8:
+    Amount:20
+    Payee:normal
+    AccountID: 9
+    Date: 1 Feb 2015
+    Latitude: 54.979388
+    Longitude: -1.614862
+  trans9:
+    Amount:15
+    Payee:Asda
+    AccountID: 9
+    Date: 2 Mar 2015
+    Latitude: 54.979287
+    Longitude:-1.614761
+  trans10:
+    Amount:70
+    Payee:UniShop
+    AccountID: 9
+    Date: 1 Mar 2015
+    Latitude: 54.978986
+    Longitude:-1.614460
+  trans11:
+    Amount:500
+    Payee:Mam
+    AccountID: 10
+    Date:1 Feb 2014
+    Latitude: 54.979187
+    Longitude: -1.614661
+  trans12:
+    Amount:20
+    Payee:Mam
+    AccountID: 10
+    Date: 1 Feb 2015
+    Category: 1
+    Latitude: 54.979388
+    Longitude: -1.614862
+
+  trans13:
+    Amount:15
+    Payee:Spotify
+    AccountID: 10
+    Date: 1 Mar 2015
+    Latitude: 54.979287
+    Longitude:-1.614761
+  trans14:
+    Amount:70
+    Payee:normal
+    AccountID: 10
+    Date: 3 Mar 2015
+    Latitude: 54.978986
+    Longitude:-1.614460
+  trans15:
+    Amount:500
+    Payee:Asda
+    AccountID: 11
+    Date: 1 Feb 2014
+    Latitude: 54.979187
+    Longitude: -1.614661
+  trans16:
+    Amount:20
+    Payee:UniShop
+    AccountID: 11
+    Date: 1 Feb 2015
+    Latitude: 54.979388
+    Longitude: -1.614862
+  trans17:
+    Amount:15
+    Payee:Mam
+    AccountID: 11
+    Date: 1 Mar 2015
+    Latitude: 54.979287
+    Longitude:-1.614761
+  trans18:
+    Amount:70
+    Payee:Mam
+    AccountID: 11
+    Date: 1 Mar 2015
+    Category: 1
+    Latitude: 54.978986
+    Longitude:-1.614460
+
 UserSession:
   myPersonSessionOne:
     UserID: 1
@@ -145,6 +272,10 @@ UserSession:
     UserID: 5
     Expiry:1577836800
     Token: w8O3z6KEhq4MqYaBCz9LAQI8wqWfYGY8VNZjPWIMPM31qZNfyeeyVlKMuZEaFw1y
+  heatMapPersonSession:
+    UserID: 6
+    Expiry:1577836800
+    Token: w8O3z6KEhq4MqYaBCz9LAQI8wqWfYGY8VNZjPWIMPM31qZNfyeeyVlKMuZEaFw1m
 Reward:
   rewardOne:
     Title:CinemaTickets
@@ -223,3 +354,19 @@ PointGain:
     title:three
     Points:70
     UserID:4
+ATM:
+  ATMOne:
+    Title:atmOne
+    Cost: 0.0
+    Latitude:54.979187
+    Longitude: -1.614661
+  ATMTwo:
+    Title:atmtwo
+    Cost: 0.0
+    Latitude:54.979187
+    Longitude: -1.614661
+  ATMThree:
+    Title:atmthree
+    Cost: 0.0
+    Latitude:54.979187
+    Longitude: -1.614661

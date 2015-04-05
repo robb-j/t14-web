@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
 	class LoginOutput extends Object {
 		
 		//the user that was logged in

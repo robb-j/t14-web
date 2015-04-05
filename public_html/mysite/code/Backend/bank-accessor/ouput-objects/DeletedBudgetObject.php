@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
 	class DeletedBudgetObject extends ArrayData {
 
 		//	Was it successful or not 

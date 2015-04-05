@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This tests NAME_OF_THING
- * Martin S A - 27/02/2015
+ * This tests BankAccessor
+ * Martin S  - 27/02/2015
  */
 class BankAccessorTest extends SapphireTest {
 
@@ -38,7 +38,7 @@ class BankAccessorTest extends SapphireTest {
 	//	#### Tests for Login using the web ####
 	//	#######################################
 	
-	/*public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
+	public function testLoginCorrectUsernameCorrectPasswordCorrectMobileBool() {
 	
 		$accessor = new BankAccessor();
 		$user = $this->objFromFixture('User','myThirdPerson');
@@ -684,14 +684,14 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','allProductsPerson');
 
 		$this->assertEquals($expected, sizeof($accessor->getNewProductsForUser($user."; DROP TABLE User")));
-    }*/
+    }
 	
 	/*
 	
 		Intermediate tests
 		
 	*/
-	/*
+	
 	//	#################################
 	//	#### Tests for getLastPoints ####
 	//	#################################
@@ -935,7 +935,7 @@ class BankAccessorTest extends SapphireTest {
 	//	#### Tests for CategorisePayments SQL Injection ####
 	//	####################################################
 	
-	/*public function testSQLInjectionChooseRewardUserID() {
+	public function testSQLInjectionChooseRewardUserID() {
 		
 		$accessor = new BankAccessor();
 		$expected = false;
@@ -1273,12 +1273,12 @@ class BankAccessorTest extends SapphireTest {
 
 		$this->assertEquals($expected, $accessor->deleteBudget($user->ID,$session->Token,"1; DROP TABLE User" )->didPass());
     }
-*/
+
 	//	###############################
 	//	#### Tests for CreateGroup ####
 	//	###############################
 	
-	/*public function testCreateGroupAllCorrect() {
+	public function testCreateGroupAllCorrect() {
 		
 		$accessor = new BankAccessor();
 		$expected = true;
@@ -1434,13 +1434,13 @@ class BankAccessorTest extends SapphireTest {
 		$categories = array( array("Name"=>"TestNameOne; DROP TABLE User", "Budget"=>"50; DROP TABLE User"), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
 		
 		$this->assertEquals($expected, $accessor->createGroup($user->ID, $session->Token,"NewName",	$categories  )->didPass());
-    }*/
+    }
 	
 	//	#############################
 	//	#### Tests for EditGroup ####
 	//	#############################
 	
-	/*public function testEditGroupAllCorrect() {
+	public function testEditGroupAllCorrect() {
 		
 		$accessor = new BankAccessor();
 		$expected = true;
@@ -1657,7 +1657,7 @@ class BankAccessorTest extends SapphireTest {
     }
 	
 	
-	/*public function testEditGroupChangeCategoryName() {
+	public function testEditGroupChangeCategoryName() {
 		
 		$accessor = new BankAccessor();
 		$expected = 0;
@@ -1756,7 +1756,7 @@ class BankAccessorTest extends SapphireTest {
 		
 		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories,null );
 		$this->assertEquals($expected, $result->didPass());
-    }*/
+    }
 	
 	//	############################################
 	//	#### Tests for EditBudget SQL Injection ####
@@ -1777,7 +1777,7 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, $result->didPass());
     }
 	
-	/*public function testSQLInjectionEditGroupToken() {
+	public function testSQLInjectionEditGroupToken() {
 		
 		$accessor = new BankAccessor();
 		$expected = false;
@@ -1835,7 +1835,7 @@ class BankAccessorTest extends SapphireTest {
 		
 		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
 		$this->assertEquals($expected, $result->didPass());
-    }*/
+    }
 	
 	public function testSQLInjectionEditGroupNewCats() {
 		
@@ -1867,6 +1867,241 @@ class BankAccessorTest extends SapphireTest {
 		$this->assertEquals($expected, $result->didPass());
     }
 	
+	/*
 	
+		Advanced Tests
+		
+	*/
+	
+	//	###########################
+	//	#### Tests for LoadATM ####
+	//	###########################
+	
+	public function testLoadATMALLCorrect() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals(3, sizeof($accessor->loadATMs($user->ID, $session->Token)));
+    }
+	
+	public function testLoadATMWrongUserID() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals(0, sizeof($accessor->loadATMs(99, $session->Token)));
+    }
+	
+	public function testLoadATMWrongToken() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals(0, sizeof($accessor->loadATMs($user->ID, "sgh")));
+    }
+	
+	//	############################################
+	//	#### Tests for LoadATM SQL Injection ####
+	//	############################################
+	
+	public function testSQLInjectionLoadATMUserID() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals(0, sizeof($accessor->loadATMs($user->ID."; DROP TABLE User", $session->Token)));
+    }
+	
+	public function testSQLInjectionLoadATMToken() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		
+		$this->assertEquals(0, sizeof($accessor->loadATMs($user->ID, $session->Token."; DROP TABLE User")));
+    }
+	
+	//	###############################
+	//	#### Tests for LoadHeatMap ####
+	//	###############################
+	
+	public function testLoadHeatMapALLCorrect() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(1), null, null);
+
+		$this->assertEquals(3, sizeof($result));
+    }
+	
+	public function testLoadHeatMapWrongUserID() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap(99, $session->Token, array(1), null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testLoadHeatMapWrongToken() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, " dfg", array(1), null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testLoadHeatMapNoAccounts() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(), null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testLoadHeatMapAccountNotOwned() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(9),null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testLoadHeatMapAccountNotExist() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(99),null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testLoadHeatMapAccountStartNull() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(1), null, null);
+
+		$this->assertEquals(3, sizeof($result));
+    }
+	
+	public function testLoadHeatMapAccountEndNull() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(1), null, null);
+
+		$this->assertEquals(3, sizeof($result));
+    }
+
+	public function testLoadHeatMapAccountStartNotNull() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','heatMapPerson');
+		$session =$this->objFromFixture('UserSession','heatMapPersonSession');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(9), '2015-01-0 00:00:00', null);
+		
+		$this->assertEquals(2, sizeof($result));
+    }
+	
+	public function testLoadHeatMapAccountEndNotNull() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','heatMapPerson');
+		$session =$this->objFromFixture('UserSession','heatMapPersonSession');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(9),  null, '2015-01-0 00:00:00');
+
+		$this->assertEquals(1, sizeof($result));
+    }
+	
+	public function testLoadHeatMapAccountMultipleAccountsStartEndNull() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','heatMapPerson');
+		$session =$this->objFromFixture('UserSession','heatMapPersonSession');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(9,10,11),  null, null);
+
+		$this->assertEquals(1545, $result[0]->getAmount());
+    }
+	
+	public function testLoadHeatMapAccountMultipleAccountsStartEndNotNull() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','heatMapPerson');
+		$session =$this->objFromFixture('UserSession','heatMapPersonSession');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(9,10,11),  '2015-01-0 00:00:00', '2015-03-0 00:00:00');
+		
+		$this->assertEquals(60, $result[0]->getAmount());
+    }
+	
+	//	#############################################
+	//	#### Tests for LoadHeatMap SQL Injection ####
+	//	#############################################
+	
+	public function testSQLInjectionLoadHeatMapUserID() {
+
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID."; DROP TABLE User", $session->Token, array(1),null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testSQLInjectionLoadHeatMapToken() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token."; DROP TABLE User", array(1),null, null);
+
+		$this->assertEquals(null, $result);
+    }
+	
+	public function testSQLInjectionLoadHeatMapAccounts() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array("1; DROP TABLE User"),null, null);
+
+		$this->assertEquals(3, sizeof($result));
+    }
+	
+	public function testSQLInjectionLoadHeatMapStartDate() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(1),"; DROP TABLE User", null);
+
+		$this->assertEquals(3, sizeof($result));
+    }
+	
+	public function testSQLInjectionLoadHeatMapEndDate() {
+	
+		$accessor = new BankAccessor();
+		$user = $this->objFromFixture('User','myPerson');
+		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(1),null, "; DROP TABLE User");
+
+		$this->assertEquals(null, $result);
+    }
 	
 }

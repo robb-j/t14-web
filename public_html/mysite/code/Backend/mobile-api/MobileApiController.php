@@ -1,5 +1,9 @@
 <?php
 
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
+ 
 /*
 	This gets the information from the mobile app, converts it to 
 	the form wanted by BankAccessor and then returns the results 
@@ -269,45 +273,85 @@ class MobileApiController extends Controller {
 		// Get inputs from post variables
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
-		$updatedGroupNames = $request->postVar("groupNames");
-		$updatedCategoryNames = $request->postVar("categoryNames");
-		$updatedCategoryBudget = $request->postVar("budgetAmount");
+		$toDelGroupsID = $request->postVar("toDelGroupsID");
+		$toEditGroupID = $request->postVar("toEditGroupID");
+		$toEditGroupName = $request->postVar("toEditGroupName ");
+		$toCreateGroupName = $request->postVar("toCreateGroupName");
+		$toEditNewCats = $request->postVar("toEditNewCats");
+		$toCreateNewCats = $request->postVar("toCreateNewCats");
+		$updateCats = $request->postVar("updateCats");
+		$delCats = $request->postVar("delCats");
 		
-
-		// Try to update the users budget
-		$output = BankAccessor::create()->updateBudget( $userID, $token, $updatedGroupNames, $updatedCategoryNames, $updatedCategoryBudget, null, null, null, null);
-		$data = null;
+		$resultDel = null;
+		$resultEdit = null;
+		$resultCreate = null;
+		$dataDel = array();
+		$dataEdit = array();
+		$dataCreate = array();
 		
-		// Decide what data to give back
-		if ($output->didPass()) {
+		if($toDelGroupsID !== null){
+			$resultDel = BankAccessor::create()->deleteBudget($userID, $token, $toDelGroupsID);
 			
-			$data = array(
-				"changedCategorys" => $output->getUpdatedCats(),
-				"changedGroups" => $output->getUpdatedGroups(),
-				"successful" => $this->didPass()
-			);
-		}else {
+			if($resultDel->didPass() ){
+				$dataDel = array(
+					"DelSuccess" => $resultDel->didPass()
+					
+				);
+			}else {
 			
-			$data = array(
-				"Error" => "Error categorising new payments"
-			);
+				$dataDel = array(
+					"Error" => $resultDel->getReason()
+				);
+			}
+			
 		}
 		
+		if($toEditGroupID !== null){
+			$resultEdit = BankAccessor::create()->editGroups($userID, $token ,$toEditGroupID, $toEditGroupName, $updateCats, $toEditNewCats, $delCats);
+			
+			if($resultEdit->didPass() ){
+				$dataEdit = array(
+			
+					"EditedGroup" => $resultEdit->getGroup(),
+					"EditedgroupID" =>$resultEdit->getGroup()->ID,
+					"EditedNewCategories" => $resultEdit->getNewCategories(),
+					"EditedCategories" => $resultEdit->getEditedCategories(),
+					"EditSuccess" => $resultEdit->didPass()
+				
+				);
+			}else {
+			
+				$dataEdit = array(
+					"Error" => $resultEdit->getReason()
+				);
+			}
+		}
+		if($toCreateGroupName !== null){
+			$resultCreate = BankAccessor::create()-> createGroup($userID, $token, $toCreateGroupName, $toCreateNewCats);
+			
+			if($resultCreate->didPass() ){
+				$dataCreate = array(
+			
+					"CreatedGroupID" => $resultCreate->getGroup(),
+					"CreatedGroupID" =>$resultCreate->getGroup()->ID,
+					"CreatedNewCategories" => $resultCreate->getNewCats(),
+					"CreateSuccess" => $resultCreate->didPass()
+				
+				
+				);
+			}else {
+			
+				$dataCreate = array(
+					"Error" => "Error categorising new payments"
+				);
+			}
+		}
+
 		// Put the data into the response & return it
-		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->setBody($this->serializer->serializeArray( $dataDel.$dataEdit.$dataCreate  ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
-		
 
-		return BankAccessor::create()->deleteBudget($userID, $token, $groupID);
-
-		return BankAccessor::create()->editGroups($userID, $token ,$groupID, $groupName, $updatedCategories, $newCats, $deletedCats);
-
-		return BankAccessor::create()-> createGroup($userID, $token, $groupName, $newCategories);
-	
-	
-	
-		
 	}
 	
 	//	Lets the user choose a reward from a list
