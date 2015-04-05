@@ -298,6 +298,16 @@ class MobileApiController extends Controller {
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
 		
+
+		return BankAccessor::create()->deleteBudget($userID, $token, $groupID);
+
+		return BankAccessor::create()->editGroups($userID, $token ,$groupID, $groupName, $updatedCategories, $newCats, $deletedCats);
+
+		return BankAccessor::create()-> createGroup($userID, $token, $groupName, $newCategories);
+	
+	
+	
+		
 	}
 	
 	//	Lets the user choose a reward from a list

@@ -13,7 +13,6 @@ interface BankInterface {
 	//	Intermediate requirements
 	public function newPayments( $userID, $token );
 	public function categorisePayments( $userID, $token, $categorisedItems );
-	public function updateBudget( $userID, $token, $updatedGroupNames, $updatedCategoryNames, $updatedCategoryBudget, $deletedCategories, $deletedGroups, $newCategories, $newGroups);
 	public function chooseReward( $userID, $token, $rewardID );
 	public function performSpin( $userID, $token);
 	public function getAllRewards();

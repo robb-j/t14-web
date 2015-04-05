@@ -22,4 +22,18 @@ class ClaimController extends BankController {
 		// Render with a template
 		return $this->renderWith("ClaimContent");
 	}
+	
+	public function ComparePoint($value1, $value2) {
+	
+
+		if ((int)$value1 <= (int)$value2 ) {
+			
+			return true;
+		}
+		else {
+			
+			return false;
+		}
+	}
+	
 }

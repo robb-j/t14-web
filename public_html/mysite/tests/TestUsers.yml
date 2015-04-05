@@ -7,6 +7,8 @@ User:
     LastFullCategorise:18 Mar 2015
     Password:Password
     DOB:18 Mar 2015
+    NumberOfSpins: 10
+    Points:400
   my2ndPerson:
     Username:my2ndPerson
     FirstName:Person2ForeName
@@ -27,10 +29,18 @@ User:
     Username:allProductsPersonForname
     FirstName:allProductsPersonSurname
     Surname:allProductsPerson
-    Email:me2@me.com
     LastFullCategorise:15 Jan 2015
     Password:Pass
     DOB:15 Jan 2015
+    Points: 1000
+  noAccountsPerson:
+    Username:noAccounts
+    FirstName:noAccountsPersonSurname
+    Surname:noAccountsPerson
+    Email:me2@me.com
+    LastFullCategorise:15 Jan 2015
+    Password:Pass
+    DOB:15 Jan 2015	
 Account:
   accountOne:
     Type:TypeOne
@@ -116,9 +126,95 @@ Transaction:
     Payee:Mam
     AccountID: 3
     Date: 1 Mar 2015
+  transSix:
+    Amount:70
+    Payee:Mam
+    AccountID: 1
+    Date: 1 Mar 2015
+    Category: 1
 UserSession:
   myPersonSessionOne:
     UserID: 1
     Expiry:1577836800
     Token: w8O3z6KEhq4MqYaBCz9LAQI8wqWfYGY8VNZjPWIMPM31qZNfyeeyVlKMuZEaFw1s
-  
+  allProductsPersonSession:
+    UserID: 4
+    Expiry:1577836800
+    Token: w8O3z6KEhq4MqYaBCz9LAQI8wqWfYGY8VNZjPWIMPM31qZNfyeeyVlKMuZEaFw1v
+  noAccountsPersonSession:
+    UserID: 5
+    Expiry:1577836800
+    Token: w8O3z6KEhq4MqYaBCz9LAQI8wqWfYGY8VNZjPWIMPM31qZNfyeeyVlKMuZEaFw1y
+Reward:
+  rewardOne:
+    Title:CinemaTickets
+    Cost: 50
+  rewardTwo:
+    Title:CinemaTickets2
+    Cost: 100
+  rewardThree:
+    Title:CinemaTickets3
+    Cost: 1000
+BudgetGroup:
+  bgOne:
+    Title:BudgetGroupsOne
+    UserID:1
+  bgTwo:
+    Title:BudgetGroupsTwo
+    UserID:1
+  bgThree:
+    Title:BudgetGroupsThree
+    UserID:2
+Category:
+  categoryOne:
+    Title:CategoryOne
+    Budgeted:50
+    GroupID: 1
+    Balance: 70
+  categoryTwo:
+    Title:CategoryOne
+    Budgeted:50
+    GroupID: 1
+    Balance: 70
+  categoryThree:
+    Title:CategoryOne
+    Budgeted:50
+    GroupID: 1
+    Balance: 70
+PointGain:
+  pointGainOne:
+    title:One
+    Points:50
+    UserID:1
+  pointGainTwo:
+    title:two
+    Points:60
+    UserID:1
+  pointGainThree:
+    title:three
+    Points:70
+    UserID:1
+  pointGainFour:
+    title:four
+    Points:50
+    UserID:1
+  pointGainFive:
+    title:five
+    Points:60
+    UserID:1
+  pointGainSix:
+    title:six
+    Points:70
+    UserID:1
+  pointGainSeven:
+    title:seven
+    Points:50
+    UserID:1
+  pointGainEight:
+    title:eight
+    Points:60
+    UserID:1
+  pointGainNine:
+    title:three
+    Points:70
+    UserID:4

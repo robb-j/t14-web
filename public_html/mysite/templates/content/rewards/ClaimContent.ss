@@ -52,14 +52,16 @@
 						
 						<div class="row">
 							
+							
+										
 							<!-- Name of the reward -->
-							<div class="col-xs-3"> <p> $Title </p></div>
+							<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> <a href="http://www.w3schools.com">$Title </a><% else %>$Title <% end_if %> </p></div>
 							
 							<!-- Description of the reward -->
 							<div class="col-xs-8"> <p> $Description </p></div>
 							
 							<!-- Number of points needed -->
-							<div class="col-xs-1"> <p class="currency-green"> $Cost </p></div>
+							<div class="col-xs-1"> <p class="currency-green"> $Cost</p></div>
 							
 						</div>
 					</div>
