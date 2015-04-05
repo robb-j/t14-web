@@ -183,7 +183,7 @@ class GroupEditController extends BankController {
 		else {
 			
 			// Create the group
-			$output = WebApi::create()->createGroup($this->CurrentUser->ID, $groupName, $updatedCategories);
+			$output = WebApi::create()->createGroup($this->CurrentUser->ID, $groupName, $newCategories);
 			
 			if ($output->didPass()) {
 				Session::set("GroupEditSuccess", "Group Successfully Created");

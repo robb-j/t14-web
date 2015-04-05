@@ -181,6 +181,11 @@ Category:
     Budgeted:50
     GroupID: 1
     Balance: 70
+  categoryFour:
+    Title:CategoryFour
+    Budgeted:50
+    GroupID: 3
+    Balance: 70
 PointGain:
   pointGainOne:
     title:One

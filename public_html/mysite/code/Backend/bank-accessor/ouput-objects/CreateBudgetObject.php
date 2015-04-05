@@ -20,7 +20,6 @@
 			
 			$this->setNewCats($newCats);
 			$this->setCreatedGroup($createdGroup);
-;
 			$this->setSuccessful($sucessful);
 			$this->setReason($reason);
 		}

@@ -278,27 +278,40 @@ class BankAccessor extends Object implements BankInterface {
 			//	If the userID given is the same as the one in the database and the user owns the account
 			if (strcmp($actaulUserID,$theAccount->UserID)=== 0){
 			
+				//	If they have transactions
 				if(	$theAccount->FirstTransaction !=null){
 				
+					//	Get all of the transactions from that account and sort by the date
 					$allTransactions = Transaction::get()->filter(array(
 						'AccountID' => $sanitisedAccountID
 					))->sort('Date');
 					
 					$allDates = new ArrayList();
 					
+					//	For everyone of the transactions found
 					foreach($allTransactions as $transaction){
+					
 						$found = false;
 						$count = 0;
+						
+						//	Split the date up
 						$arrayExploded = explode('-',$transaction->Date);
 						
+						//	While the month not found and not at the end of the array
 						while ($found !== true && $count < sizeof($allDates)){
 						
+							//	If the month/year is found move on 
 							if ($allDates[$count]->getMonth() === $arrayExploded[1] &&  $allDates[$count]->getYear() === $arrayExploded[0]){
+							
 								$found = true;
 							}
+							
 							$count++;
 						}
+						
+						//	If the month/year wasn't found add it to the array of all statement dates
 						if($found !=true){
+						
 							$allDates->push(new DateObject($arrayExploded[2],$arrayExploded[1],$arrayExploded[0]));
 						
 						}
@@ -309,12 +322,9 @@ class BankAccessor extends Object implements BankInterface {
 			
 					return $allDates;
 				}
-
-	
 			}
 		}
 		return array();
-	
 	}
 	
 	//	##############################################
@@ -727,74 +737,84 @@ class BankAccessor extends Object implements BankInterface {
 					$group->Title = $groupName;
 					$group->write();
 				}
-			
-				//check all to edit categogres belong to the user and exist same with deleting ones
-				foreach ($updatedCategories as $categoryID => $infoArray){
-			
-					if(isset($infoArray["Name"]) && isset($infoArray["Budget"]) &&  is_numeric($infoArray["Budget"])){
-					
-						$newName = Convert::raw2sql($infoArray["Name"]);
-						$newBudget = Convert::raw2sql($infoArray["Budget"]);
+				
+				if(sizeof($updatedCategories)>0){
+					//check all to edit categogres belong to the user and exist same with deleting ones
+					foreach ($updatedCategories as $categoryID => $infoArray){
+				
+						if(isset($infoArray["Name"]) && isset($infoArray["Budget"]) &&  is_numeric($infoArray["Budget"])){
 						
-					}else{
-					
-						return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
-					}
-					
-					$category = Category::get()->byId(Convert::raw2sql($categoryID));
-					
-					if( $newName === null && $newBudget === null || $category === null || $category->Group()->UserID !== $sanitisedUserID){
-					
-						return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format or not belonging to the user or not being found", false);
+							$newName = Convert::raw2sql($infoArray["Name"]);
+							$newBudget = Convert::raw2sql($infoArray["Budget"]);
+							
+						}else{
+						
+							return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+						}
+						
+						$category = Category::get()->byId(Convert::raw2sql($categoryID));
+						
+						if( $newName === null && $newBudget === null || $category === null || $category->Group()->UserID !== $sanitisedUserID){
+						
+							return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format or not belonging to the user or not being found", false);
+						}
 					}
 				}
-
-				foreach ( $deletedCats as  $deletedCatIDs){
 			
-					$category = Category::get()->byId(Convert::raw2sql($deletedCatIDs));
-					
-					if( $category === null || $category->Group()->UserID !== $sanitisedUserID){
-						return new EditBudgetObject(null, null, null,"Failed due to categories not being found or not being owned by the user", false);
+				if(sizeof($deletedCats)>0){
+					foreach ( $deletedCats as  $deletedCatIDs){
+				
+						$category = Category::get()->byId(Convert::raw2sql($deletedCatIDs));
+						
+						if( $category === null || $category->Group()->UserID !== $sanitisedUserID){
+							return new EditBudgetObject(null, null, null,"Failed due to categories not being found or not being owned by the user", false);
+						}
 					}
 				}
-				
-				$result = $this->createCategories($groupID, $newCats);
-				
-				if(sizeof($result) !== sizeof($newCats)){
+				$result = new ArrayList();
+				if(sizeof($newCats)>0){
+					$result = $this->createCategories($groupID, $newCats);
+					
+					if(sizeof($result) !== sizeof($newCats)){
 					return new EditBudgetObject(null, null, null,"Failed due to categories being in the wrong format", false);
 				}
+				}
 				
-				foreach ($deletedCats as $toDelCatID) {
-	
-					$toDelCategory =  Category::get()->byID(Convert::raw2sql($toDelCatID));
+				if(sizeof($deletedCats)>0){
+					foreach ($deletedCats as $toDelCatID) {
+		
+						$toDelCategory =  Category::get()->byID(Convert::raw2sql($toDelCatID));
 
-					if($toDelCategory !== null && $toDelCategory->Group()->UserID === $sanitisedUserID ){
+						if($toDelCategory !== null && $toDelCategory->Group()->UserID === $sanitisedUserID ){
 
-						$toDelCategory->delete();
+							$toDelCategory->delete();
+						}
 					}
 				}
-
+				
 				$editedCategoriesArray = new ArrayList();
 				
-				foreach ($updatedCategories as $categoryID => $infoArray){
-			
-					$newName = Convert::raw2sql($infoArray["Name"]);
-					$newBudget = Convert::raw2sql($infoArray["Budget"]);
-					$category = Category::get()->byId(Convert::raw2sql($categoryID));
-					
-					if( $category !== null && $category->Group()->UserID === $sanitisedUserID){
+				if(sizeof($updatedCategories)>0){
+					foreach ($updatedCategories as $categoryID => $infoArray){
+				
+						$newName = Convert::raw2sql($infoArray["Name"]);
+						$newBudget = Convert::raw2sql($infoArray["Budget"]);
+						$category = Category::get()->byId(Convert::raw2sql($categoryID));
 						
-						if($newName !== null && strcmp($category->Title, $newName) !==0){
-							$category->Title = $newName;
-						
-						
+						if( $category !== null && $category->Group()->UserID === $sanitisedUserID){
+							
+							if($newName !== null && strcmp($category->Title, $newName) !==0){
+								$category->Title = $newName;
+							
+							
+							}
+							if($newBudget !== null && $category->Budgeted !== $newBudget){
+								$category->Budgeted = $newBudget;
+							}
+							
+							$category->write();
+							$editedCategoriesArray->push($category);
 						}
-						if($newBudget !== null && $category->Budgeted !== $newBudget){
-							$category->Budgeted = $newBudget;
-						}
-						
-						$category->write();
-						$editedCategoriesArray->push($category);
 					}
 				}
 				
@@ -817,24 +837,26 @@ class BankAccessor extends Object implements BankInterface {
 		if($userSession !== null){
 
 			//	If the groups has a name
-			if($groupName !== null && $newCategories !== null){
+			if($groupName !== null){
 				
-				foreach ($newCategories as $newCategory){
-			
-					if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Budget"])){
-					
-						$newName = Convert::raw2sql($newCategory["Name"]);
-						$newBudget = Convert::raw2sql($newCategory["Budget"]);
-					}else{
-					
-						return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
-					}
-					
-					if( $newName === null || $newBudget === null){
-						return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+				if(sizeof($newCategories)>0){
+					foreach ($newCategories as $newCategory){
+				
+						if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Budget"])){
+						
+							$newName = Convert::raw2sql($newCategory["Name"]);
+							$newBudget = Convert::raw2sql($newCategory["Budget"]);
+						}else{
+						
+							return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+						}
+						
+						if( $newName === null || $newBudget === null){
+							return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+						}
 					}
 				}
-		
+				
 				//Create group
 				$theNewGroup = BudgetGroup::create();
 				$theNewGroup->Title = Convert::raw2sql($groupName);
@@ -842,10 +864,15 @@ class BankAccessor extends Object implements BankInterface {
 				
 				//	Then write this to the database
 				$theNewGroup->write();
-				$result = $this->createCategories($theNewGroup->ID, $newCategories);
+				$result = new ArrayList();
 				
-				if(sizeof($result) !== sizeof($newCategories)){
-					return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+				if(sizeof($newCategories)>0){
+				
+					$result = $this->createCategories($theNewGroup->ID, $newCategories);
+					
+					if(sizeof($result) !== sizeof($newCategories)){
+						return new CreateBudgetObject(null,null, "Failed due to new categories being in an incorrect format", false);
+					}
 				}
 				
 				//	Update the session 
@@ -1144,43 +1171,48 @@ class BankAccessor extends Object implements BankInterface {
 	
 	private function createCategories($groupID, $newCategories){
 	
-		//	Then create all of the associated categories that have been added
-		foreach ($newCategories as $newCategory){
-			
-			if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Budget"])){
-					
+		if(sizeof($newCategories)>0){
+			//	Then create all of the associated categories that have been added
+			foreach ($newCategories as $newCategory){
+				
+				if(isset($newCategory["Name"]) && isset($newCategory["Budget"]) && is_numeric($newCategory["Budget"])){
+						
+					$newName = Convert::raw2sql($newCategory["Name"]);
+					$newBudget = Convert::raw2sql($newCategory["Budget"]);
+				}else{
+				
+					return array();
+				}
+				
+				if( $newName === null || $newBudget === null){
+					return array();
+				}
+			}
+		
+		
+			$newCatObjects = new ArrayList();
+			//	Then create all of the associated categories that have been added
+			foreach ($newCategories as $newCategory){
+
 				$newName = Convert::raw2sql($newCategory["Name"]);
 				$newBudget = Convert::raw2sql($newCategory["Budget"]);
-			}else{
-			
-				return array();
-			}
-			
-			if( $newName === null || $newBudget === null){
-				return array();
-			}
-		}
-		$newCatObjects = new ArrayList();
-		//	Then create all of the associated categories that have been added
-		foreach ($newCategories as $newCategory){
-			
-			$newName = Convert::raw2sql($newCategory["Name"]);
-			$newBudget = Convert::raw2sql($newCategory["Budget"]);
-			
-			if( $newName !== null && $newBudget != null){
 				
-				$theNewCat = Category::create();
-				$theNewCat->Title = $newName;
-				$theNewCat->Budgeted = $newBudget;
-				$theNewCat->GroupID = $groupID;
-				$theNewCat->Balance = 0;
+				if( $newName !== null && $newBudget !== null){
+					
+					$theNewCat = Category::create();
+					$theNewCat->Title = $newName;
+					$theNewCat->Budgeted = $newBudget;
+					$theNewCat->GroupID = $groupID;
+					$theNewCat->Balance = 0;
 
-				//	Then write this to the database
-				$theNewCat->write();
-				$newCatObjects->push($theNewCat);
+					//	Then write this to the database
+					$theNewCat->write();
+					$newCatObjects->push($theNewCat);
+				}
 			}
+			return $newCatObjects;
 		}
-		return $newCatObjects;
+		return array();
 	}
 	
 	//	################################################
