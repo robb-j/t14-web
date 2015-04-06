@@ -43,4 +43,7 @@ class ClaimController extends BankController {
 		}
 	}
 	
+	public function TestFunction() {
+		echo "Hello World!";
+	}
 }
