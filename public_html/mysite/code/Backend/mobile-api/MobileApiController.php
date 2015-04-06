@@ -13,7 +13,7 @@ class MobileApiController extends Controller {
 
 	//	Sets the list of allowed actions
 	private static $allowed_actions = array(
-        'login', 'loadTransactions','makeTransfer','logout',"getStatementDates",'newPayments','chooseReward', "performSpin","getAllRewards","getLastPoints"
+        'login', 'loadTransactions','makeTransfer','logout',"getStatementDates",'newPayments','chooseReward', "performSpin","getAllRewards","getLastPoints","categorisePayments","updateBudget","getUserCategories","loadATMs","loadHeatMap"
     );
     
 	//	Initialises the API
@@ -250,7 +250,7 @@ class MobileApiController extends Controller {
 				"changedTransactions" => $output->getChangedTransactions(),
 				"newSpin" => $output->allowedNewSpin(),
 				"numberOfSpins" => $output->allowedNewSpin(),
-				"successful" => $this->didPass()
+				"successful" => $output->didPass()
 			);
 		}else {
 			
@@ -517,7 +517,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"ATMs" => $output,
+				"ATMs" => $output
 			);
 		}else {
 			
@@ -525,7 +525,7 @@ class MobileApiController extends Controller {
 				"Error" => "Error getting ATM's"
 			);
 		}
-		
+
 		// Put the data into the response & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
@@ -549,7 +549,7 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if (sizeof($output) > 0 ) {
 			$data = array(
-				"heatMapPoints" => $output,
+				"heatMapPoints" => $output
 			);
 		}else {
 			
