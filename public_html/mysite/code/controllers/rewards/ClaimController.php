@@ -45,11 +45,10 @@ class ClaimController extends BankController {
 				return $this->index();
 			}
 			else {
-				
+				$this->CurrentUser = WebAPI::create()->getCurrentUser();
 				$this->SuccessMessage = "Reward successfully claimed";
 			}
 		}
-		
 		return $this->index();
 	}
 }
