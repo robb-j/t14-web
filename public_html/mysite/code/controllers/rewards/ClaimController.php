@@ -11,22 +11,23 @@ class ClaimController extends BankController {
 	public $TabTitle = "rewards";
 	
 	private static $allowed_actions = array(
-		"TestFunction","martinFunction"
+		"TakeReward"
 	);
 	
-	
-	public function CostClass($points, $cost) {
+	public function NewPointBalance() {
 		
-		if ($points > $cost) {
-			
-			return "currency-green";
-		}
+		return $this->Rewards->Cost;
 	}
 	
 	public function Content() {
 		
 		// Create an API to access the database
 		$api = new WebApi();
+		
+		if (array_key_exists("delete", $this->request->getVars())) {
+			
+			$this->DeleteID = $this->request->getVars()["delete"];
+		}
 		
 		// Get the list of available rewards for the user
 		$this->Rewards = $api->getAllRewards()->limit(7);
@@ -35,31 +36,25 @@ class ClaimController extends BankController {
 		return $this->renderWith("ClaimContent");
 	}
 	
-	public function ComparePoint($value1, $value2) {
-	
-
-		if ((int)$value1 <= (int)$value2 ) {
-			
-			return true;
-		}
-		else {
-			
-			return false;
-		}
-	}
-	
-	public function TestFunction(){
-	
+	public function TakeReward() {
 		
-		echo "|Hello|";
-	
-	}
-	
-	public function martinTest(){
-	
-		$ID = $this->request->param('ID');
+		if (array_key_exists("group", $this->request->getVars())) {
+			
+			$groupID = $this->request->getVars()["group"];
+			
+			$output = WebApi::create()->chooseReward($this->CurrentUser->ID, $groupID);
+			
+			if ($output->didPass() == false) {
+				
+				$this->ErrorMessage = "Failed to claim reward";
+				return $this->index();
+			}
+			else {
+				
+				$this->SuccessMessage = "Reward successfully claimed";
+			}
+		}
 		
-		echo "|".$ID."| and |".$this->CurrentUser->ID."|";
-	
+		return $this->index();
 	}
 }

@@ -22,7 +22,7 @@
 							</div>
 							
 							<div class="col-xs-6">
-								<p class="$Top.CurrencyClass($BudgetedAmount) right"> $CurrentUser.Points </p>
+									<p class="$Top.CurrencyClass($BudgetedAmount) right"> $CurrentUser.Points </p>
 							</div>
 							
 						</div>
@@ -41,6 +41,20 @@
 		<!-- The Offers -->
 		<h2> Offers </h2>
 		
+		<!-- Display a form error if there was one -->
+		<% if $ErrorMessage %>
+			<div class="form-message message-fail">
+				<p> $ErrorMessage </p>
+			</div>
+		<% end_if %>
+		
+		<!-- Display a message if it was successfuly deleted -->
+		<% if $SuccessMessage  %>
+			<div class="form-message message-success">
+				<p> $SuccessMessage </p>
+			</div>
+		<% end_if %>
+		
 		<div class="data-table">
 			
 			<% if $Rewards.Count %>
@@ -52,18 +66,17 @@
 						
 						<div class="row">
 							
-							
-										
-							<!-- Name of the reward -->
-							<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> <a href="ClaimController/TestFunction">$Title </a><% else %>$Title <% end_if %> </p></div>
-							
-							<!-- Description of the reward -->
+							<% if $Top.DeleteID == $ID %>
+							<div class="col-xs-3"> <p> $Title </p></div>
+							<div class="col-xs-3"> <p> Claim reward? </p></div>
+							<div class="col-xs-3"> <a href="rewards/claim/TakeReward?group=$ID" class="control-button cb-red cb-small cb-no-mar"> Confirm </a></div>
+							<div class="col-xs-3"> <a href="rewards/claim" class="control-button cb-white cb-small cb-no-mar"> Cancel </a></div>
+							 
+							<% else %>
+							<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> <a href="rewards/claim?delete=$ID">$Title </a><% else %>$Title <% end_if %> </p></div>
 							<div class="col-xs-8"> <p> $Description </p></div>
-							
-							<!-- Number of points needed -->
-
-							<div class="col-xs-1"> <p class="currency-green"> $Cost </p></div>
-
+							<div class="col-xs-1"> <% if $Cost <= $Top.CurrentUser.Points %> <p class="currency-green"> $Cost </p> <% else %> <p> $Cost </p> <% end_if %> </div>
+							<% end_if %>
 							
 						</div>
 					</div>
