@@ -10,6 +10,11 @@ class ClaimController extends BankController {
 	// Set the tab title
 	public $TabTitle = "rewards";
 	
+	private static $allowed_actions = array(
+		"TestFunction","martinFunction"
+	);
+	
+	
 	public function CostClass($points, $cost) {
 		
 		if ($points > $cost) {
@@ -43,7 +48,18 @@ class ClaimController extends BankController {
 		}
 	}
 	
-	public function TestFunction() {
-		echo "Hello World!";
+	public function TestFunction(){
+	
+		
+		echo "|Hello|";
+	
+	}
+	
+	public function martinTest(){
+	
+		$ID = $this->request->param('ID');
+		
+		echo "|".$ID."| and |".$this->CurrentUser->ID."|";
+	
 	}
 }
