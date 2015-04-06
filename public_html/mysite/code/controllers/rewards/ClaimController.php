@@ -14,11 +14,6 @@ class ClaimController extends BankController {
 		"TakeReward"
 	);
 	
-	public function NewPointBalance() {
-		
-		return $this->Rewards->Cost;
-	}
-	
 	public function Content() {
 		
 		// Create an API to access the database
