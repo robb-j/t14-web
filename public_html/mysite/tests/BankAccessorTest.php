@@ -334,7 +334,7 @@ class BankAccessorTest extends SapphireTest {
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		$transactions = $accessor->loadTransactions( $user->ID, 1, 3, 2015, $session->Token );
 		
-		$this->assertEquals(2,sizeof($transactions->getTransactions()));
+		$this->assertEquals(3,sizeof($transactions->getTransactions()));
 
 	}
 	
@@ -422,7 +422,7 @@ class BankAccessorTest extends SapphireTest {
 	public function testSQLInjectionLoadTransactionsAccountID() {
 		
 		$accessor = new BankAccessor();
-		$expected = 0;
+		$expected = 3;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 	   
@@ -1363,9 +1363,9 @@ class BankAccessorTest extends SapphireTest {
 		
     }
 	
-	//	##############################################
-	//	#### Tests for DeleteBudget SQL Injection ####
-	//	##############################################
+	//	#############################################
+	//	#### Tests for CreateGroup SQL Injection ####
+	//	#############################################
 	
 	public function testSQLInjectionCreateGroupUserID() {
 		
@@ -1403,7 +1403,7 @@ class BankAccessorTest extends SapphireTest {
 	public function testSQLInjectionCreateGroupCategories() {
 		
 		$accessor = new BankAccessor();
-		$expected = true;
+		$expected = false;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		$categories = array( array("Name"=>"TestNameOne; DROP TABLE User", "Budget"=>"50; DROP TABLE User"), array("Name"=>"TestNameTwo", "Budget"=>50), array("Name"=>"TestNameTwo", "Budget"=>50));
