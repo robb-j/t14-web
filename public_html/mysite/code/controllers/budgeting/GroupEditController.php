@@ -5,6 +5,8 @@
  */
 class GroupEditController extends BankController {
 	
+	
+	// An Action for the Form to use
 	private static $allowed_actions = array(
 		"GroupEditForm",
 	);
@@ -25,11 +27,30 @@ class GroupEditController extends BankController {
 	
 	public function Content() {
 		
+		// Get Session messages from previous submissions
+		$error = Session::get("GroupEditError");
+		$success = Session::get("GroupEditSuccess");
+		
+		
+		// Display the messages, if there were any
+		if ($error != null) {
+			
+			$this->ErrorMessage = $error;
+			Session::clear("GroupEditError");
+		}
+		if ($success != null) {
+			
+			$this->SuccessMessage = $success;
+			Session::clear("GroupEditSuccess");
+		}
+		
+		
 		// Get the group to edit
 		$groupID = $this->request->param("ID");
 		$group = BudgetGroup::get()->byId($groupID);
 		
 		
+		// Make sure we can edit this group
 		if ($group && $group->UserID == $this->CurrentUser->ID) {
 			
 			// If there is a group, set editing mode
@@ -63,19 +84,116 @@ class GroupEditController extends BankController {
 	 */
 	public function submitEdit($data) {
 		
-		if ($data["Mode"] == "edit") {
+		// Clear previous messages
+		Session::clear("GroupEditError");
+		Session::clear("GroupEditSuccess");
+		
+		$error = false;
+		$errorMessage = "";
+		
+		
+		// Get the group ID & name
+		$groupID = array_key_exists("GroupID", $data) ? $data["GroupID"] : "";
+		$groupName = $data["GroupName"];
+		
+		
+		// Get the updated names & budgets
+		$catNames = array_key_exists("CategoryNames", $data) ? $data["CategoryNames"] : array();
+		$catBudgets = array_key_exists("CategoryBudgets", $data) ? $data["CategoryBudgets"] : array();
+		
+		
+		// Get the new names & budgets
+		$newNames = array_key_exists("NewNames", $data) ? $data["NewNames"] : array();
+		$newBudgets = array_key_exists("NewBudgets", $data) ? $data["NewBudgets"] : array();
+		
+		
+		// Get the ids of removed categories
+		$removedCats = array_key_exists("RemovedCategories", $data) ? array_keys($data["RemovedCategories"]) : array();
+		
+		
+		// Format the category updates
+		$updatedCategories = array();
+		foreach ($catNames as $id => $name) {
 			
-			// If editing do ...
-			echo "<p> Edit </p>";
+			$budget = $catBudgets[$id];
+			
+			// Check the budget was set & cast to a float
+			if ( $budget == null || ! is_numeric($budget)) {
+				
+				$errorMessage = "'" . $budget . "' must be a number";
+				$error = true;
+				break;
+			}
+			else {
+				
+				$budget = floatval($budget);
+			}
+			
+			$updatedCategories[$id] = array(
+				"Name" => $name,
+				"Budget" => $budget
+			);
+		}
+		
+		
+		// Format the new categories
+		$newCategories = array();
+		foreach ($newNames as $index => $name) {
+			
+			$budget = $newBudgets[$index];
+			
+			if ( $budget == null || ! is_numeric($budget)) {
+
+				$errorMessage = "'" . $budget . "' must be a number";
+				$error = true;
+				break;
+			}
+			else {
+				
+				$budget = floatval($budget);
+			}
+			
+			array_push($newCategories, array(
+				"Name" => $name,
+				"Budget" => $budget
+			));
+		}
+		
+		// If we've already error'd present that
+		if ($error) {
+			
+			Session::set("GroupEditError", $errorMessage);
+			return $this->redirect("budgeting/edit/group/" . $groupID);
+		}
+		else if ($data["Mode"] == "edit") {
+			
+			
+			// Do an edit
+			$output = WebApi::create()->editGroups($this->CurrentUser->ID, $groupID, $groupName, $updatedCategories, $newCategories, $removedCats);
+			
+			if ($output->didPass()) {
+				Session::set("GroupEditSuccess", "Group Successfully Edited");
+			}
+			else {
+				Session::set("GroupEditError", $output->getReason());
+			}
+			
+			return $this->redirect("budgeting/edit/group/" . $groupID);
 		}
 		else {
 			
-			// If creating do ...
-			echo "<p> New </p>";
+			// Create the group
+			$output = WebApi::create()->createGroup($this->CurrentUser->ID, $groupName, $newCategories);
+			
+			if ($output->didPass()) {
+				Session::set("GroupEditSuccess", "Group Successfully Created");
+				return $this->redirect("budgeting/edit/group/" . $output->getCreatedGroup()->ID);
+			}
+			else {
+				Session::set("GroupEditError", $output->getReason());
+				return $this->redirect("budgeting/edit/group/new");
+			}
 		}
-		
-		// Print the data for debug
-		print_r($data);
 	}
 	
 	

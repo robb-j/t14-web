@@ -1,4 +1,8 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
 	class CategoriseOutput extends ArrayData {
 
 		//	Stores the categories that were edited

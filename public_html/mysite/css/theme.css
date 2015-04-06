@@ -305,17 +305,17 @@ form.banking-form .form-actions .control-button {
 	min-width: 150px;
 }
 
-form.banking-form .form-message {
+.form-message {
 	margin: 10px 0px;
 	padding: 10px;
 	border-radius: 5px;
 	text-align: center;
 }
 
-form.banking-form .form-message.message-success {
+.form-message.message-success {
 	border: 3px solid #30A857;
 }
 
-form.banking-form .form-message.message-fail {
+.form-message.message-fail {
 	border: 3px solid #CC391A;
 }

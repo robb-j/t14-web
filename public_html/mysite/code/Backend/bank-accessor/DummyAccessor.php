@@ -1,5 +1,8 @@
 <?php
 
+/* 
+ * Created by Martin Smith - Feb 2015
+ */
 class DummyAccessor extends Object implements BankInterface {
 
 	public function login($username, $password) {

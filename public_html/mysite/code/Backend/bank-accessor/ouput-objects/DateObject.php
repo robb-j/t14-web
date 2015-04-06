@@ -1,4 +1,9 @@
 <?php
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
+ 
 	class DateObject extends ArrayData {
 
 		//This constructor takes in these parameters and sets the relevant fields

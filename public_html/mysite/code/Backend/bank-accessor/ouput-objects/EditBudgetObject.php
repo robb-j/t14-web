@@ -1,5 +1,9 @@
 <?php
-	class EditedBudgetObject extends ArrayData {
+
+/* 
+ * Created by Martin Smith - Mar 2015
+ */
+	class EditBudgetObject extends ArrayData {
 
 		//	Stores the group that was edited
 		private $group;
@@ -17,7 +21,7 @@
 		private $reason;
 
 		//This constructor takes in these parameters and sets the relevant fields
-		public function __construct( $group, $newCategories, $editedCategories, $reason, $sucessful = false,){
+		public function __construct( $group, $newCategories, $editedCategories, $reason, $sucessful = false){
 			
 			$this->setGroup($group);
 			$this->setNewCategories($newCategories);
@@ -36,7 +40,7 @@
 			return $this->newCategories;
 		}
 		
-		private function getEditedCategories()){
+		private function getEditedCategories(){
 			
 			return $this->editedCategories;
 		}
@@ -62,7 +66,7 @@
 			$this->newCategories = $newCategories;
 		}
 		
-		private function setEditedCategories($editedCategories)){
+		private function setEditedCategories($editedCategories){
 			
 			$this->editedCategories= $editedCategories;
 		}
