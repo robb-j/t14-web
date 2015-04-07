@@ -68,8 +68,8 @@
 							
 							<% if $Top.DeleteID == $ID %>
 							<div class="col-xs-3"> <p> $Title </p></div>
-							<div class="col-xs-3"> <p> Claim reward? </p></div>
-							<div class="col-xs-3"> <a href="rewards/claim/TakeReward?group=$ID" class="control-button cb-red cb-small cb-no-mar"> Confirm </a></div>
+							<div class="col-xs-3"> <p> Are you sure? </p></div>
+							<div class="col-xs-3"> <a href="rewards/claim/TakeReward?group=$ID" class="control-button cb-green cb-small cb-no-mar"> Confirm </a></div>
 							<div class="col-xs-3"> <a href="rewards/claim" class="control-button cb-white cb-small cb-no-mar"> Cancel </a></div>
 							 
 							<% else %>

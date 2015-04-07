@@ -17,7 +17,7 @@ class RewardsController extends BankController {
 		
 		// Get the recent point & rewards for the User
 		$this->RecentPoints = $api->getLastPoints($this->CurrentUser->ID);
-		$this->RecentRewards = $this->CurrentUser->RewardsTaken()->limit(7);
+		$this->RecentRewards = $this->CurrentUser->RewardsTaken()->limit(7)->sort("Date DESC");
 		
 		// Render with a template
 		return $this->renderWith("RewardsContent");

@@ -13,18 +13,24 @@
 				
 				<div class="account-table data-table">
 					
-					<div class="data-row last-row small-row">
-						
+					<div class="data-row small-row">
 						<div class="row">
-							
-							<div class="col-xs-6">
-								<p> Total Budget: </p>
-							</div>
-							
-							<div class="col-xs-6">
-								<p class="$Top.CurrencyClass($BudgetedAmount) right"> $Top.FormatCurrency($BudgetedAmount) </p>
-							</div>
-							
+							<div class="col-xs-6"> <p> Budgeted: </p> </div>
+							<div class="col-xs-6"> <p class="currency-green right"> $Top.FormatCurrency($BudgetedAmount) </p> </div>
+						</div>
+					</div>
+					
+					<div class="data-row small-row">
+						<div class="row">
+							<div class="col-xs-6"> <p> Total Spent: </p> </div>
+							<div class="col-xs-6"> <p class="currency-red right"> $Top.FormatCurrency($BudgetSpent) </p> </div>
+						</div>
+					</div>
+					
+					<div class="data-row last-row small-row">
+						<div class="row">
+							<div class="col-xs-6"> <p> Remaining: </p> </div>
+							<div class="col-xs-6"> <p class="$Top.CurrencyClass($BudgetLeft) right"> $Top.FormatCurrency($BudgetLeft) </p> </div>
 						</div>
 					</div>
 				</div>

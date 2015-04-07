@@ -22,6 +22,8 @@ class BudgetController extends BankController {
 		
 		$allGroups = $this->CurrentUser->Groups();
 		$budgeted = 0.0;
+		$spent = 0.0;
+		$remaining = 0.0;
 		
 		foreach($allGroups as $group) {
 			
@@ -30,10 +32,13 @@ class BudgetController extends BankController {
 			foreach($allCategories as $category) {
 				
 				$budgeted = $budgeted + $category->Budgeted;
+				$spent = $spent + $category->Balance;
 			}
 		}
 		
 		$this->BudgetedAmount = $budgeted;
+		$this->BudgetSpent = $spent;
+		$this->BudgetLeft = $budgeted - $spent;
 		
 		
 		$this->NumNewPayments = WebApi::create()->newPayments($this->CurrentUser->ID)->count();
