@@ -82,6 +82,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => $output->getReason()
 			);
@@ -108,11 +109,21 @@ class MobileApiController extends Controller {
 		$output = BankAccessor::create()->loadTransactions($userID, $accountID, $month, $year, $token);
 		$data = null;
 		
-		//	Builds the returned data
-		$data = array(
-			"Transactions" => $output->getTransactions(),
-			"Account" => $output->getAccount()
-		);
+		if ($output->didPass()) {
+			
+			//	Builds the returned data
+			$data = array(
+				"Transactions" => $output->getTransactions(),
+				"Account" => $output->getAccount()
+			);
+		}
+		else {
+			
+			$this->response->setStatusCode(400);
+			$data = array(
+				"Error" => $output->getReason()
+			);
+		}
 
 		// Put the data into the response & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
@@ -144,6 +155,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error making transfer"
 			);
@@ -164,6 +176,24 @@ class MobileApiController extends Controller {
 		
 		//	Logout the user
 		$output = BankAccessor::create()->logout($userID ,$token);
+		
+		if ($output) {
+			
+			$data = array(
+				"Message" => "Successfully logged out",
+			);
+		}
+		else {
+			
+			$this->response->setStatusCode(400);
+			$data = array(
+				"Error" => "Logout Failed",
+			);
+		}
+		
+		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
+		return $this->response;
 	}
 	
 	public function getStatementDates(SS_HTTPRequest $request){
@@ -185,6 +215,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error making transfer"
 			);
@@ -219,6 +250,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error getting new Payments"
 			);
@@ -254,6 +286,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error categorising new payments",
 				"Reason" => $output->getReason()
@@ -298,7 +331,8 @@ class MobileApiController extends Controller {
 					
 				);
 			}else {
-			
+				
+				$this->response->setStatusCode(400);
 				$dataDel = array(
 					"Error" => $resultDel->getReason()
 				);
@@ -320,7 +354,8 @@ class MobileApiController extends Controller {
 				
 				);
 			}else {
-			
+				
+				$this->response->setStatusCode(400);
 				$dataEdit = array(
 					"Error" => $resultEdit->getReason()
 				);
@@ -341,6 +376,7 @@ class MobileApiController extends Controller {
 				);
 			}else {
 			
+				$this->response->setStatusCode(400);
 				$dataCreate = array(
 					"Error" => "Error categorising new payments"
 				);
@@ -375,6 +411,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error choosing a reward"
 			);
@@ -404,6 +441,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error performing a spin"
 			);
@@ -429,6 +467,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error getting all rewards"
 			);
@@ -459,6 +498,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error getting last points"
 			);
@@ -488,6 +528,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error getting categories"
 			);
@@ -515,12 +556,13 @@ class MobileApiController extends Controller {
 		$data = null;
 		
 		// Decide what data to give back
-		if (sizeof($output) > 0 ) {
+		if ($output->count() > 0 ) {
 			$data = array(
 				"ATMs" => $output
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error getting ATM's"
 			);
@@ -553,6 +595,7 @@ class MobileApiController extends Controller {
 			);
 		}else {
 			
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => "Error getting HeatMap"
 			);
