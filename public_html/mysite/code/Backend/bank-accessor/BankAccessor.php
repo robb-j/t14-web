@@ -1298,6 +1298,7 @@ class BankAccessor extends Object implements BankInterface {
 	}
 	
 	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate){
+<<<<<<< HEAD
 	
 		/*if ($accounts == null) {
 			
@@ -1313,7 +1314,7 @@ class BankAccessor extends Object implements BankInterface {
 			}
 		}
 		*/
-		
+
 		//	Get the user sessions 
 		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
@@ -1352,6 +1353,7 @@ class BankAccessor extends Object implements BankInterface {
 				//	Get the account object
 				$theAccount = Account::get()->byID(Convert::raw2sql($account));
 				
+				
 				//	If the account object it not null and is owned by the user
 				if($theAccount !== null && $theAccount->UserID === $sanitisedUserID){
 				
@@ -1389,7 +1391,7 @@ class BankAccessor extends Object implements BankInterface {
 					$found= false;
 					
 					//	At every position in the groups array
-					for($j = 0 ; $j <sizeof($groups); $j++){
+					for($j = 0 ; $j < $groups->count(); $j++){
 						
 						//	If the transaction is "close" to the centre of the groups first transaction group it with that
 						if($transactions[$i]->Longitude != null && $transactions[$i]->Latitude != null && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){

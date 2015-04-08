@@ -30,6 +30,10 @@ class SimpleSerializer extends RESTfulAPI_BasicSerializer {
 				
 				$output[$key] = $value;
 			}
+			else if ($value instanceof HeatMapGroup) {
+				
+				$output[$key] = $this->serializeHearGroup($value);
+			}
 		}
 		
 		return $output;
@@ -41,5 +45,16 @@ class SimpleSerializer extends RESTfulAPI_BasicSerializer {
 		
 		$output = $this->formatArray( $input );
 		return $this->jsonify( $output );
+	}
+	
+	
+	private function serializeHearGroup($input) {
+		
+		return array(
+			"Latitude" => $input->getLat(),
+			"Longitude" => $input->getLng(),
+			"Amount" => $input->getAmount(),
+			"Radius" => $input->getRadius(),
+		);
 	}
 }
