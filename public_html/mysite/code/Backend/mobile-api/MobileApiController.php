@@ -22,6 +22,12 @@ class MobileApiController extends Controller {
 	    parent::init();
 	    
 	    $this->serializer = new SimpleSerializer();
+	    
+	    
+	    // Make sure the response doesn't cache
+	    $this->response->addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	    $this->response->addHeader("Pragma", "no-cache");
+	    $this->response->addHeader("Expires", "0");
     }
     
     public function index(SS_HTTPRequest $request) {
