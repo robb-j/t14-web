@@ -444,7 +444,10 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if ($output != null ) {
 			$data = array(
-				"points" => $output->Points
+				"points" => $output->Points,
+				"currentSpins" => User::get()->filter(array(
+								'UserID' => Convert::raw2sql($userID)
+							))->NumberOfSpins;
 			);
 		}else {
 			

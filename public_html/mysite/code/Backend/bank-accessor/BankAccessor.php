@@ -1299,9 +1299,9 @@ class BankAccessor extends Object implements BankInterface {
 	
 	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate){
 	
-		if ($accounts == null) {
+		/*if ($accounts == null) {
 			
-			/*
+			
 			$accounts = array();
 			
 			$allAccounts = Account::get()->filter(array(
@@ -1310,8 +1310,9 @@ class BankAccessor extends Object implements BankInterface {
 			
 			foreach ($allAccounts as $acc) {
 				array_push($accounts, $acc->ID);
-			}*/
+			}
 		}
+		*/
 		
 		//	Get the user sessions 
 		$userSession = $this->checkUserSession($userID,$token);
@@ -1319,6 +1320,17 @@ class BankAccessor extends Object implements BankInterface {
 		
 		//	If the session exists
 		if($userSession != null ){
+			
+			if($accounts === null){
+				$accounts = new ArrayList;
+				$allAccounts = Account::get()->filter(array(
+					"UserID" => $sanitisedUserID
+				));
+			
+				foreach ($allAccounts as $acc) {
+					$accounts->push( $acc->ID);
+				}
+			}
 			
 			//	If there is no specified start date use the beginning on unix time
 			if($startDate === null){

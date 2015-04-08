@@ -1938,11 +1938,11 @@ class BankAccessorTest extends SapphireTest {
 	public function testLoadHeatMapNoAccounts() {
 	
 		$accessor = new BankAccessor();
-		$user = $this->objFromFixture('User','myPerson');
-		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
-		$result = $accessor->loadHeatMap($user->ID, $session->Token, array(), null, null);
+		$user = $this->objFromFixture('User','heatMapPerson');
+		$session =$this->objFromFixture('UserSession','heatMapPersonSession');
+		$result = $accessor->loadHeatMap($user->ID, $session->Token, null, null, null);
 
-		$this->assertEquals(null, $result);
+		$this->assertEquals(3, sizeof($result));
     }
 	
 	public function testLoadHeatMapAccountNotOwned() {
