@@ -248,19 +248,26 @@ class BankAccessor extends Object implements BankInterface {
 		//	If there was such a session
 		if($userSession != null){
 		
-			// Expire the token
-			$userSession->Expiry = Time()-10;
-			$userSession->write();
+			//	If the session has already not expired
+			if($userSession->Expiry < time()){
 			
-			//	Only stores the last n UserSessions for that user
-			$this->deleteUserSessions($userSession->UserID);
+				return 1;
+			}else{
 			
-			//	Return a successful logout
-			return true;
+				// Expire the token
+				$userSession->Expiry = Time()-10;
+				$userSession->write();
+				
+				//	Only stores the last n UserSessions for that user
+				$this->deleteUserSessions($userSession->UserID);
+				
+				//	Return a successful logout
+				return 0;
+			}
 		}
 		
 		//	return a failed logout 
-		return false;
+		return 2;
 	}
 	
 	public function getStatementDates($userID, $accountID, $token){

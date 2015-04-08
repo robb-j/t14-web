@@ -62,7 +62,7 @@ class WebApi extends Object{
 		$token = Cookie::get('BankingSession');
 		
 		//	If the logout was successful delete the cookie
-		if ($accessor->logout($user->ID, $token)) {
+		if ($accessor->logout($user->ID, $token) == 0) {
 			
 			Cookie::force_expiry("BankingSession");
 			return true;
