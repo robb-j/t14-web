@@ -457,7 +457,7 @@ class MobileApiController extends Controller {
 				"points" => $output->Points,
 				"currentSpins" => User::get()->filter(array(
 								'UserID' => Convert::raw2sql($userID)
-							))->NumberOfSpins;
+							))->NumberOfSpins,
 			);
 		}else {
 			
