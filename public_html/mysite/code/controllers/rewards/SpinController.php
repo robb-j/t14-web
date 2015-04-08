@@ -9,10 +9,28 @@ class SpinController extends BankController {
 	// Set the tab title
 	public $TabTitle = "rewards";
 	
+	private static $allowed_actions = array(
+		"PerformSpin"
+	);
 	
 	public function Content() {
+		// Create an API to access the database
+		$api = new WebApi();
+		
+		$Points = $this->CurrentUser->Points - Session::get("PreSpin");
+		Session::clear("PreSpin");
+		
+		$this->message = "You earned $Points";
 		
 		// Render with a template
 		return $this->renderWith("SpinContent");
+	}
+
+	public function PerformSpin() {
+		Session::set("PreSpin", $this->CurrentUser->Points);
+		
+		$output = WebApi::create()->performSpin($this->CurrentUser->ID);
+		
+		return $this->redirect("rewards/spin");
 	}
 }
