@@ -177,13 +177,20 @@ class MobileApiController extends Controller {
 		//	Logout the user
 		$output = BankAccessor::create()->logout($userID ,$token);
 		
-		if ($output) {
+		if ($output == 0) {
 			
 			$data = array(
 				"Message" => "Successfully logged out",
 			);
 		}
-		else {
+		else if($output == 1){
+
+			$this->response->setStatusCode(400);
+			$data = array(
+				"Error" => "Logout Failed, you have already logged out",
+			);
+			
+		}else{
 			
 			$this->response->setStatusCode(400);
 			$data = array(
