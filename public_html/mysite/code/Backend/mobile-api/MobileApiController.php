@@ -382,13 +382,23 @@ class MobileApiController extends Controller {
 				);
 			}
 		}
+		
+		$data = array(
+			"Delete" => $dataDel,
+			"Edit" => $dataEdit,
+			"Create" => $dataCreate
+		);
 
 		// Put the data into the response & return it
-		$this->response->setBody($this->serializer->serializeArray( $dataDel.$dataEdit.$dataCreate  ));
+		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
 
 	}
+	
+	
+	
+	
 	
 	//	Lets the user choose a reward from a list
 	public function chooseReward(SS_HTTPRequest $request){
@@ -583,6 +593,10 @@ class MobileApiController extends Controller {
 		$accounts = $request->postVar("accounts");
 		$startDate = $request->postVar("startDate");
 		$endDate = $request->postVar("endDate");
+		
+		if ($accounts == null) {
+			$accounts = array();
+		}
 		
 		//	Generate a heat map for the user 
 		$output = BankAccessor::create()->loadHeatMap($userID, $token, $accounts, $startDate, $endDate);
