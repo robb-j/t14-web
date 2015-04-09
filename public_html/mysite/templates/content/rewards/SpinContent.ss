@@ -1,8 +1,15 @@
+<!--  <script>
+
+ function myFunction(){
+	setInterval(function(){document.getElementById("points-message").innerHTML = "You earned $Points points!";}, 9000);
+}
+
+</script>  -->
+
 <div class="spin-page">
 	
 	<div class="main-section">
 		
-		<h2> Spin </h2>		
 		<div class="spin-content">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2">
@@ -14,10 +21,26 @@
 			
 			<div class="row">
 				<div class="col-xs-10 col-xs-offset-1">
+					<div class="roulette">
 					<a href="SpinController/PerformSpin">
-						$animation
-						<embed src="mysite/images/test20.swf" width="400px" height="378px" />
+						
+						<!-- This if statement displays a still image or the appropriate animation for the spin -->
+						<% if $animation == 20 %>
+							<embed src="mysite/images/20animation.swf" width="400px" height="378px" />
+												
+						<% else_if $animation == 40 %>
+							<embed src="mysite/images/40animation.swf" width="400px" height="378px" />
+						<% else_if $animation == 60 %>
+						
+						<% else_if $animation == 80 %>
+						
+						<% else %>
+							<img src="mysite/images/spin-still.png" alt="roulette wheel" width="400px" height="378px"/>
+						
+						<% end_if %>
+						
 					</a>
+					</div>
 				</div>
 			</div>
 		

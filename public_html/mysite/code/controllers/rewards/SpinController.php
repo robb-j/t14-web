@@ -2,6 +2,7 @@
 
 /* A Page that lets the user spin for points
  * Created by Rob A - March 2015
+ * Completed by Seb S - April 2015
  */
 class SpinController extends BankController {
 	
@@ -19,6 +20,7 @@ class SpinController extends BankController {
 		
 		$Points = $this->CurrentUser->Points - Session::get("PreSpin");
 		Session::clear("PreSpin");
+		$this->animation = $Points;
 		
 		if(Session::get("First") == 1){
 			$this->message = "You earned $Points points!";
