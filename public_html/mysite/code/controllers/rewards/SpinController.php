@@ -20,7 +20,10 @@ class SpinController extends BankController {
 		$Points = $this->CurrentUser->Points - Session::get("PreSpin");
 		Session::clear("PreSpin");
 		
-		$this->message = "You earned $Points";
+		if(Session::get("First") == 1){
+			$this->message = "You earned $Points points!";
+			Session::clear("First");
+		}
 		
 		// Render with a template
 		return $this->renderWith("SpinContent");
@@ -28,6 +31,7 @@ class SpinController extends BankController {
 
 	public function PerformSpin() {
 		Session::set("PreSpin", $this->CurrentUser->Points);
+		Session::set("First", 1);
 		
 		$output = WebApi::create()->performSpin($this->CurrentUser->ID);
 		
