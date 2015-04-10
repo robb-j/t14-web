@@ -319,23 +319,3 @@ form.banking-form .form-actions .control-button {
 .form-message.message-fail {
 	border: 3px solid #CC391A;
 }
-
-/*
- *	Spin page styling
- */
- 
- .spin-content {
-	text-align:center;
- }
- 
- #points-message {
-	color:red;
- }
- 
- .roulette {
-	margin-right:30px;
- }
- 
- 
-
-

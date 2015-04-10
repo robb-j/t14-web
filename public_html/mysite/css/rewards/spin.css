@@ -1,4 +1,17 @@
-.main-section {
+/*
+ *	Spin page styling
+ * 	Created by Seb April 2015
+ */
+ 
+ .spin-content {
 	text-align:center;
-}
+ }
+ 
+ 
+ .roulette {
+	margin-bottom: 20px;
+	margin-right:5px;
+ }
+ 
+ 
 

@@ -14,6 +14,16 @@ class SpinController extends BankController {
 		"PerformSpin"
 	);
 	
+	public function init() {
+		
+		parent::init();
+		
+		
+		// Page specific styling
+		Requirements::css('mysite/css/rewards/spin.css');
+		
+	}
+	
 	public function Content() {
 		// Create an API to access the database
 		$api = new WebApi();
