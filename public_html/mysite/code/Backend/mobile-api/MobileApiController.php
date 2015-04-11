@@ -38,6 +38,8 @@ class MobileApiController extends Controller {
 	    
 	    return "Bank Api Index";
     }
+    
+    
 
 	//	############################
 	//	#### Basic Requirements ####
@@ -417,116 +419,39 @@ class MobileApiController extends Controller {
 	
 	
 	public function updateBudget(SS_HTTPRequest $request) {
-		
-		$postData = $request->postVars();
-		
+				
+		// Get the params from the request
 		$userID = $request->postVar("userID");
 		$token = $request->postVar("token");
+		$groupData = $request->postVar("groups");
 		
 		
-		$data = array(
-			"Error" => "Not Implemented"
-		);
+		// Pass the message onto BankAccessor
+		$output = BankAccessor::create()->mobileBudgetEdit($userID, $token, $groupData);
 		
+		
+		if ($output->didPass()) {
+			
+			// If it passed, put the returned data into json
+			$data = array(
+				"Groups" => $output->getGroups(),
+				"Categories" => $output->getCategories(),
+			);
+			
+		}
+		else {
+			
+			// Otherwise output the error
+			$data = array(
+				"Error" => $output->getReason(),
+			);
+		}
+		
+		
+		// Parse the keyed-array into a json string & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
+		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
-		
-		
-		
-		// Edit Group Names { ID : NAME }
-		
-		/*
-			groups [
-				
-				{
-					id: ID | DEL | NEW
-					name: A_NAME,
-					category: [
-						{
-							name: CATEGORY_NAME,
-							budget: CATEGORY_Budget
-						},
-						...
-					]
-				],
-				...
-			]
-			
-			data = $request->postVar('groups');
-			
-			Group = data[n];
-			GroupName = data[n][name]
-			Group Cats = data[n][categories]
-			A Category = data[n[categories][m]
-			Category ID  = data[n][categories][m][name]
-			CategoryName = data[n][categories][m][name]
-			CategoryBudg = data[n][categories][m][name]
-			
-			
-			Algorithm:
-			   #Determines what to do with an item based on it's ID
-			
-			Loop through groups:
-				If delete group 
-					Delete the group
-				
-				Else If create group
-					Create the group
-				
-				If the group exists or is new
-					Update the group's name
-					Update the group's budget
-					
-					Loop through group's categories: 
-						If delete category
-							Delete the category
-						
-						Else If the categroy is new
-							Create the category
-						
-						If the category exists or is new
-							Update the category's name
-							Update the category's budget
-			
-			
-			Set user's last budget updated date to today
-			
-			
-			
-			Returns:
-			groups: [
-				{
-					id: ID,
-					name: A_NAME,
-				},
-				...
-			],
-			categories: [	
-				{
-					id: ID,
-					name: A_NAME,
-					budget: A_BUDGET,
-				},
-				...
-			],
-			
-		*/
-		
-		// New Group
-		//		- Name
-		//		- Category
-		
-		// New Category
-		//		- Name
-		//		- Budget
-		
-		// Edit Category
-		//		- Name
-		//		- Budget
-		// Delete Category ID
-		// Delete Group ID
-		
-		
 	}
 	
 	

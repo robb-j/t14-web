@@ -21,6 +21,7 @@ interface BankInterface {
 	public function editGroups( $userID, $token, $groupID, $groupName, $updatedCategories, $newCats, $deletedCats );
 	public function createGroup($userID, $token, $groupName, $newCategories );
 	public function chooseReward( $userID, $token, $rewardID );
+	public function mobileBudgetEdit($usedID, $token, $allGroupsData);
 	public function performSpin( $userID, $token );
 	public function getAllRewards();
 	public function getLastPoints($userID, $token );

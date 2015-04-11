@@ -57,7 +57,7 @@ class BankAccessor extends Object implements BankInterface {
 				}else{
 				
 					//	Return an unsuccessful LoginOutput object
-					return new LoginOutput(null, null, null, null,false,"You are already logged in!");
+					return new LoginOutput(null, null, null, null,false,"You are logged in on another device");
 				}
 			}
 		}
@@ -926,6 +926,210 @@ class BankAccessor extends Object implements BankInterface {
 		}
 		return new CreateBudgetObject(null,null,"Failed to authenticate user session", false);
 	}
+	
+	
+	public function mobileBudgetEdit($userID, $token, $allGroupsData) {
+		
+		/*
+		## POST VAR USAGE
+		Group = data[n];
+		Group  ID = data[n][id]
+		GroupMode = data[n][mode]
+		GroupName = data[n][title]
+		GroupCats = data[n][categories]
+		A Category   = data[n][categories][m]
+		Category  ID = data[n][categories][m][id]
+		CategoryMode = data[n][categories][m][mode]
+		CategoryName = data[n][categories][m][title]
+		CategoryBudg = data[n][categories][m][budget]
+		
+		
+		##Algorithm:
+		Determines what to do with an item based on it's 'mode'
+		
+		Loop through groups:
+			If create Group
+				Delete the group
+
+			Else If create group
+				Create the group
+			
+			If the group exists or is new
+				Update the group's name
+				Update the group's budget
+				
+				Loop through group's categories: 
+					If delete category
+						Delete the category
+					
+					Else If the categroy is new
+						Create the category
+					
+					If the category exists or is new
+						Update the category's name
+						Update the category's budget
+		
+		
+		Set user's last budget updated date to today
+		*/
+		
+		
+		$userSession = $this->checkUserSession($userID, $token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		// Check the user is signed in
+		if ($userSession == null) {
+			
+			return new MobileBudgetEditOutput(null, null, false, "Failed to authenticate user session");
+		}
+		
+		
+		// Check they provided group data
+		if ($allGroupsData == null) {
+			
+			return new MobileBudgetEditOutput(null, null, false, "Incorrect Data Passed");
+		}
+		
+		
+		// Store all the groups & categroies to give back
+		$allGroups = ArrayList::create();
+		$allCategories = ArrayList::create();
+		
+		
+		// Loop all the groups
+		foreach ($allGroupsData as $groupData) {
+			
+			if (array_key_exists("mode", $groupData)) {
+				
+				$mode = Convert::raw2sql($groupData["mode"]);
+				$group = null;
+				
+				
+				if ($mode == "create") {
+					
+					// Create the group if needed
+					$group = BudgetGroup::create();
+					$group->UserID = $sanitisedUserID;
+				}
+				else if (array_key_exists("id", $groupData)) {
+					
+					// Othwerwise, get it from the database, if it belongs to the user
+					$gID = Convert::raw2sql($groupData["id"]);
+					
+					$theGroup = BudgetGroup::get()->byId($gID);
+					if ($theGroup->UserID == $sanitisedUserID) {
+						
+						$group = $theGroup;
+					}
+					else {
+						
+						// Remove references to the group
+						$theGroup == null;
+					}
+				}
+				
+				
+				// Delete it if wanted
+				if ($group && $mode == "delete") {
+					
+					$group->delete();
+				}
+				
+				// Otherwise edit it
+				else if ($group) {
+					
+					
+					// Set the title if provided with one
+					if (array_key_exists("title", $groupData)) {
+						
+						$group->Title = Convert::raw2sql($groupData["title"]);
+					}
+					
+					// Store the categories that were created, to add them back to this group
+					$addedCategories = array();
+					
+					
+					// Work through the categories
+					if (array_key_exists("categories", $groupData)) {
+						
+						$allCatsData = Convert::raw2sql($groupData["categories"]);
+						
+						foreach ($allCatsData as $categoryData) {
+							
+							if (array_key_exists("mode", $categoryData)) {
+								
+								
+								// Get the mode
+								$mode = Convert::raw2sql($categoryData["mode"]);
+								$category = null;
+								
+								
+								if ($mode == "create") {
+									
+									// Create category
+									$category = Category::create();
+									array_push($addedCategories, $category);
+								}
+								else if (array_key_exists("id", $categoryData)){
+									
+									// Or get it from the Database
+									$cID = Convert::raw2sql($categoryData["id"]);
+									$category = Category::get()->byId($cID);
+								}
+								
+								
+								if ($category && $mode == "delete") {
+									
+									// Delete the category if wanted
+									$category->delete();
+								}
+								else if ($category) {
+									
+									// Otherwise edit it
+									
+									// If there's a title update that
+									if (array_key_exists("title", $categoryData)) {
+										
+										$category->Title = Convert::raw2sql($categoryData["title"]);
+									}
+									
+									// If there's a budget update that
+									if (array_key_exists("budget", $categoryData)) {
+										
+										$category->Budgeted = Convert::raw2sql($categoryData["budget"]);
+										$category->Balance = Convert::raw2sql($categoryData["budget"]);
+									}
+									
+									
+									// Write changes to the categroy table & store it for the return
+									$category->write();
+									$allCategories->push($category);
+								}
+							}
+						}
+					}
+					
+					
+					$allGroups->push($group);
+					
+					
+					// Added new categories to the group
+					foreach ($addedCategories as $cat) {
+						
+						$group->Categories()->add($cat);
+					}
+					
+					// Write changes to the Group table & store it for the return
+					$group->write();
+				}
+			}
+		}
+		
+		return new MobileBudgetEditOutput($allGroups, $allCategories);
+	}
+	
+	
+	
 
 	//	This lets the user choose a reward and spend their points
 	public function chooseReward( $userID, $token, $rewardID ){

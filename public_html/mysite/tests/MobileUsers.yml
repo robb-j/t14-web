@@ -1,14 +1,34 @@
-# Created by Rob A April 2015
+# Created by Rob A, April 2015
 
 Category:
   groceries:
+    ID: 1
     Title: Groceries
     Budgeted: 60
+    Balance: 30
+  food:
+    ID: 2
+    Title: Food
+    Budgeted: 50
+    Balance: 10
+  gym:
+    ID: 3
+    Title: Gym
+    Budgeted: 50
+    Balance: 70
+
+
     
 BudgetGroup:
   everyday:
+    ID: 1
     Title: Everyday
     Categories: =>Category.groceries
+  spending:
+    ID: 2
+    Title: Spending
+    Categories: =>Category.food, =>Category.gym
+  
 
 
 User:
@@ -20,5 +40,4 @@ User:
     Email: me@email.com
     LastFullCategorise: 15 Jan 2015
     DOB: 22 Aug 1995
-    Groups: =>BudgetGroup.everyday
-    
+    Groups: =>BudgetGroup.everyday,=>BudgetGroup.spending
