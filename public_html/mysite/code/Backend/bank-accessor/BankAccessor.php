@@ -991,11 +991,6 @@ class BankAccessor extends Object implements BankInterface {
 		}
 		
 		
-		// Store all the groups & categroies to give back
-		$allGroups = ArrayList::create();
-		$allCategories = ArrayList::create();
-		
-		
 		// Loop all the groups
 		foreach ($allGroupsData as $groupData) {
 			
@@ -1101,16 +1096,12 @@ class BankAccessor extends Object implements BankInterface {
 									}
 									
 									
-									// Write changes to the categroy table & store it for the return
+									// Write changes to the categroy table
 									$category->write();
-									$allCategories->push($category);
 								}
 							}
 						}
 					}
-					
-					
-					$allGroups->push($group);
 					
 					
 					// Added new categories to the group
@@ -1119,9 +1110,22 @@ class BankAccessor extends Object implements BankInterface {
 						$group->Categories()->add($cat);
 					}
 					
-					// Write changes to the Group table & store it for the return
+					// Write changes to the Group table
 					$group->write();
 				}
+			}
+		}
+		
+		
+		// Get all Categories & Groups 
+		$user = User::get()->byId($sanitisedUserID);
+		$allGroups = $user->Groups();
+		$allCategories = new ArrayList();
+		
+		foreach ($allGroups as $group) {
+			
+			foreach ($group->Categories() as $category) {
+				$allCategories->push($category);
 			}
 		}
 		
