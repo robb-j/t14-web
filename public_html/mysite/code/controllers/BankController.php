@@ -23,7 +23,7 @@ class BankController extends Controller {
 		// Common Requirements
 		Requirements::javascript("mysite/js/libs/jquery.js");
 		Requirements::javascript("mysite/js/libs/bootstrap.js");
-		Requirements::javascript("mysite/js/LogoutCheck.js");
+		//Requirements::javascript("mysite/js/LogoutCheck.js");
 		
 		
 		// Get the session token, if there is one
