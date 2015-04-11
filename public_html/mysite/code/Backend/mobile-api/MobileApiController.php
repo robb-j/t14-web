@@ -384,7 +384,7 @@ class MobileApiController extends Controller {
 			if($resultCreate->didPass() ){
 				$dataCreate = array(
 			
-					"CreatedGroupID" => $resultCreate->getGroup(),
+					"CreatedGroup" => $resultCreate->getGroup(),
 					"CreatedGroupID" =>$resultCreate->getGroup()->ID,
 					"CreatedNewCategories" => $resultCreate->getNewCats(),
 					"CreateSuccess" => $resultCreate->didPass()

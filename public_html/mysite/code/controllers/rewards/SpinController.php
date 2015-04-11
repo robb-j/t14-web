@@ -2,6 +2,7 @@
 
 /* A Page that lets the user spin for points
  * Created by Rob A - March 2015
+ * Completed by Seb S - April 2015
  */
 class SpinController extends BankController {
 	
@@ -13,14 +14,28 @@ class SpinController extends BankController {
 		"PerformSpin"
 	);
 	
+	public function init() {
+		
+		parent::init();
+		
+		
+		// Page specific styling
+		Requirements::css('mysite/css/rewards/spin.css');
+		
+	}
+	
 	public function Content() {
 		// Create an API to access the database
 		$api = new WebApi();
 		
 		$Points = $this->CurrentUser->Points - Session::get("PreSpin");
 		Session::clear("PreSpin");
+		$this->animation = $Points;
 		
-		$this->message = "You earned $Points";
+		if(Session::get("First") == 1){
+			$this->message = "You earned $Points points!";
+			Session::clear("First");
+		}
 		
 		// Render with a template
 		return $this->renderWith("SpinContent");
@@ -28,6 +43,7 @@ class SpinController extends BankController {
 
 	public function PerformSpin() {
 		Session::set("PreSpin", $this->CurrentUser->Points);
+		Session::set("First", 1);
 		
 		$output = WebApi::create()->performSpin($this->CurrentUser->ID);
 		

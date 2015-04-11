@@ -197,6 +197,8 @@ class BankAccessor extends Object implements BankInterface {
 				
 				if($expiry > Time()){
 					
+					$this->updateSession($userSession);
+					
 					return $userSession->User();
 				}
 			}
@@ -337,6 +339,7 @@ class BankAccessor extends Object implements BankInterface {
 		}
 		return array();
 	}
+
 	
 	//	##############################################
 	//	#### Basic Requirements private functions ####
@@ -1298,7 +1301,6 @@ class BankAccessor extends Object implements BankInterface {
 	}
 	
 	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate){
-
 
 		//	Get the user sessions 
 		$userSession = $this->checkUserSession($userID,$token);
