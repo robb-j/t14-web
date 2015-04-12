@@ -5,7 +5,7 @@
 	
 	<% base_tag %>
 	
-	<title> $Title </title>
+	<title> $SiteConfig.Title </title>
 	
 	<% require css("mysite/css/theme.css") %>
 	<% require css("mysite/css/form.css") %>
