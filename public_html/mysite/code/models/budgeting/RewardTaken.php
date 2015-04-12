@@ -14,4 +14,9 @@
 		"Reward" => "Reward",
 		"User" => "User"
 	 );
+	 
+	 private static $summary_fields = array(
+		"Reward.Title" => "Reward Taken",
+		"Date.Long" => "Date"
+	 );
  }

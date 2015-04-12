@@ -18,6 +18,11 @@
 		"Categories" => "Category" 
 	);
 	
+	private static $summary_fields = array(
+		 "Title" => "Title",
+		 "Categories.count" => "Categories",
+	);
+	
 	
 	public function Balance() {
 		 

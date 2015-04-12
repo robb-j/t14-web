@@ -32,9 +32,23 @@ class User extends DataObject {
 		'PointsAwarded' => 'PointGain',
 		'RewardsTaken' => 'RewardTaken'
 	);
+	
+	
+	private static $summary_fields = array(
+		"Username" => "Username",
+		"FirstName" => "First Name",
+		"LastName" => "Last Name", 
+		"DOB.Long" => "Birthday"
+	);
+	
+	
+	public function getTitle() {
+		
+		return $this->Username;
+	}
 
 	//	This encrypts the users password before write
-	function onBeforeWrite(){
+	public function onBeforeWrite(){
 	
 			$user = User::get()->filter(array(
 					'Username' => $this->getField("Username")

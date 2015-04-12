@@ -16,4 +16,10 @@
 	 private static $has_one = array(
 		"User" => "User" 
 	 );
+	 
+	 private static $summary_fields = array(
+		 "Title" => "Title", 
+		 "Date.Long" => "Date", 
+		 "Points" => "Points"
+	 );
  }

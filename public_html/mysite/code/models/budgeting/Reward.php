@@ -12,4 +12,8 @@
 		"Cost" => "Int",
 		"EmailContent" => "HTMLText"
 	 );
+	 
+	 private static $summary_fields = array(
+		 "Title", "Cost"
+	 );
  }

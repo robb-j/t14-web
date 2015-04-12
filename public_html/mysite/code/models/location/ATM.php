@@ -12,4 +12,8 @@
 		"Latitude" => "Double",
 		"Longitude" => "Double"
 	 );
+	 
+	 private static $summary_fields = array(
+		 "Title", "Cost"
+	 );
  }

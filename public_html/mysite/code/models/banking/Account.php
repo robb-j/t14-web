@@ -18,6 +18,20 @@ class Account extends DataObject {
 	private static $has_many = array(
 		'Transactions' => 'Transaction'
 	);
+	
+	
+	public static $summary_fields = array(
+		"AccountType" => "Title",
+		"Product.Title" => "Product",
+		"Balance" => "Balance",
+		"Transactions.count" => "Transactions"
+	);
+	
+	
+	public function getTitle() {
+		
+		return $this->AccountType;
+	}
 
 	
 }

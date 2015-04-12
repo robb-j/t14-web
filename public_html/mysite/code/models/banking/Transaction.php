@@ -17,6 +17,16 @@ class Transaction extends DataObject {
 		'Account' => 'Account',
 		'Category' => 'Category'
 	);
+	
+	private static $summary_fields = array(
+		"Payee", "Amount"
+	);
+	
+	
+	public function getTitle() {
+		
+		return $this->Amount . ' - ' . $this->Payee;
+	}
 }
 
 ?>
