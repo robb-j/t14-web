@@ -166,8 +166,8 @@ class BankAccessor extends Object implements BankInterface {
 				$accountB->write();
 				
 				//	Create a transaction for each of the accounts 
-				$this->createTransaction(0-$amount, $accountB->AccountType,$accountA);
-				$this->createTransaction(0+$amount, $accountA->AccountType,$accountB);
+				$this->createTransaction(0-$amount, $accountB->AccountType,$accountA,"to");
+				$this->createTransaction(0+$amount, $accountA->AccountType,$accountB,"from");
 
 				// Update the user session
 				$this->updateSession($userSession);
@@ -536,12 +536,12 @@ class BankAccessor extends Object implements BankInterface {
 	}
 	
 	//	Creates a new Transaction for an account, with the amount, the payee and the account needing the new transaction
-	private function createTransaction($amount, $payee, $account){
+	private function createTransaction($amount, $payee, $account, $direction){
 	
 		//	Create a new row and fills in the relevant fields 
 		$transaction = Transaction::create();
 		$transaction->Amount = $amount;
-		$transaction->Payee = "Transfer to account ".$payee;
+		$transaction->Payee = "Transfer ".$direction." account ".$payee;
 		$transaction->Date = date("d M Y");
 		$transaction->AccountID = $account->ID;
 		$transaction->IsTransfer = 1;
