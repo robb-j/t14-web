@@ -68,11 +68,13 @@ class MobileApiController extends Controller {
 		if ($output->didPass()) {
 		
 			$categories = BankAccessor::create()->getUserCategories($output->GetUser()->ID, $output->getToken());
+			$newPayments = BankAccessor::create()->newPayments($output->GetUser()->ID, $output->getToken());
 			
 			$data = array(
 				"User" => $output->GetUser(),
-				"NewProducts" => $output->getAllProducts(),
 				"Token" => $output->getToken(),
+				"NewProducts" => $output->getAllProducts(),
+				"NumNewPayments" => $newPayments->count(),
 				"Accounts" => $output->getAccounts(),
 				
 				"Groups" => BudgetGroup::get()->filter(array(
