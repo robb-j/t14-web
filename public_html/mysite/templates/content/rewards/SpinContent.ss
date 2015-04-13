@@ -22,8 +22,10 @@
 						<% else_if $animation == 40 %>
 							<embed src="mysite/images/40animation.swf" width="400px" height="378px" />
 						<% else_if $animation == 60 %>
-							<embed src="mysite/images/20animation.swf" width="400px" height="378px" />
+							<embed src="mysite/images/60animation.swf" width="400px" height="378px" />
 						<% else_if $animation == 80 %>
+							<embed src="mysite/images/80animation.swf" width="400px" height="378px" />
+						<% else_if $animation == 100 %>
 							<embed src="mysite/images/20animation.swf" width="400px" height="378px" />
 						<% else %>
 							<img src="mysite/images/spin-still.png" alt="roulette wheel" width="378px" height="378px"/>
@@ -38,10 +40,11 @@
 			<div class="row">
 		
 				<div class="col-xs-4 col-xs-offset-4">
-				
+					<a href="SpinController/PerformSpin">
 					<div class="control-button cb-green cb-top">
-						<a href="SpinController/PerformSpin">SPIN!</a>
+						SPIN!
 					</div>
+					</a>
 					
 				
 				</div>
