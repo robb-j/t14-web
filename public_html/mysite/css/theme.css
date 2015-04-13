@@ -319,3 +319,8 @@ form.banking-form .form-actions .control-button {
 .form-message.message-fail {
 	border: 3px solid #CC391A;
 }
+
+.googlemap {
+	width: 100%;
+	height: 700px;
+}

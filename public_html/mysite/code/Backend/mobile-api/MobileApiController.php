@@ -67,13 +67,22 @@ class MobileApiController extends Controller {
 		// Decide what data to give back
 		if ($output->didPass()) {
 		
+			// Get values to put into response
 			$categories = BankAccessor::create()->getUserCategories($output->GetUser()->ID, $output->getToken());
 			$newPayments = BankAccessor::create()->newPayments($output->GetUser()->ID, $output->getToken());
+			$allProducts = Product::get();
+			
+			// Just pass the ids of new products, along with the list of them all
+			$newProducts = new ArrayList();
+			foreach ($output->getAllProducts() as $product) {
+				$newProducts->push($product->ID);
+			}
 			
 			$data = array(
 				"User" => $output->GetUser(),
 				"Token" => $output->getToken(),
-				"NewProducts" => $output->getAllProducts(),
+				"NewProducts" => $newProducts,
+				"AllProducts" => $allProducts,
 				"NumNewPayments" => $newPayments->count(),
 				"Accounts" => $output->getAccounts(),
 				

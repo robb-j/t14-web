@@ -7,30 +7,18 @@ class ATMController extends ToolController {
 	
 	public $ToolName = "atm";
 	
-	private static $allowed_actions = array(
-		"loadATMs"
-	);
-	
-	public function ToolContent() {
-		$api = new WebApi();
-	
-		$this->atmList = $api->loadATMs($this->CurrentUser->ID);
+	public function init() {
 		
-		return $this->renderWith("ATMTool");
+		parent::init();
+		
+		// Add js to display the atms on the map
+		Requirements::javascript("mysite/js/ATMFinder.js");
 	}
 	
-	public function loadATMs(){
-	
-		// Create an API to access the database
-		$api = new WebApi();
-	
-		$arrayOfATMObjects = $api->loadATMs($this->CurrentUser->ID);
+	public function ToolContent() {
 		
-		foreach ($arrayOfATMObjects as $ATM){
+		$this->AllAtms = WebApi::create()->loadATMs($this->CurrentUser->ID);
 		
-			echo " Title=".$ATM->Title." Cost=".$ATM->Cost." Lng=".$ATM->Longitude." Lat=".$ATM->Latitude;
-		
-		}
-		return 0;
+		return $this->renderWith("ATMTool");
 	}
 }
