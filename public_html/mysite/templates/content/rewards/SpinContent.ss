@@ -1,11 +1,3 @@
-<!--  <script>
-
- function myFunction(){
-	setInterval(function(){document.getElementById("points-message").innerHTML = "You earned $Points points!";}, 9000);
-}
-
-</script>  -->
-
 <div class="spin-page">
 	
 	<div class="main-section">
@@ -28,7 +20,7 @@
 						<% if $animation == 20 %>
 							<embed src="mysite/images/20animation.swf" width="400px" height="378px" />
 						<% else_if $animation == 40 %>
-							<embed src="mysite/images/20animation.swf" width="400px" height="378px" />
+							<embed src="mysite/images/40animation.swf" width="400px" height="378px" />
 						<% else_if $animation == 60 %>
 							<embed src="mysite/images/20animation.swf" width="400px" height="378px" />
 						<% else_if $animation == 80 %>
