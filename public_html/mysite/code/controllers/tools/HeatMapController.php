@@ -20,4 +20,17 @@ class HeatMapController extends ToolController {
 		$this->AllHeatPoints = WebApi::create()->loadHeatMap($this->CurrentUser->ID, null, null, null);
 		return $this->renderWith("HeatMapTool");
 	}
+	
+	
+	
+	
+	public function FromField() {
+		
+		$field = new DateField("FromDate", "From Date");
+		$field->setConfig('showcalendar', true);
+		$field->setConfig('showdropdown', true);
+		$field->setConfig('dateformat', 'dd.MM.YYYY');
+		
+		return $field;
+	}
 }

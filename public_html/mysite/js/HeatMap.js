@@ -7,34 +7,32 @@
 		
 		// Setup the map's properties
 		var mapProp = {
-			center: new google.maps.LatLng(54.979187, -1.614661),
-			zoom: 11,
+			center: new google.maps.LatLng( 53.8024037 , -1.5580483,13),
+			zoom: 12,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		
 		
 		// Create the map
-		var map = new google.maps.Map(document.getElementById("atm-map"), mapProp);
-		var allAtms = [];
+		var map = new google.maps.Map(document.getElementById("heatmap-map"), mapProp);
+		var allHeatMessages = [];
+		var allHeatPoints = [];
 		var infoWindow = new google.maps.InfoWindow();
 		
 		
 		// Loop through each bit of atm data
-		$(".all-atm-data").children().each(function(i) {
+		$(".all-heatmap-data").children().each(function(i) {
 			
 			// Extract the title, cost & position
-			var title = $(this).children(".title").text();
-			var cost = parseFloat($(this).children(".cost").text());
+			var radius = $(this).children(".radius").text();
+			var amount = parseFloat($(this).children(".amount").text());
 			var lat = parseFloat($(this).children(".latitude").text());
 			var lon = parseFloat($(this).children(".longitude").text());
 			
 			
 			// Store the atm for later use
-			allAtms.push({
-				title: title,
-				cost: cost,
-				lat: lat,
-				lon: lon
+			allHeatMessages.push({
+				amount: amount
 			});
 			
 			
@@ -43,7 +41,12 @@
 			var marker = new google.maps.Marker({
 				position: position,
 				map: map,
-				title: title,
+				title: "",
+			});
+			
+			allHeatPoints.push({
+				location: position,
+				weight: amount
 			});
 			
 			
@@ -52,12 +55,28 @@
 				
 				// Format & display a message from the atm, on request
 				return function() {
-					var message = "<h3>" + allAtms[i].title + "</h3><p> Cost: £" + allAtms[i].cost.toFixed(2) + "</p>";
+					var message = "<h5> Spent: &pound" + allHeatMessages[i].amount.toFixed(2) + "</h5>";
 					infoWindow.setContent(message);
 					infoWindow.open(map, marker);
 				};
 			})(marker, i));
+			
 		});
+		
+		
+		
+		var pointArray = new google.maps.MVCArray(allHeatPoints);
+		
+		
+		heatmap = new google.maps.visualization.HeatmapLayer({
+			data: pointArray
+		});
+		
+		heatmap.set('radius', 0.0004);
+		heatmap.set('dissipating', false);
+		
+		heatmap.setMap(map);
+		
 		
 	});
 

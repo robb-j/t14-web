@@ -52,7 +52,13 @@
 				
 				// Format & display a message from the atm, on request
 				return function() {
-					var message = "<h3>" + allAtms[i].title + "</h3><p> Cost: £" + allAtms[i].cost.toFixed(2) + "</p>";
+					
+					var message = "<h3>" + allAtms[i].title + "</h3><p> Cost: Free </p>";
+					
+					if (allAtms[i].cost > 0) {
+						message = "<h3>" + allAtms[i].title + "</h3><p> Cost: &pound" + allAtms[i].cost.toFixed(2) + "</p>";
+					}
+					
 					infoWindow.setContent(message);
 					infoWindow.open(map, marker);
 				};

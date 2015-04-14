@@ -3,7 +3,7 @@
 /* 
  * Created by Martin Smith - Mar 2015
  */
-	class HeatMapGroup extends Object {
+	class HeatMapGroup extends ArrayData {
 	
 		//	Longitude
 		private $lng = 0.0;
@@ -20,35 +20,41 @@
 		//This constructor takes in these parameters and sets the relevant fields
 		public function __construct( $lng, $lat, $radius){
 		
-			$this->setLng($lng);
-			$this->setLat($lat);
-			$this->setRad($radius);
+			parent::__construct(array(
+				"Latitude" => $lat,
+				"Longitude" => $lng,
+				"Radius" => $radius,
+				"Amount" => 0.0
+			));
 		}
 		
 		// Getters
 		public function getLng(){
 			
-			return $this->lng;
+			return $this->getField("Longitude");
 		}
 
 		public function getLat(){
 			
-			return $this->lat;
+			return $this->getField("Latitude");
 		}
 		
 		public function getAmount(){
 			
-			return $this->amount;
+			return $this->getField("Amount");
 		}
 		
 		public function getRadius(){
 			
-			return $this->radius;
+			return $this->getField("Radius");
 		}
 		
 		public function close($newLng, $newLat){
-		
-			if(abs($this->lng - (double)$newLng) <= 0.0002 && abs($this->lat - (double)$newLat) <= 0.0002){
+			
+			$latitude = $this->getLat();
+			$longitude = $this->getLng();
+			
+			if(abs($longitude - (double)$newLng) <= 0.0002 && abs($latitude - (double)$newLat) <= 0.0002){
 				return true;
 			}else{
 				return false;
@@ -56,25 +62,11 @@
 		}
 		
 		public function addAmount($amount){
-		
-			$this->amount = $this->amount + (double)$amount;
-		}
-		
-		
-		//These are private as once they are set we don't want them to be able to change
-		private function setlng($lng){
 			
-			$this->lng = (double)$lng;
+			$totalAmount = $this->getField("Amount") + abs($amount);
+			$this->setField("Amount", $totalAmount);
 		}
 		
-		private function setlat($lat){
-			
-			$this->lat = (double)$lat;
-		}
 		
-		private function setRad($rad){
-			
-			$this->radius = $rad;
-		}
 	}
 ?>

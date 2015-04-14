@@ -1583,15 +1583,16 @@ class BankAccessor extends Object implements BankInterface {
 				//	For every transaction in the array
 				for($i = 1 ; $i<sizeof($transactions) ; $i++){
 				
+					$hasLatitude = $transactions[$i]->Latitude != null && $transactions[$i]->Latitude != 0;
+					$hasLongitude = $transactions[$i]->Longitude != null && $transactions[$i]->Longitude != 0;
 					$found= false;
 					
 					//	At every position in the groups array
 					for($j = 0 ; $j < $groups->count(); $j++){
 						
 						//	If the transaction is "close" to the centre of the groups first transaction group it with that
-						if($transactions[$i]->Longitude != null && $transactions[$i]->Latitude != null && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
+						if($hasLatitude && $hasLongitude && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
 						
-							
 							$groups[$j]->addAmount($transactions[$i]->Amount);
 							$found = true;
 							break;
@@ -1599,7 +1600,7 @@ class BankAccessor extends Object implements BankInterface {
 						//	If at the end of the groups array add to the end position a new group
 						}
 					}
-					if(!$found){
+					if(!$found && $hasLatitude && $hasLongitude){
 						$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
 						$groups[sizeof($groups) -1]->addAmount($transactions[$i]->Amount);
 					}

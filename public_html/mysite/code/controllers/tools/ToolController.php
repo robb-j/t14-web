@@ -16,7 +16,7 @@ class ToolController extends BankController {
 		
 		// Add custom css & the google maps js
 		Requirements::css("mysite/css/tools/tools.css");
-		Requirements::javascript("http://maps.googleapis.com/maps/api/js");
+		Requirements::javascript("https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=visualization");
 	}
 	
 	public function Content() {
