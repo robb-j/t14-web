@@ -868,6 +868,7 @@ class BankAccessor extends Object implements BankInterface {
 							}
 							if($newBudget !== null && $category->Budgeted !== $newBudget){
 								$category->Budgeted = $newBudget;
+								$category->Balance = 0;
 							}
 							
 							$category->write();
