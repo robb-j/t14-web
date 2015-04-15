@@ -355,6 +355,7 @@ class MobileApiController extends Controller {
 		else {
 			
 			// Otherwise output the error
+			$this->response->setStatusCode(400);
 			$data = array(
 				"Error" => $output->getReason(),
 			);
