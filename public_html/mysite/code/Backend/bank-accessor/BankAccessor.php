@@ -1423,21 +1423,8 @@ class BankAccessor extends Object implements BankInterface {
 				if($user->Email !== null){
 				
 					//	Get all their accounts 
-					//	Pass email a list of stuff 
 					$accounts = Account::get()->filter(array("UsersID"=>$user->ID));
-					$transactionsArray = new ArrayList();
-					if( $accounts !== null){
-						foreach( $accounts as $account){
-						
-							$transactions = Transaction::get()->filter(array(
-								"UsersID"=>$user->ID,
-								"AccountID" => $account->ID
-							))->limit(7);
-						
-							$transactionsArray->push($transactions);
-						}
-					}
-					
+
 					//	Create an email form the template and send it 
 					$email = new Email();
 					$email
@@ -1447,8 +1434,7 @@ class BankAccessor extends Object implements BankInterface {
 						->setTemplate('MonthlyUpdate')
 						->populateTemplate(new ArrayData(array(
 							'user' => $user->FirstName,
-							'accounts' => $accounts,
-							'transactions' =>$transactionsArray
+							'accounts' => $accounts
 						)));
 
 					$email->send();

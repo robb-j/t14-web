@@ -1,16 +1,17 @@
 <?php
 
 /* A Tool Page that displays the Heatmap
- * Created by Rob A - March 2015
+ * Created by Martin S - April 2015
  */
-class EmailController {
-	
-	public $ToolName = "EmailController";
+class EmailController extends Controller {
 
-	
-	public function ToolContent() {
-	
+   private static $allowed_actions = array(
+      "MonthlyDigest"
+   );
+   
+   public function MonthlyDigest() {
 		BankAccessor::create()->monthlyAccountUpdate();
-	}
+		return "<p> Account updates sent out </p>";
+   }
 }
 ?>
