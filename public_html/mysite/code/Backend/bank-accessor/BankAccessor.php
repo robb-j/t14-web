@@ -692,7 +692,7 @@ class BankAccessor extends Object implements BankInterface {
 				if($user != null){
 					
 					$user->NumberOfSpins = $user->NumberOfSpins +1;
-					$user->LastFullCateforise = date("d M Y");
+					$user->LastFullCategorise= date("d M Y");
 					$user->write();
 					
 					$currentSpins = $user->NumberOfSpins;
@@ -1427,7 +1427,7 @@ class BankAccessor extends Object implements BankInterface {
 					$accounts = Account::get()->filter(array("UsersID"=>$user->ID));
 					$transactionsArray = new ArrayList();
 					if( $accounts !== null){
-						for( $accounts as $account){
+						foreach( $accounts as $account){
 						
 							$transactions = Transaction::get()->filter(array(
 								"UsersID"=>$user->ID,

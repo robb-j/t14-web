@@ -309,10 +309,8 @@ class MobileApiController extends Controller {
 			
 			$data = array(
 				"changedCategorys" => $output->getChangedCategorys(),
-				"changedTransactions" => $output->getChangedTransactions(),
 				"newSpin" => $output->allowedNewSpin(),
-				"numberOfSpins" => $output->allowedNewSpin(),
-				"successful" => $output->didPass()
+				"numberOfSpins" => $output->getCurrentSpins()
 			);
 		}else {
 			

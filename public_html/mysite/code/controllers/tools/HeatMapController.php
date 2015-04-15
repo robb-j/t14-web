@@ -34,3 +34,4 @@ class HeatMapController extends ToolController {
 		return $field;
 	}
 }
+?>

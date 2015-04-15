@@ -22,3 +22,4 @@ class ATMController extends ToolController {
 		return $this->renderWith("ATMTool");
 	}
 }
+?>
