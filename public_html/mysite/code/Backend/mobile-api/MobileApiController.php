@@ -273,10 +273,10 @@ class MobileApiController extends Controller {
 		$data = null;
 		
 		// Decide what data to give back
-		if (sizeof($output) > 0 ) {
+		if ($output->didPass() ) {
 			$data = array(
 			
-				"transactions" => $output
+				"transactions" => $output-> getPayments()
 			);
 		}else {
 			
