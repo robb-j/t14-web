@@ -69,6 +69,16 @@
 			
 			<div class="group-table data-table">
 				
+				<div class="data-row small-row">
+					<div class="row">
+						
+						<!-- Add headings to the table -->
+						<div class="col-xs-6"> <p class="light-text"> Category </p> </div>
+						<div class="col-xs-3"> <p class="right light-text"> Budgeted </p> </div>
+						<div class="col-xs-3"> <p class="right light-text"> Remaining </p> </div>
+						
+					</div>
+				</div>
 				
 				<!-- Add a row to the table for each Category in the Group -->
 				<% loop Categories %>
@@ -78,11 +88,15 @@
 						<div class="row">
 							
 							<!-- The Title of the Category -->
-							<div class="col-xs-8"> <p> $Title </p> </div>
+							<div class="col-xs-6"> <p> $Title </p> </div>
 							
 							
-							<!-- The Balance of the Category, formatted as a currency -->
-							<div class="col-xs-4"> <p class="$Top.CurrencyClass($Budgeted) right"> $Top.FormatCurrency($Budgeted) </p></div>
+							<!-- The Budget for the Category, formatted as a currency -->
+							<div class="col-xs-3"> <p class="$Top.CurrencyClass($Budgeted) right"> $Top.FormatCurrency($Budgeted) </p></div>
+							
+							
+							<!-- The Balance for the Category, formatted as a currency -->
+							<div class="col-xs-3"> <p class="$Top.CurrencyClass($Remaining) right"> $Top.FormatCurrency($Remaining) </p></div>
 							
 						</div>
 						

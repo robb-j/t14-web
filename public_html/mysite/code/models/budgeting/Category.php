@@ -15,4 +15,10 @@
 	 private static $has_one = array(
 		 "Group" => "BudgetGroup"
 	 );
+	 
+	 
+	 public function Remaining() {
+		 
+		 return $this->Budgeted - $this->Balance;
+	 }
  }

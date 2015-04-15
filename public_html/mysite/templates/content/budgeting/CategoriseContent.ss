@@ -50,9 +50,9 @@
 					<div class="data-row small-row <% if Last %> last-row <% end_if %>">
 						<div class="row">
 							
-							<div class="col-xs-3"> <p> $Payee </p> </div>
+							<div class="col-xs-5"> <p> $Payee </p> </div>
 							
-							<div class="col-xs-4"> <p class="$Top.CurrencyClass($Amount)"> $Top.FormatCurrency($Amount) </p> </div>
+							<div class="col-xs-2"> <p class="$Top.CurrencyClass($Amount)"> $Top.FormatCurrency($Amount) </p> </div>
 							
 							<div class="col-xs-5">
 								<select class="form-control" name="categorise[$ID]">
