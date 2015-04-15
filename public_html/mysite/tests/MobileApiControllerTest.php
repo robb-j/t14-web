@@ -205,14 +205,14 @@ $result = file_get_contents($url, false, $context);*/
 		$g2c2 = $g2->Categories()->byId(3);
 		$this->assertEquals("Health", $g2c2->Title);
 		$this->assertEquals(120.00, $g2c2->Budgeted);
-		$this->assertEquals(120.00, $g2c2->Balance);
+		$this->assertEquals(0.00, $g2c2->Balance);
 		
 		// Test it added a category
 		$g2c3 = $g2->Categories()->byId(4);
 		$this->assertNotNull($g2c3);
 		$this->assertEquals("Going Out", $g2c3->Title);
 		$this->assertEquals(80.00, $g2c3->Budgeted);
-		$this->assertEquals(80.00, $g2c3->Balance);
+		$this->assertEquals(0.00, $g2c3->Balance);
 		
 		
 		
@@ -231,7 +231,7 @@ $result = file_get_contents($url, false, $context);*/
 		$this->assertNotNull($g3c1);
 		$this->assertEquals("Car Fund", $g3c1->Title);
 		$this->assertEquals(500.00, $g3c1->Budgeted);
-		$this->assertEquals(500.00, $g3c1->Balance);
+		$this->assertEquals(0.00, $g3c1->Balance);
 		
 		
 		
