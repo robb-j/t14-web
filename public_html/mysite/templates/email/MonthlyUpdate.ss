@@ -16,7 +16,7 @@
 	}
 </style>
 <div>
-<h3>Hi $user.FirstName</h3>
+<h3>Hi $user</h3>
 		<p>This email contains your monthly update for each one of your accounts as well as a mini statement.</p>
 		<hr>
 		<% loop $accounts %>

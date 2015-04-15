@@ -556,7 +556,7 @@ class BankAccessor extends Object implements BankInterface {
 		$transaction->Payee = "Transfer ".$direction." account ".$payee;
 		$transaction->Date = date("d M Y");
 		$transaction->AccountID = $account->ID;
-		$transaction->IsTransfer = 1;
+		$transaction->OffBudget = 1;
 		
 		//	Then write this to the database
 		$transaction->write();
@@ -606,7 +606,7 @@ class BankAccessor extends Object implements BankInterface {
 					$transactions = Transaction::get()->filter(array(
 						'AccountID' => $theRowID,
 						'CategoryID' => 0,
-						"IsTransfer" => 0
+						"OffBudget" => 0
 					));
 
 						foreach($transactions as $transaction){
@@ -640,13 +640,22 @@ class BankAccessor extends Object implements BankInterface {
 			*/
 			foreach ($categorisedItems as $transID => $catID) {
 				
-				//	Get the corresponding transaction and category objects
-				$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
-				$category = Category::get()->byID(Convert::raw2sql($catID));
-				
-				//	If the objects are not null and the account and budget are owned by the user
-				if ($transaction === null || $category === null || $transaction->Account()->UserID !== $sanitisedUserID || $category->Group()->UserID !== $sanitisedUserID){
-					return new CategoriseOutput(null, null, null, null, false, "Transaction or Category not found for this user");
+				if($catID === -1){
+					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
+					$transaction->OffBudget = 1;
+		
+					//	Then write this to the database
+					$transaction->write();
+		
+				}else{
+					//	Get the corresponding transaction and category objects
+					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
+					$category = Category::get()->byID(Convert::raw2sql($catID));
+					
+					//	If the objects are not null and the account and budget are owned by the user
+					if ($transaction === null || $category === null || $transaction->Account()->UserID !== $sanitisedUserID || $category->Group()->UserID !== $sanitisedUserID){
+						return new CategoriseOutput(null, null, null, null, false, "Transaction or Category not found for this user");
+					}
 				}
 			}
 
@@ -668,7 +677,7 @@ class BankAccessor extends Object implements BankInterface {
 					$transaction->write();
 					
 					//	Increase the balance of the category
-					$category->Balance = $category->Balance  + 	$transaction->Amount;
+					$category->Balance = $category->Balance  + 	abs($transaction->Amount);
 					$category->write();
 				}
 				
