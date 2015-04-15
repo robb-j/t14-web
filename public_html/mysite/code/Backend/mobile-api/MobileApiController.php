@@ -273,14 +273,7 @@ class MobileApiController extends Controller {
 		$data = null;
 		
 		// Decide what data to give back
-		if ($output === null || sizeof($output) > 0 ) {
-			
-			//	If null they have no transactions to do so return an empty array
-			if($output === null){
-			
-				$output = new ArrayList();
-			}
-			
+		if (sizeof($output) > 0 ) {
 			$data = array(
 			
 				"transactions" => $output

@@ -608,19 +608,11 @@ class BankAccessor extends Object implements BankInterface {
 						'CategoryID' => 0,
 						"IsTransfer" => 0
 					));
-					
-					//	If the user has no categories return null otherwise add the transactions to the array list
-					if(sizeof($transactions) >0){
-					
+
 						foreach($transactions as $transaction){
 						
 							$arrayList->push($transaction);
 						}
-						
-					}else{
-					
-						return null;
-					}
 				}
 		
 				//	Update the session 
