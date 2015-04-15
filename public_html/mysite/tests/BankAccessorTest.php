@@ -1646,7 +1646,6 @@ class BankAccessorTest extends SapphireTest {
 		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
 		
 		$theCats = Category::get()->byID(1);
-		echo "|".$theCats->Title."|";
 		
 		$this->assertEquals($expected, strcmp($theCats->Title,"Martin") );
     }
@@ -1665,7 +1664,6 @@ class BankAccessorTest extends SapphireTest {
 		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
 		
 		$theCats = Category::get()->byID(1);
-		echo "|".$theCats->Budgeted."|";
 		
 		$this->assertEquals($expected, ((int)$theCats->Budgeted - 500) );
     }
