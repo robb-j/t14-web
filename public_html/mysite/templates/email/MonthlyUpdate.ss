@@ -14,7 +14,7 @@
 				<li>Available Balance: ($OverdraftLimit+$Balance)</li>
 			</ul>
 			<h4>Transactions</h4>
-				<% loop $Tansactions.Limit(7) %>
+				<% loop $Tansactions.limit(7) %>
 				<ul>
 					<li>$Date 	$Payee 		$Amount</li>
 				<% end_loop %>
