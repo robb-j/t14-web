@@ -1105,7 +1105,7 @@ class BankAccessor extends Object implements BankInterface {
 									if (array_key_exists("budget", $categoryData)) {
 										
 										$category->Budgeted = Convert::raw2sql($categoryData["budget"]);
-										$category->Balance = Convert::raw2sql($categoryData["budget"]);
+										$category->Balance = 0;
 									}
 									
 									

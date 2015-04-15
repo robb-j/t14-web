@@ -111,15 +111,31 @@ class GroupEditController extends BankController {
 		$removedCats = array_key_exists("RemovedCategories", $data) ? array_keys($data["RemovedCategories"]) : array();
 		
 		
+		// Error if no group name entered
+		if ( $groupName == "") {
+			
+			$error = true;
+			$errorMessage = "No Group Name Entered";
+		}
+		
+		
 		// Format the category updates
 		$updatedCategories = array();
 		foreach ($catNames as $id => $name) {
 			
 			$budget = $catBudgets[$id];
 			
-			// Check the budget was set & cast to a float
-			if ( $budget == null || ! is_numeric($budget)) {
+			
+			if ($name == "") {
 				
+				// Check they entered a name
+				$errorMessage = "All categories need a name";
+				$error = true;
+				break;
+			}
+			else if ( $budget == null || ! is_numeric($budget)) {
+				
+				// Check the budget was set & cast to a float
 				$errorMessage = "'" . $budget . "' must be a number";
 				$error = true;
 				break;
@@ -142,8 +158,17 @@ class GroupEditController extends BankController {
 			
 			$budget = $newBudgets[$index];
 			
-			if ( $budget == null || ! is_numeric($budget)) {
+			if ($name == "") {
+				
+				// Check they entered a name
+				$errorMessage = "All categories need a name";
+				$error = true;
+				break;
+			}
+			
+			else if ( $budget == null || ! is_numeric($budget)) {
 
+				// Check the budget was set & cast to a float
 				$errorMessage = "'" . $budget . "' must be a number";
 				$error = true;
 				break;
