@@ -2078,5 +2078,4 @@ class BankAccessorTest extends SapphireTest {
 
 		$this->assertEquals(null, $result);
     }
-	
 }

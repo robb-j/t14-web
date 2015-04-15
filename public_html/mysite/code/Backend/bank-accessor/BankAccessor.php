@@ -50,14 +50,26 @@ class BankAccessor extends Object implements BankInterface {
 					$token = $this->generateToken();
 					
 					$this->createSession($user, $token);
-					
-					
-					
+	
 					return new LoginOutput($user, $user->Accounts(), $this->getNewProductsForUser($user), $token, true,"Success");
 				}else{
 				
-					//	Return an unsuccessful LoginOutput object
-					return new LoginOutput(null, null, null, null,false,"You are logged in on another device");
+					//	If the user is already logged in somewhere else end that session
+					$userSession = UserSession::get()->filter(array(
+						"UserID" => $user->ID,
+						'Expiry:GreaterThan' => time()
+					))[0];
+					
+					//	Create the new session
+					$userSession->Expiry = time() -10;
+					$userSession->write();
+					
+					$token = $this->generateToken();
+					
+					$this->createSession($user, $token);
+
+					return new LoginOutput($user, $user->Accounts(), $this->getNewProductsForUser($user), $token, true,"Success");
+					
 				}
 			}
 		}
@@ -510,7 +522,7 @@ class BankAccessor extends Object implements BankInterface {
 	private function updateSession($userSession){
 	
 		//	Increases the Expiry by 600 seconds
-		$userSession->Expiry = $userSession->Expiry + 600;
+		$userSession->Expiry = (Time() + 600);
 		$userSession->write();
 		
 		return true;
@@ -1396,6 +1408,57 @@ class BankAccessor extends Object implements BankInterface {
 		
 		return array();
 	}
+	
+	public function monthlyAccountUpdate(){
+	
+		//Get everyuser that asks for updates
+		$users = User::get()->filter(array(
+			"MonthlyEmail" => 1
+		));
+		if($users  !== null){
+		
+			foreach($users as $user){
+			
+				//	If they have an email
+				if($user->Email !== null){
+				
+					//	Get all their accounts 
+					//	Pass email a list of stuff 
+					$accounts = Account::get()->filter(array("UsersID"=>$user->ID));
+					$transactionsArray = new ArrayList();
+					if( $accounts !== null){
+						for( $accounts as $account){
+						
+							$transactions = Transaction::get()->filter(array(
+								"UsersID"=>$user->ID,
+								"AccountID" => $account->ID
+							))->limit(7);
+						
+							$transactionsArray->push($transactions);
+						}
+					}
+					
+					//	Create an email form the template and send it 
+					$email = new Email();
+					$email
+						->setFrom("updates@t14.banking.co.uk")
+						->setTo($user->Email)
+						->setSubject("Monthly Account Update")
+						->setTemplate('MonthlyUpdate')
+						->populateTemplate(new ArrayData(array(
+							'user' => $user->FirstName,
+							'accounts' => $accounts,
+							'transactions' =>$transactionsArray
+						)));
+
+					$email->send();
+				
+				
+				}
+			}
+		}
+	}
+	
 	
 	//	#####################################################
 	//	#### Intermediate Requirements private functions ####

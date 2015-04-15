@@ -24,7 +24,9 @@ class User extends DataObject {
 		'Password' => 'Varchar(30)',
 		'NumberOfSpins' => 'Int',
 		'Points' => 'Int',
-		'LastBudgetUpdate' => 'Date'
+		'LastBudgetUpdate' => 'Date',
+		"NewProductUpdate" => "Boolean",
+		"MonthlyEmail" => "Boolean"
     );
 	private static $has_many =  array(
 		'Accounts' => 'Account',
@@ -103,13 +105,6 @@ class User extends DataObject {
 				$this->Password = base64_encode($encrypted);
 			}
 			
-			
-		
-			
-		
-		
-		
-		
 			//	Finishes the write operation
 			parent::onBeforeWrite();
 		
