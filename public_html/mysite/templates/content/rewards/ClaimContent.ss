@@ -48,7 +48,7 @@
 			</div>
 		<% end_if %>
 		
-		<!-- Display a message if it was successfuly deleted -->
+		<!-- Display a message if it was successfuly chosen -->
 		<% if $SuccessMessage  %>
 			<div class="form-message message-success">
 				<p> $SuccessMessage </p>
@@ -59,21 +59,21 @@
 			
 			<% if $Rewards.Count %>
 			
-				<!-- Add a row to the table for each Category in the Group -->
+				<!-- Add a row for each reward -->
 				<% loop $Rewards %>
 					
 					<div class="data-row small-row <% if Last %>last-row<% end_if %>">
 						
 						<div class="row">
 							
-							<% if $Top.DeleteID == $ID %>
+							<% if $Top.ChooseID == $ID %>
 							<div class="col-xs-3"> <p> $Title </p></div>
 							<div class="col-xs-3"> <p> Are you sure? </p></div>
-							<div class="col-xs-3"> <a href="rewards/claim/TakeReward?group=$ID" class="control-button cb-green cb-small cb-no-mar"> Confirm </a></div>
+							<div class="col-xs-3"> <a href="rewards/claim/TakeReward?choose=$ID" class="control-button cb-green cb-small cb-no-mar"> Confirm </a></div>
 							<div class="col-xs-3"> <a href="rewards/claim" class="control-button cb-white cb-small cb-no-mar"> Cancel </a></div>
 							 
 							<% else %>
-							<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> <a href="rewards/claim?delete=$ID">$Title </a><% else %>$Title <% end_if %> </p></div>
+							<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> <a href="rewards/claim?choose=$ID">$Title </a><% else %>$Title <% end_if %> </p></div>
 							<div class="col-xs-8"> <p> $Description </p></div>
 							<div class="col-xs-1"> <% if $Cost <= $Top.CurrentUser.Points %> <p class="currency-green"> $Cost </p> <% else %> <p> $Cost </p> <% end_if %> </div>
 							<% end_if %>

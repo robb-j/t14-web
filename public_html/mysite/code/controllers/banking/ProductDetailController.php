@@ -1,8 +1,7 @@
 <?php
 
 /* A Page that displays a Product
- * The first page they'll see once thay logged in
- * Created by Rob A - mar 2015
+ * Created by Rob A - Mar 2015
  */
 class ProductDetailController extends BankController {
 	
@@ -29,7 +28,5 @@ class ProductDetailController extends BankController {
 		
 		// Render the cotent with the template ProductContent.ss
 		return $this->renderWith("ProductContent");
-		
-		
 	}
 }

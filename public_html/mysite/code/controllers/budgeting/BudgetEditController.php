@@ -25,20 +25,29 @@ class BudgetEditController extends BankController {
 		return $this->renderWith("BudgetEditContent");
 	}
 	
+	
+	/*
+	 *	An action that is called by visiting .../BudgetEditController/DeleteGroup
+	 */
 	public function DeleteGroup() {
 		
+		// Get the group id from the url's GET params
 		if (array_key_exists("group", $this->request->getVars())) {
 			
-			$groupID = $this->request->getVars()["group"];
 			
+			// Delete the group
+			$groupID = $this->request->getVars()["group"];
 			$output = WebApi::create()->deleteBudget($this->CurrentUser->ID, $groupID);
 			
 			
+			// If failed redirect back with an error message
 			if ($output->didPass() == false) {
 				
 				$this->ErrorMessage = $output->getReason();
 				return $this->index();
 			}
+			
+			// Otherwise give a success message
 			else {
 				
 				$this->SuccessMessage = "Group successfully deleted";

@@ -20,6 +20,7 @@ class AccountController extends BankController {
 	
 	public function Content() {
 		
+		// Pass the new products to the template
 		$this->NewProducts = WebApi::create()->getNewProductsForUser($this->CurrentUser);
 		
 		
@@ -35,7 +36,5 @@ class AccountController extends BankController {
 		
 		// Redirect to login screen
 		return $this->redirect("login/");
-		
-		//return $this->CurrentUser->ID;
 	}
 }

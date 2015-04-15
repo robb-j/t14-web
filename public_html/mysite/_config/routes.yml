@@ -21,6 +21,7 @@ Director:
     'rewards': 'RewardsController'
     'tools': 'ATMController'
     'login': 'LoginController'
+    'help': 'HelpController'
     'settings': 'SettingsController'
     '': 'AccountController'
     'image/$ImageId/$Width/$Height': 'ImageController'

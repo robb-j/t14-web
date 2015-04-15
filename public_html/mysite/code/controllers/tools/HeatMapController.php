@@ -17,7 +17,10 @@ class HeatMapController extends ToolController {
 	
 	public function ToolContent() {
 	
+		// Pass the heat points to the template
 		$this->AllHeatPoints = WebApi::create()->loadHeatMap($this->CurrentUser->ID, null, null, null);
+		
+		
 		return $this->renderWith("HeatMapTool");
 	}
 	

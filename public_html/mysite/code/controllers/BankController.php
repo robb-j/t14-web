@@ -2,7 +2,7 @@
 
 /* A Parent page to be subclassed for any page that wants the navigation and side bar
  * Override $Content to provide content to go in the main area
- * Override $TabTibtle to tell the navigation bar what tab you're on: banking | budgeting | rewards | tools | settings
+ * Override $TabTibtle to tell the navigation bar what tab you're on: banking | budgeting | rewards | tools | settings | help
  * Created by Rob A - Feb 2015
  */
 class BankController extends Controller {
@@ -23,13 +23,13 @@ class BankController extends Controller {
 		// Common Requirements
 		Requirements::javascript("mysite/js/libs/jquery.js");
 		Requirements::javascript("mysite/js/libs/bootstrap.js");
-		//Requirements::javascript("mysite/js/LogoutCheck.js");
 		
 		
 		// Get the session token, if there is one
 		$this->CurrentUser = BankAccessor::create()->getCurrentUser();
 		
 		
+		// Set the default currency symbol to a £
 		Currency::setCurrencySymbol("£");
 	}
 	
@@ -94,7 +94,7 @@ class BankController extends Controller {
 	 *		$allowed_actions = array("MyFormName");
 	 *	and implement the function:
 	 *		public function MyFormName($request) { return parent::HandleForm($request); }
-	 *	Then you can do whatever you want with the post data in the called function and us SS's return->redirect("someplace") if you want
+	 *	Then you can do whatever you want with the post data in the called function and us SS's return $this->redirect("someplace/")
 	 */
 	public function HandleForm($request) {
 		

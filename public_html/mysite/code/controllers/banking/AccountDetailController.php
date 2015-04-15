@@ -3,6 +3,7 @@
 /* A Page that displays a User's Account Details
  * Gives specific information about account type and transactions
  * Created by Yifan W - feb 2015
+ * Tidied by Rob A - Apr 2015
  */
 class AccountDetailController extends BankController {
 	

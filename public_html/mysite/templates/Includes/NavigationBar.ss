@@ -1,5 +1,6 @@
 <div class="navigation-bar">
    <div class="navigation-bar-inner">
+	   
 		<div class="row">
 			
 			
@@ -17,7 +18,7 @@
 				</div>
 			</div>	
 		
-			<div class="col-xs-6">
+			<div class="col-xs-9">
 				
 				<div id="nav-text">Lloyd's Banking Group</div>
 				
@@ -26,11 +27,10 @@
 					<a href='budgeting' <% if $Current == budgeting %>id="current"<% end_if %>>Budgeting</a>
 					<a href='rewards' <% if $Current == rewards %>id="current"<% end_if %>>Rewards</a>
 					<a href='tools' <% if $Current == tools %>id="current"<% end_if %>>Tools</a>
+					<a href='help' <% if $Current == help %>id="current"<% end_if %>>Help</a>	
 					<a href='settings' <% if $Current == settings %>id="current"<% end_if %>>Settings</a>	
 				</div>
 			</div>
-			
-			<div class="col-xs-3"></div>
 
         </div>
     </div>

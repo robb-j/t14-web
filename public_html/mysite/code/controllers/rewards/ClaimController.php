@@ -19,9 +19,9 @@ class ClaimController extends BankController {
 		// Create an API to access the database
 		$api = new WebApi();
 		
-		if (array_key_exists("delete", $this->request->getVars())) {
+		if (array_key_exists("choose", $this->request->getVars())) {
 			
-			$this->DeleteID = $this->request->getVars()["delete"];
+			$this->ChooseID = $this->request->getVars()["choose"];
 		}
 		
 		// Get the list of available rewards for the user
@@ -33,11 +33,11 @@ class ClaimController extends BankController {
 	
 	public function TakeReward() {
 		
-		if (array_key_exists("group", $this->request->getVars())) {
+		if (array_key_exists("choose", $this->request->getVars())) {
 			
-			$groupID = $this->request->getVars()["group"];
+			$rewardID = $this->request->getVars()["choose"];
 			
-			$output = WebApi::create()->chooseReward($this->CurrentUser->ID, $groupID);
+			$output = WebApi::create()->chooseReward($this->CurrentUser->ID, $rewardID);
 			
 			if ($output->didPass() == false) {
 				

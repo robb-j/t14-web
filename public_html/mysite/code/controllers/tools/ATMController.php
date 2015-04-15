@@ -1,6 +1,7 @@
 <?php
 
-/* A Tool Page that displays the ATM Finder
+/* 
+ * A Tool Page that displays the ATM Finder
  * Created by Rob A - March 2015
  */
 class ATMController extends ToolController {
@@ -17,6 +18,7 @@ class ATMController extends ToolController {
 	
 	public function ToolContent() {
 		
+		// Pass the atms to the template
 		$this->AllAtms = WebApi::create()->loadATMs($this->CurrentUser->ID);
 		
 		return $this->renderWith("ATMTool");

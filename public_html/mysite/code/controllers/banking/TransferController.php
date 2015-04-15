@@ -17,16 +17,21 @@ class TransferController extends BankController {
 		
 		parent::init();
 		
+		
+		// Add some custom css
 		Requirements::css("mysite/css/banking/transfer.css");
 	}
 	
 	public function Content() {
 		
+		// Pass the account to the template
 		$this->FromAccount = Account::get()->byId($this->request->param("ID"));
 		
-		if ($this->FromAccount === null) {
+		
+		// Make sure we have an account and it belongs to the signed in user
+		if ($this->FromAccount === null || $this->FromAccount->UserID != $this->CurrentUser->ID) {
 			
-			return "Error: No Account from provided";
+			return "<div class='main-section'> <h3> Cannot transfer from this account </h3> </div>";
 		}
 		else {
 		
@@ -35,21 +40,25 @@ class TransferController extends BankController {
 		}
 	}
 	
+	
+	/*
+	 *	Creates a Form to perform the transfer
+	*/
 	public function BankTransferForm() {
 		
 		
 		if ($this->FromAccount !== null) {
 			
+			// Add a select for each account thet can transfer to
 			$possibleAccounts = $this->CurrentUser->Accounts()->where("ID <> " . $this->FromAccount->ID);
 			
 			$values = array();
-			
 			foreach($possibleAccounts as $row) {
 				$values[$row->ID] = $row->AccountType;
 			}
 			
 			
-			
+			// Create the fields
 			$fields = new FieldList(
 				HiddenField::create("AccountFrom", "The Sending Account", $this->FromAccount->ID),
 				HiddenField::create("UserID", "The Sending Account", $this->CurrentUser->ID),
@@ -81,7 +90,6 @@ class TransferController extends BankController {
 		
 		// Return a new form, SS renders it
 		return $form;
-		
 	}
 	
 	
@@ -93,12 +101,16 @@ class TransferController extends BankController {
 	
 	public function submitTransferForm($data, Form $form) {
 		
+		// Get the data from the form
 		$fromID = $data["AccountFrom"];
 		$toID = $data["AccountTo"];
 		$userID = $data["UserID"];
 		$amount = $data["Amount"];
 		
+		
+		// Perform the transfer through the WebApi
 		$output = WebApi::create()->makeTransfer($userID, $fromID, $toID, $amount);
+		
 		
 		if ($output->didPass()) {
 			
