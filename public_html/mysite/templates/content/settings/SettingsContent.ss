@@ -37,7 +37,7 @@
 							<p> My Email </p>
 						</div>
 						<div class="col-xs-10">
-							<p><input type="text" name="Email" placeholder="Email" value="$CurrentUser.Email"> </p>
+							<p><input class="form-control" type="text" name="Email" placeholder="Email" value="$CurrentUser.Email"> </p>
 						</div>
 					</div>
 					

@@ -69,19 +69,25 @@
 			
 			<div class="group-table data-table">
 				
-				<div class="data-row small-row">
-					<div class="row">
-						
-						<!-- Add headings to the table -->
-						<div class="col-xs-6"> <p class="light-text"> Category </p> </div>
-						<div class="col-xs-3"> <p class="right light-text"> Budgeted </p> </div>
-						<div class="col-xs-3"> <p class="right light-text"> Remaining </p> </div>
-						
+				
+				<!-- If there are categories, add a header -->
+				<% if $Categories.count %>
+					
+					<div class="data-row header-row">
+						<div class="row">
+							
+							<!-- Add headings to the table -->
+							<div class="col-xs-6"> <p > Category </p> </div>
+							<div class="col-xs-3"> <p class="right"> Budgeted </p> </div>
+							<div class="col-xs-3"> <p class="right"> Remaining </p> </div>
+							
+						</div>
 					</div>
-				</div>
+				<% end_if %>
+				
 				
 				<!-- Add a row to the table for each Category in the Group -->
-				<% loop Categories %>
+				<% loop $Categories %>
 					
 					<div class="category-row data-row small-row <% if Last %>last-row<% end_if %>">
 						

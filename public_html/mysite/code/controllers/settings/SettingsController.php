@@ -67,7 +67,7 @@ class SettingsController extends BankController {
 		
 		// Set the notification preferences
 		$user->NewProductUpdate = $newProdsUpdate;
-		$user->MonthlyEmail = $newProdsUpdate;
+		$user->MonthlyEmail = $monthlyUpdate;
 		
 		
 		// Set the email if it was entered
