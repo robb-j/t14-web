@@ -1423,7 +1423,7 @@ class BankAccessor extends Object implements BankInterface {
 				if($user->Email !== null){
 				
 					//	Get all their accounts 
-					$accounts = Account::get()->filter(array("UsersID"=>$user->ID));
+					$accounts = Account::get()->filter(array("UserID"=>$user->ID));
 
 					//	Create an email form the template and send it 
 					$email = new Email();
