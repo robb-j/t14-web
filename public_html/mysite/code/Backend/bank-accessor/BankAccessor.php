@@ -619,11 +619,11 @@ class BankAccessor extends Object implements BankInterface {
 				$this->updateSession($userSession);
 				
 				//	Returns the array
-				return $arrayList;
+				return new NewPaymentsOutput($arrayList,true,"Passed");
 					
 			}
 		}
-		return new ArrayList();
+		return new NewPaymentsOutput(null,false,"failed to authenticate");
 	}
 	
 	//	Allows the user to categorise all of their payments 

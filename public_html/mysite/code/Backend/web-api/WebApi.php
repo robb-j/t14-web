@@ -83,7 +83,13 @@ class WebApi extends Object{
 	public function newPayments($userID){
 	
 		//	Adds the token from the cookie "Cookie::get('BankingSession')"
-		return BankAccessor::create()->newPayments( $userID, Cookie::get('BankingSession') );
+		$output = BankAccessor::create()->newPayments( $userID, Cookie::get('BankingSession') );
+		if ($output->didPass() ) {
+		
+			return $output-> getPayments();
+		}else {
+			return new ArrayList();
+		}
 	}
 	
 	public function categorizePayments($userID,$categorisation){
