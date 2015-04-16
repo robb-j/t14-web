@@ -152,6 +152,13 @@ class WebApi extends Object{
 	
 	}
 	
+	public function resetBudget($userID){
+	
+		//	Adds the token from the cookie "Cookie::get('BankingSession')"
+		return BankAccessor::create()->resetBudget( $userID, Cookie::get('BankingSession') );
+	
+	}
+	
 	//	################################
 	//	#### Advanced  Requirements ####
 	//	################################

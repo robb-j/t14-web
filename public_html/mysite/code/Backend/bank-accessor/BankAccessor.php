@@ -287,7 +287,7 @@ class BankAccessor extends Object implements BankInterface {
 	
 	public function getStatementDates($userID, $accountID, $token){
 	
-	//	This stops SQL injection
+		//	This stops SQL injection
 		$sanitisedUserID = Convert::raw2sql($userID);
 		$sanitisedAccountID = Convert::raw2sql($accountID);
 
@@ -352,7 +352,6 @@ class BankAccessor extends Object implements BankInterface {
 		}
 		return array();
 	}
-
 	
 	//	##############################################
 	//	#### Basic Requirements private functions ####
@@ -1466,8 +1465,34 @@ class BankAccessor extends Object implements BankInterface {
 			}
 		}
 	}
+		
+	public function resetBudget($userID, $token){
 	
-	
+		//	Get the user sessions 
+		$userSession = $this->checkUserSession($userID,$token);
+		$sanitisedUserID = Convert::raw2sql($userID);
+		
+		//	If the session exists
+		if($userSession != null ){
+			
+			//	Get all of the users categories
+			$categories = $this->getUserCategories($userID,$token);
+			
+			//	If they have categories reset balance to 0
+			if(sizeof($categories) > 0){
+			
+				foreach($categories as $category){
+					
+					if($category !== null){
+					
+						$category->Balance = 0;
+						$category->write();
+					}
+				}
+			}
+		}
+	}
+
 	//	#####################################################
 	//	#### Intermediate Requirements private functions ####
 	//	#####################################################
