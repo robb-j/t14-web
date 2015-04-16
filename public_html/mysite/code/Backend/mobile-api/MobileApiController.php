@@ -385,7 +385,8 @@ class MobileApiController extends Controller {
 			
 			$data = array(
 				"rewardTaken" => $output->getRewardTaken(),
-				"reward" => $output->getReward()
+				"reward" => $output->getReward(),
+				"CurrentPoints" => User::get()->byID(Convert::raw2sql($userID))->Points
 			);
 		}else {
 			
