@@ -22,14 +22,14 @@
 		<% loop $accounts %>
 			<h4>$AccountType acccount:</h4>
 			<ul>
-				<li>Current Balance: <span id="colour-<% if $Balance > 0 %>green"<% else %>red"<% end_if %>>$Balance</span></li>
-				<li>Overdraft limit: $OverdraftLimit</li>
+				<li>Current Balance: <span id="colour-<% if $Balance > 0 %>green"<% else %>red"<% end_if %>>&pound;$Balance</span></li>
+				<li>Overdraft limit: &pound;$OverdraftLimit</li>
 			</ul>
 			<h4>Last 10 transactions:</h4>
 				
 				<ul>
 					<% loop $Transactions.Sort(ID, DESC).limit(10) %>
-						<li><span class="date">$Date:</span><span class="payee">$Payee:</span> <span class="amount"><span id="colour-<% if $Amount > 0 %>green"<% else %>red"<% end_if %>>$Amount</span></span> </li>
+						<li><span class="date">$Date:</span><span class="payee">$Payee:</span> <span class="amount"><span id="colour-<% if $Amount > 0 %>green"<% else %>red"<% end_if %>>&pound;$Amount</span></span> </li>
 					<% end_loop %>
 				</ul>
 			<hr>
