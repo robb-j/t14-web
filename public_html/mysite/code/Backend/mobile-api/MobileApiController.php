@@ -141,7 +141,7 @@ class MobileApiController extends Controller {
 		else {
 			
 			$this->response->setStatusCode(400);
-			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkUserSession($userID,$token));
 		}
 
 		// Put the data into the response & return it
@@ -176,7 +176,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -205,13 +205,13 @@ class MobileApiController extends Controller {
 
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Logout Failed, you have already logged out",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 			
 		}else{
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Logout Failed",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		$this->response->setBody($this->serializer->serializeArray( $data ));
@@ -240,7 +240,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting statement dates",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -276,7 +276,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting new Payments",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -297,7 +297,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("No categorisations provided",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		else {
@@ -321,7 +321,7 @@ class MobileApiController extends Controller {
 				
 				$this->response->setStatusCode(400);
 
-				$data = $this->formatError($output->getReason(),BankAccessor::create()->checkUserSession($userID,$token)));
+				$data = $this->formatError("Error making transfer", $userID, $token);
 			}
 		}
 		
@@ -358,7 +358,7 @@ class MobileApiController extends Controller {
 			// Otherwise output the error
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		
@@ -391,7 +391,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error choosing a reward",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -425,7 +425,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error performing a spin",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -450,7 +450,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting all rewards",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -480,7 +480,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting last points",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -509,7 +509,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting categories",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -542,7 +542,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting ATM's",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 
 		// Put the data into the response & return it
@@ -578,7 +578,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error getting HeatMap",BankAccessor::create()->checkUserSession($userID,$token)));
+			$data = $this->formatError("Error making transfer", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -588,8 +588,10 @@ class MobileApiController extends Controller {
 	}
 	
 	// formats the error messages
-	private function formatError($reason, $loggedIn) {
-
+	private function formatError($reason, $userID, $token) {
+		
+		$loggedIn = BankAccessor::create()->checkUserSession($userID, $token);
+		
 		if($loggedIn === null){
 		
 			$logged = false;
