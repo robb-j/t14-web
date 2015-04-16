@@ -52,6 +52,10 @@
 	text-align: right;
 }
 
+.centered {
+	text-align: center;
+}
+
 .light-text {
 	color: #777;
 }

@@ -7,7 +7,7 @@ class BudgetEditController extends BankController {
 	
 	
 	private static $allowed_actions = array(
-		"DeleteGroup",
+		"DeleteGroup", "ResetBudget"
 	);
 	
 	// Set the tab title
@@ -19,6 +19,11 @@ class BudgetEditController extends BankController {
 		if (array_key_exists("delete", $this->request->getVars())) {
 			
 			$this->DeleteID = $this->request->getVars()["delete"];
+		}
+		
+		if (array_key_exists("reset", $this->request->getVars())) {
+			
+			$this->Reset = "True";
 		}
 		
 		// Render with a template
@@ -55,5 +60,18 @@ class BudgetEditController extends BankController {
 		}
 		
 		return $this->index();
+	}
+	
+	
+	public function ResetBudget() {
+		
+		
+		// Call the web api method
+		$api = WebApi::create();
+		$output = $api->resetBudget($api->getCurrentUser()->ID);
+		
+		
+		// Redirect back to the user's budget
+		return $this->redirect("budgeting/");
 	}
 }

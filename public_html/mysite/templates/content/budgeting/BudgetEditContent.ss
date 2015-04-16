@@ -53,6 +53,34 @@
 			
 		</div>
 		
+		<br/>
+		
+		<div class="row">
+			
+			<% if $Top.Reset %>
+				
+				<p class="centered"> This will reset the balances of your categories giving you a fresh start </p>
+				
+				<br/>
+				
+				<div class="col-xs-2 col-xs-offset-3">
+					<a href="budgeting/edit" class="control-button cb-white"> Cancel </a>
+				</div>
+				
+				<div class="col-xs-4">
+					<a href="budgeting/edit/ResetBudget" class="control-button cb-green"> Reset </a>
+				</div>
+				
+			<% else %>
+				
+				<div class="col-xs-4 col-xs-offset-4">
+					<a href="budgeting/edit?reset" class="control-button cb-white"> Reset Budget </a>
+				</div>
+				
+			<% end_if %>
+			
+		</div>
+		
 		<div class="row">
 			
 			<!-- A button to go back -->

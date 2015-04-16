@@ -88,7 +88,7 @@
 							<!-- Add headings to the table -->
 							<div class="col-xs-6"> <p > Category </p> </div>
 							<div class="col-xs-3"> <p class="right"> Budgeted </p> </div>
-							<div class="col-xs-3"> <p class="right"> Spent </p> </div>
+							<div class="col-xs-3"> <p class="right"> Remaining </p> </div>
 							
 						</div>
 					</div>
@@ -111,7 +111,7 @@
 							
 							
 							<!-- The Balance for the Category, formatted as a currency -->
-							<div class="col-xs-3"> <p class="$Top.CurrencyClass($Balance) right"> $Top.FormatCurrency($Balance) </p></div>
+							<div class="col-xs-3"> <p class="$Top.CurrencyClass($Remaining) right"> $Top.FormatCurrency($Remaining) </p></div>
 							
 						</div>
 						
