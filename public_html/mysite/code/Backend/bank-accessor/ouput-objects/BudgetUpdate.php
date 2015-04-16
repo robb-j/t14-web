@@ -17,7 +17,7 @@
 		
 		
 		//This constructor takes in these parameters and sets the relevant fields
-		public function __construct( $updatedGroups, $updatedCategories, $passed = false,){
+		public function __construct( $updatedGroups, $updatedCategories, $passed = false){
 		
 			$this->setUpdatedGroups($updatedGroups);
 			$this->setUpdatedCats($updatedCategories);
