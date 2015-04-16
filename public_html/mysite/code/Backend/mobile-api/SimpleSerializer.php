@@ -26,7 +26,7 @@ class SimpleSerializer extends RESTfulAPI_BasicSerializer {
 				
 				$output[$key] = $this->formatArray($value);
 			}
-			else if (is_string($value) || is_numeric($value) ) {
+			else if (is_string($value) || is_numeric($value) || is_bool($value)) {
 				
 				$output[$key] = $value;
 			}

@@ -106,9 +106,7 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => $output->getReason()
-			);
+			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkIfUserLoggedIn(User::get()->filter(array("Username"=>Convert::raw2sql($username)))));
 		}
 
 		// Put the data into the response & return it
@@ -143,9 +141,7 @@ class MobileApiController extends Controller {
 		else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => $output->getReason()
-			);
+			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 
 		// Put the data into the response & return it
@@ -179,9 +175,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error making transfer"
-			);
+
+			$data = $this->formatError("Error making transfer",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -209,16 +204,14 @@ class MobileApiController extends Controller {
 		else if($output == 1){
 
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Logout Failed, you have already logged out",
-			);
+
+			$data = $this->formatError("Logout Failed, you have already logged out",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 			
 		}else{
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Logout Failed",
-			);
+
+			$data = $this->formatError("Logout Failed",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		$this->response->setBody($this->serializer->serializeArray( $data ));
@@ -246,9 +239,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error making transfer"
-			);
+
+			$data = $this->formatError("Error getting statement dates",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -283,9 +275,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error getting new Payments"
-			);
+
+			$data = $this->formatError("Error getting new Payments",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -305,9 +296,8 @@ class MobileApiController extends Controller {
 		if ($categorises == null || count($categorises) == 0) {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "No categorisations provided"
-			);
+
+			$data = $this->formatError("No categorisations provided",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		else {
@@ -330,10 +320,8 @@ class MobileApiController extends Controller {
 			}else {
 				
 				$this->response->setStatusCode(400);
-				$data = array(
-					"Error" => "Error categorising new payments",
-					"Reason" => $output->getReason()
-				);
+
+				$data = $this->formatError($output->getReason(),BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 			}
 		}
 		
@@ -343,9 +331,6 @@ class MobileApiController extends Controller {
 		return $this->response;
 	
 	}
-	
-	
-	
 	
 	public function updateBudget(SS_HTTPRequest $request) {
 				
@@ -372,9 +357,8 @@ class MobileApiController extends Controller {
 			
 			// Otherwise output the error
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => $output->getReason(),
-			);
+
+			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		
@@ -383,11 +367,7 @@ class MobileApiController extends Controller {
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
 	}
-	
-	
-	
-	
-	
+
 	//	Lets the user choose a reward from a list
 	public function chooseReward(SS_HTTPRequest $request){
 	
@@ -410,9 +390,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error choosing a reward"
-			);
+
+			$data = $this->formatError("Error choosing a reward",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -445,9 +424,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error performing a spin"
-			);
+
+			$data = $this->formatError("Error performing a spin",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -471,9 +449,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error getting all rewards"
-			);
+
+			$data = $this->formatError("Error getting all rewards",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -502,9 +479,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error getting last points"
-			);
+
+			$data = $this->formatError("Error getting last points",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -532,9 +508,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error getting categories"
-			);
+
+			$data = $this->formatError("Error getting categories",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
@@ -566,9 +541,8 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error getting ATM's"
-			);
+
+			$data = $this->formatError("Error getting ATM's",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 
 		// Put the data into the response & return it
@@ -603,15 +577,23 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = array(
-				"Error" => "Error getting HeatMap"
-			);
+
+			$data = $this->formatError("Error getting HeatMap",BankAccessor::create()->checkIfUserLoggedIn(User::get()->byID(Convert::raw2sql($userID))));
 		}
 		
 		// Put the data into the response & return it
 		$this->response->setBody($this->serializer->serializeArray( $data ));
 		$this->response->addHeader("Content-type", $this->serializer->getcontentType());
 		return $this->response;
+	}
+	
+	// formats the error messages
+	private function formatError($reason, $loggedIn) {
+
+		return array(
+			"Error" => $reason,
+			"LoggedIn" => $loggedIn
+		);
 	}
 }
 ?>
