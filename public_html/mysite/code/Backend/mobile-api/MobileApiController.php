@@ -141,7 +141,7 @@ class MobileApiController extends Controller {
 		else {
 			
 			$this->response->setStatusCode(400);
-			$data = $this->formatError($output->getReason(),BankAccessor::create()->checkUserSession($userID,$token));
+			$data = $this->formatError($output->getReason(), $userID, $token);
 		}
 
 		// Put the data into the response & return it
@@ -176,7 +176,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError($output->getReason(), $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -205,13 +205,14 @@ class MobileApiController extends Controller {
 
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("You are already logged out", $userID, $token);
+			$data = $this->formatError($output->getReason(), $userID, $token);
 			
 		}else{
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Logout Failed", $userID, $token);
 		}
 		
 		$this->response->setBody($this->serializer->serializeArray( $data ));
@@ -240,7 +241,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Failed to get statements dates", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -276,7 +277,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Failed to get new payments", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -297,7 +298,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("No categorisations provided", $userID, $token);
 		}
 		
 		else {
@@ -321,7 +322,7 @@ class MobileApiController extends Controller {
 				
 				$this->response->setStatusCode(400);
 
-				$data = $this->formatError("Error making transfer", $userID, $token);
+				$data = $this->formatError($output->getReason(), $userID, $token);
 			}
 		}
 		
@@ -358,7 +359,7 @@ class MobileApiController extends Controller {
 			// Otherwise output the error
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError($output->getReason(), $userID, $token);
 		}
 		
 		
@@ -392,7 +393,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Failed to choose reward", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -427,7 +428,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Spin failed", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -452,7 +453,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Could not find any rewards", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -482,7 +483,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Could not find recent points", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -511,7 +512,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Could not find categories", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
@@ -544,7 +545,7 @@ class MobileApiController extends Controller {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Could not find any ATMs", $userID, $token);
 		}
 
 		// Put the data into the response & return it
@@ -563,24 +564,22 @@ class MobileApiController extends Controller {
 		$startDate = $request->postVar("startDate");
 		$endDate = $request->postVar("endDate");
 		
-		if ($accounts == null) {
-			$accounts = array();
-		}
 		
 		//	Generate a heat map for the user 
 		$output = BankAccessor::create()->loadHeatMap($userID, $token, $accounts, $startDate, $endDate);
 		$data = null;
 		
 		// Decide what data to give back
-		if (sizeof($output) > 0 ) {
+		if ($output->count() > 0 ) {
 			$data = array(
 				"heatMapPoints" => $output
 			);
-		}else {
+		}
+		else {
 			
 			$this->response->setStatusCode(400);
 
-			$data = $this->formatError("Error making transfer", $userID, $token);
+			$data = $this->formatError("Couldn't find heat points for that filter", $userID, $token);
 		}
 		
 		// Put the data into the response & return it
