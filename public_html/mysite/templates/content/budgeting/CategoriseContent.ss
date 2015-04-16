@@ -56,7 +56,10 @@
 							
 							<div class="col-xs-5">
 								<select class="form-control" name="categorise[$ID]">
+									
 									<option value="none" selected="selected"> Pick A Category </option>
+									<option value="-1"> Don't Categorise </option>
+									
 									<% loop $Top.CurrentUser.Groups %>
 										<optgroup label="$Title">
 											

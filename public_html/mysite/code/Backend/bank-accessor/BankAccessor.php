@@ -165,28 +165,29 @@ class BankAccessor extends Object implements BankInterface {
 					// If they are not return a failed TransferOutput
 					return new TransferOutput(null,null,null,false,null,null);
 				}
-			}
+			
 		
-			// Check the user has available funds left in accountA inc overdraft
-			if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
-			
-			
-				// Transfer the money to and from the accounts
-				$accountA->Balance = $accountA->Balance - $amount;
-				$accountA->write();
-				$accountB->Balance = $accountB->Balance + $amount;
-				$accountB->write();
+				// Check the user has available funds left in accountA inc overdraft
+				if(($accountA->Balance + $accountA->OverdraftLimit)>=$sanitisedAmount){
 				
-				//	Create a transaction for each of the accounts 
-				$this->createTransaction(0-$amount, $accountB->AccountType,$accountA,"to");
-				$this->createTransaction(0+$amount, $accountA->AccountType,$accountB,"from");
+				
+					// Transfer the money to and from the accounts
+					$accountA->Balance = $accountA->Balance - $amount;
+					$accountA->write();
+					$accountB->Balance = $accountB->Balance + $amount;
+					$accountB->write();
+					
+					//	Create a transaction for each of the accounts 
+					$this->createTransaction(0-$amount, $accountB->AccountType,$accountA,"to");
+					$this->createTransaction(0+$amount, $accountA->AccountType,$accountB,"from");
 
-				// Update the user session
-				$this->updateSession($userSession);
-				
-				// Returns a successful TransferOutput
-				return new TransferOutput($accountA,$accountB,$sanitisedAmount,true,$accountA->Balance, $accountB->Balance );
-				
+					// Update the user session
+					$this->updateSession($userSession);
+					
+					// Returns a successful TransferOutput
+					return new TransferOutput($accountA,$accountB,$sanitisedAmount,true,$accountA->Balance, $accountB->Balance );
+					
+				}
 			}
 		}
 		
@@ -480,7 +481,7 @@ class BankAccessor extends Object implements BankInterface {
 	}
 	
 	//	This checks if the user is logged in based on the user object
-	private function checkIfUserLoggedIn($user){
+	public function checkIfUserLoggedIn($user){
 	
 		//	Check the User is the one with the token		
 		$userSession = UserSession::get()->filter(array(
