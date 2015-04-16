@@ -420,6 +420,7 @@ class MobileApiController extends Controller {
 				"newPoints" => $output->Points,
 				"totalPoints" => $user->Points,
 				"currentSpins" => $user->NumberOfSpins,
+				"RecentPoints" => BankAccessor::create()->getLastPoints($userID, $token)
 			);
 		}else {
 			
