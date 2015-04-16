@@ -685,8 +685,8 @@ class BankAccessor extends Object implements BankInterface {
 						$transaction->CategoryID = Convert::raw2sql($catID);
 						$transaction->write();
 						
-						//	Increase the balance of the category
-						$category->Balance = $category->Balance  + 	abs($transaction->Amount);
+						//	Increase or decrease the balance of the category
+						$category->Balance = $category->Balance - $transaction->Amount;
 						$category->write();
 					}
 					
