@@ -25,9 +25,10 @@
 		<% if Form %>
 		
 			<% include AdminLogin Form=$Form %>
-			
+		
+		
+		<!-- Othwise, render the page normally -->
 		<% else %>
-			
 			
 			<!-- Add the navigation bar, using TabTitle form the controller -->
 			<% include NavigationBar Current=$TabTitle%>
@@ -52,17 +53,14 @@
 							<div class="col-xs-9">
 								<div class="content-container">
 									
+									<!-- Draw the content of the page, BankController subclasses override to present their page -->
 									$Content()
 									
 								</div>
 							</div>
-						
 						</div>
-						
 					</div>
-					
 				</div>
-				
 			</div>			
 			
 		<% end_if %>

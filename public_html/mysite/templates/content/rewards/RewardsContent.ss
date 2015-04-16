@@ -4,7 +4,10 @@
 	<!-- The Overview section -->
 	<div class="rewards-info-section main-section">
 		
+		
+		<!-- The page title -->
 		<h2> Overview </h2>		
+		
 		
 		<div class="row">
 			
@@ -35,7 +38,7 @@
 			<div class="col-xs-1"></div>
 			
 			
-			<!-- The Buttons side -->
+			<!-- The buttons side -->
 			<div class="col-xs-4">
 				
 				<a class="control-button cb-green cb-top" href="rewards/claim"> Claim A Reward </a>
@@ -45,9 +48,7 @@
 				<% end_if %>
 				
 			</div>
-			
 		</div>
-		
 	</div>
 		
 	

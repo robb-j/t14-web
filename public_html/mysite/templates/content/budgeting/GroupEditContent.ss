@@ -11,12 +11,15 @@
 		<% end_if %>
 		
 		
+		<!-- Display an error message, if there was one -->
 		<% if $ErrorMessage %>
 			<div class="form-message message-fail">
 				<p> $ErrorMessage </p>
 			</div>
 		<% end_if %>
 		
+		
+		<!-- Display a success message, if there is one -->
 		<% if $SuccessMessage %>
 			<div class="form-message message-success">
 				<p> $SuccessMessage </p>

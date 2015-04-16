@@ -81,8 +81,15 @@
 			</div>
 			
 			<div class="form-actions">
+				
+				<!-- The cancel button -->
 				<input class="control-button cb-white" type="submit" name="action_cancelCategorise" value="Cancel" class="action"/>
-				<input class="control-button cb-green" type="submit" name="action_submitCategorise" value="Save" class="action"/>
+				
+				
+				<!-- The Submit button, don't show if there is nothing to categorise -->
+				<% if $NewPayments.count != 0 %>
+					<input class="control-button cb-green" type="submit" name="action_submitCategorise" value="Save" class="action"/>
+				<% end_if %>
 			</div>
 			
 		</form>

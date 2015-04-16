@@ -88,6 +88,8 @@
 				</div>
 			</div>
 		</div>
+		
+		
 
 		<!-- The List of Transactions -->
 		<div class="transaction-table data-table">
