@@ -642,11 +642,9 @@ class BankAccessor extends Object implements BankInterface {
 				
 				if($catID === -1){
 					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
-					$transaction->OffBudget = 1;
-		
-					//	Then write this to the database
-					$transaction->write();
-		
+					if ($transaction === null ||  $transaction->Account()->UserID !== $sanitisedUserID){
+						return new CategoriseOutput(null, null, null, null, false, "Transaction or Category not found for this user");
+					}
 				}else{
 					//	Get the corresponding transaction and category objects
 					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
@@ -665,28 +663,39 @@ class BankAccessor extends Object implements BankInterface {
 			//	For every item in the key value array
 			foreach ($categorisedItems as $transID => $catID) {
 				
-				//	Get the corresponding transaction and category objects
-				$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
-				$category = Category::get()->byID(Convert::raw2sql($catID));
-				
-				//	If the objects are not null and the account and budget are owned by the user
-				if ($transaction !== null && $category !== null && $transaction->Account()->UserID === $sanitisedUserID && $category->Group()->UserID === $sanitisedUserID){
-					
-					//	Change the categoryID
-					$transaction->CategoryID = Convert::raw2sql($catID);
+				if($catID === -1){
+					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
+					$transaction->OffBudget = 1;
+		
+					//	Then write this to the database
 					$transaction->write();
+					$transArray->push($transaction);
 					
-					//	Increase the balance of the category
-					$category->Balance = $category->Balance  + 	abs($transaction->Amount);
-					$category->write();
-				}
+				}else{
+
+					//	Get the corresponding transaction and category objects
+					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
+					$category = Category::get()->byID(Convert::raw2sql($catID));
+					
+					//	If the objects are not null and the account and budget are owned by the user
+					if ($transaction !== null && $category !== null && $transaction->Account()->UserID === $sanitisedUserID && $category->Group()->UserID === $sanitisedUserID){
+						
+						//	Change the categoryID
+						$transaction->CategoryID = Convert::raw2sql($catID);
+						$transaction->write();
+						
+						//	Increase the balance of the category
+						$category->Balance = $category->Balance  + 	abs($transaction->Amount);
+						$category->write();
+					}
+					
+					//	Compiles an array of the categories edited
+					if (!$catArray->exists($category)) {
+						$catArray->push($category);
+					}
 				
-				//	Compiles an array of the categories edited
-				if (!$catArray->exists($category)) {
-					$catArray->push($category);
+					$transArray->push($transaction);
 				}
-				
-				$transArray->push($transaction);
 			}
 			
 			$newSpin = false;
