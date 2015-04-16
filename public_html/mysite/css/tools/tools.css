@@ -21,6 +21,10 @@
 	color: white;
 }
 
-.tools-container .tools-tabbar .tabbar-item.active p a {
+.tools-container .tools-tabbar .tabbar-item.active p {
 	color: white;
+}
+
+.tools-container .tools-tabbar a:hover .tabbar-item.active {
+	color: #666;
 }

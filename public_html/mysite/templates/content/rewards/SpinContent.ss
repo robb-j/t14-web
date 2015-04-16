@@ -6,7 +6,9 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2">
 				
-						<h3> You have $CurrentUser.NumberOfSpins spins</h3>
+						<h3> You have $CurrentUser.NumberOfSpins spins </h3>
+						<p> Points: <span class="currency-green"> $CurrentUser.Points </span> </p>
+						<br/>
 					
 				</div>
 			</div>
@@ -38,16 +40,19 @@
 		
 		
 			<div class="row">
-		
-				<div class="col-xs-4 col-xs-offset-4">
-					<a href="SpinController/PerformSpin">
-					<div class="control-button cb-green cb-top">
-						SPIN!
-					</div>
-					</a>
-					
 				
+				<div class="col-xs-3 col-xs-offset-3">
+					<a class="control-button cb-white cb-top" href="rewards/"> Back </a>
 				</div>
+		
+				<div class="col-xs-3">
+					<a href="SpinController/PerformSpin">
+						<div class="control-button cb-green cb-top">
+							Spin!
+						</div>
+					</a>				
+				</div>
+				
 			</div>
 		</div>
 	</div>
