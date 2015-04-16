@@ -353,8 +353,29 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
+	//Checks if the user session is still active
+	public function checkSessionActive($userID,$token){
+	
+		$output = $this->checkUserSession($userID, $token);
+
+		if($output === null){
+		
+			return false;
+		
+		}else{
+		
+			return true;
+		}
+		
+	}
+	
+	
+	//	##############################################
+	//	#### Basic Requirements private functions ####
+	//	##############################################
+	
 	//	Checks if the users session is still valid
-	public function checkUserSession($userID, $token){
+	private function checkUserSession($userID, $token){
 	
 		//	Gets the user session that is associated with the token	
 		$userSession = UserSession::get()->filter(array(
@@ -372,10 +393,6 @@ class BankAccessor extends Object implements BankInterface {
 			return null;
 		}
 	}
-	
-	//	##############################################
-	//	#### Basic Requirements private functions ####
-	//	##############################################
 	
 	// This only keeps the last n userSession for the user
 	private function deleteUserSessions($userID){

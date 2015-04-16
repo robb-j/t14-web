@@ -590,20 +590,11 @@ class MobileApiController extends Controller {
 	// formats the error messages
 	private function formatError($reason, $userID, $token) {
 		
-		$loggedIn = BankAccessor::create()->checkUserSession($userID, $token);
-		
-		if($loggedIn === null){
-		
-			$logged = false;
-		
-		}else{
-		
-			$logged = true;
-		}
+		$loggedIn = BankAccessor::create()->checkSessionActive($userID, $token);
 		
 		return array(
 			"Error" => $reason,
-			"LoggedIn" => $logged
+			"LoggedIn" => $loggedIn
 		);
 	}
 }
