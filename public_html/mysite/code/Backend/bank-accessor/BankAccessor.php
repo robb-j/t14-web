@@ -155,7 +155,7 @@ class BankAccessor extends Object implements BankInterface {
 			$accountB = Account::get()->byID($sanitisedAccountBID);
 	
 			//	Check if the accounts are owned by the same person
-			if($accountA != null && $accountA != null){
+			if($accountA !== null && $accountB !== null){
 			
 				$accountAOwner = $accountA->UserID;
 				$accountBOwner = $accountB->UserID;
