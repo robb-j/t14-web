@@ -640,10 +640,11 @@ class BankAccessor extends Object implements BankInterface {
 			*/
 			foreach ($categorisedItems as $transID => $catID) {
 				
-				if($catID === -1){
+				if((int)$catID === -1){
 					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
 					if ($transaction === null ||  $transaction->Account()->UserID !== $sanitisedUserID){
-						return new CategoriseOutput(null, null, null, null, false, "Transaction or Category not found for this user");
+			
+						return new CategoriseOutput(null, null, null, null, false, "Transaction not found for this user");
 					}
 				}else{
 					//	Get the corresponding transaction and category objects
@@ -663,7 +664,7 @@ class BankAccessor extends Object implements BankInterface {
 			//	For every item in the key value array
 			foreach ($categorisedItems as $transID => $catID) {
 				
-				if($catID === -1){
+				if((int)$catID === -1){
 					$transaction = Transaction::get()->byID(Convert::raw2sql($transID));
 					$transaction->OffBudget = 1;
 		
