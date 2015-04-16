@@ -1625,6 +1625,7 @@ class BankAccessor extends Object implements BankInterface {
 	
 	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate){
 
+		
 		//	Get the user sessions 
 		$userSession = $this->checkUserSession($userID,$token);
 		$sanitisedUserID = Convert::raw2sql($userID);
@@ -1645,13 +1646,11 @@ class BankAccessor extends Object implements BankInterface {
 			
 			//	If there is no specified start date use the beginning on unix time
 			if($startDate === null){
-			
 				$startDate = '1970-01-0 00:00:00';
 			}
 			
 			//	If there is no end date specified use today
 			if($endDate === null){
-			
 				$endDate = date("Y-m-d",time()).' 23:59:59';
 			}
 			
@@ -1672,13 +1671,16 @@ class BankAccessor extends Object implements BankInterface {
 					
 						"AccountID" => Convert::raw2sql($account),
 						'Date:GreaterThan' =>  Convert::raw2sql($startDate),
-						'Date:LessThan' =>  Convert::raw2sql($endDate)
+						'Date:LessThan' =>  Convert::raw2sql($endDate),
+						"OffBudget" => 0
 					));
-					
+						
 					//	Add all of these transactions to an array
 					foreach($accountTransactions as $transaction){
-						
-						$transactions->push($transaction);
+					
+						if($transaction->Latitude !== null && $transaction->Latitude != 0 && $transaction->Longitude != null && $transaction->Longitude != 0){
+							$transactions->push($transaction);
+						}
 					}
 				}
 			}
@@ -1688,30 +1690,40 @@ class BankAccessor extends Object implements BankInterface {
 			
 				
 				$groups = new ArrayList();
-
+				
+				//	Add the first transaction to a hew HeatMapGroup 
+				$groups->push( new HeatMapGroup($transactions[0]->Longitude,$transactions[0]->Latitude,20));
+				
+				//	Increase the amount spent in the group 
+				$groups[0]->addAmount($transactions[0]->Amount);
+				
 				//	For every transaction in the array
-				for($i = 0 ; $i<sizeof($transactions) ; $i++){
+				for($i = 1 ; $i<sizeof($transactions) ; $i++){
+				
 				
 					$hasLatitude = $transactions[$i]->Latitude != null && $transactions[$i]->Latitude != 0;
 					$hasLongitude = $transactions[$i]->Longitude != null && $transactions[$i]->Longitude != 0;
 					$found= false;
 					
-					//	At every position in the groups array
-					for($j = 0 ; $j < $groups->count(); $j++){
-						
-						//	If the transaction is "close" to the centre of the groups first transaction group it with that
-						if($hasLatitude && $hasLongitude && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
-						
-							$groups[$j]->addAmount($transactions[$i]->Amount);
-							$found = true;
-							break;
-						
-						//	If at the end of the groups array add to the end position a new group
+					if($hasLatitude && $hasLongitude){
+					
+						//	At every position in the groups array
+						for($j = 0 ; $j < $groups->count(); $j++){
+							
+							//	If the transaction is "close" to the centre of the groups first transaction group it with that
+							if($hasLatitude && $hasLongitude && $groups[$j]->close($transactions[$i]->Longitude,$transactions[$i]->Latitude)){
+							
+								$groups[$j]->addAmount($transactions[$i]->Amount);
+								$found = true;
+								break;
+							
+							//	If at the end of the groups array add to the end position a new group
+							}
 						}
-					}
-					if(!$found && $hasLatitude && $hasLongitude){
-						$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
-						$groups[sizeof($groups) -1]->addAmount($transactions[$i]->Amount);
+						if(!$found && $hasLatitude && $hasLongitude){
+							$groups->push( new HeatMapGroup($transactions[$i]->Longitude,$transactions[$i]->Latitude,20));
+							$groups[sizeof($groups) -1]->addAmount($transactions[$i]->Amount);
+						}
 					}
 				}
 				
