@@ -353,6 +353,26 @@ class BankAccessor extends Object implements BankInterface {
 		return array();
 	}
 	
+	//	Checks if the users session is still valid
+	public function checkUserSession($userID, $token){
+	
+		//	Gets the user session that is associated with the token	
+		$userSession = UserSession::get()->filter(array(
+			'Token' => Convert::raw2sql($token)
+			))[0]; 
+			
+		if($userSession !== null && $userSession->UserID !== null &&
+		   $userID != null && strcmp($userSession->UserID,$userID)===0 &&
+		   $userSession->Expiry !== null && 
+		   DateTime::createFromFormat("U", "$userSession->Expiry")->getTimestamp()> time()){
+		   
+			return $userSession;
+		}else{
+		
+			return null;
+		}
+	}
+	
 	//	##############################################
 	//	#### Basic Requirements private functions ####
 	//	##############################################
@@ -480,7 +500,7 @@ class BankAccessor extends Object implements BankInterface {
 	}
 	
 	//	This checks if the user is logged in based on the user object
-	public function checkIfUserLoggedIn($user){
+	private function checkIfUserLoggedIn($user){
 	
 		//	Check the User is the one with the token		
 		$userSession = UserSession::get()->filter(array(
@@ -527,25 +547,7 @@ class BankAccessor extends Object implements BankInterface {
 		
 		return true;
 	}
-	
-	private function checkUserSession($userID, $token){
-	
-		//	Gets the user session that is associated with the token	
-		$userSession = UserSession::get()->filter(array(
-			'Token' => Convert::raw2sql($token)
-			))[0]; 
-			
-		if($userSession !== null && $userSession->UserID !== null &&
-		   $userID != null && strcmp($userSession->UserID,$userID)===0 &&
-		   $userSession->Expiry !== null && 
-		   DateTime::createFromFormat("U", "$userSession->Expiry")->getTimestamp()> time()){
-		   
-			return $userSession;
-		}else{
-		
-			return null;
-		}
-	}
+
 	
 	//	Creates a new Transaction for an account, with the amount, the payee and the account needing the new transaction
 	private function createTransaction($amount, $payee, $account, $direction){
