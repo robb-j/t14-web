@@ -786,7 +786,7 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		
-		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)));
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)->getPayments()));
 		
     }
 	
@@ -797,7 +797,7 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','allProductsPerson');
 		$session =$this->objFromFixture('UserSession','allProductsPersonSession');
 		
-		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)));
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)->getPayments()));
 		
     }
 	
@@ -808,29 +808,29 @@ class BankAccessorTest extends SapphireTest {
 		$user = $this->objFromFixture('User','noAccountsPerson');
 		$session =$this->objFromFixture('UserSession','noAccountsPersonSession');
 		
-		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)));
+		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,$session->Token)->getPayments()));
 		
     }
 	
 	public function testNewPaymentsIncorrectUserID() {
 		
 		$accessor = new BankAccessor();
-		$expected = 0;
+		$expected = false;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		
-		$this->assertEquals($expected,sizeof($accessor->newPayments(5,$session->Token)));
+		$this->assertEquals($expected,$accessor->newPayments(5,$session->Token)->didPass());
 		
     }
 	
 		public function testNewPaymentsIncorrectUserToken() {
 		
 		$accessor = new BankAccessor();
-		$expected = 0;
+		$expected = false;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 		
-		$this->assertEquals($expected,sizeof($accessor->newPayments($user->ID,"rubbish")));
+		$this->assertEquals($expected,$accessor->newPayments($user->ID,"rubbish")->didPass());
 		
     }
 	
@@ -841,21 +841,21 @@ class BankAccessorTest extends SapphireTest {
 	public function testSQLInjectionNewPaymentsUserID() {
 		
 		$accessor = new BankAccessor();
-		$expected = 0;
+		$expected = false;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 
-		$this->assertEquals($expected, sizeof($accessor->newPayments($user->ID."; DROP TABLE User",$session->Token)));
+		$this->assertEquals($expected, $accessor->newPayments($user->ID."; DROP TABLE User",$session->Token)->didPass());
     }
 	
 	public function testSQLInjectionNewPaymentsToken() {
 		
 		$accessor = new BankAccessor();
-		$expected = 0;
+		$expected = false;
 		$user = $this->objFromFixture('User','myPerson');
 		$session =$this->objFromFixture('UserSession','myPersonSessionOne');
 
-		$this->assertEquals($expected, sizeof($accessor->newPayments($user->ID,$session->Token."; DROP TABLE User")));
+		$this->assertEquals($expected, $accessor->newPayments($user->ID,$session->Token."; DROP TABLE User")->didPass());
     }
 	
 
@@ -1646,7 +1646,6 @@ class BankAccessorTest extends SapphireTest {
 		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
 		
 		$theCats = Category::get()->byID(1);
-		echo "|".$theCats->Title."|";
 		
 		$this->assertEquals($expected, strcmp($theCats->Title,"Martin") );
     }
@@ -1665,7 +1664,6 @@ class BankAccessorTest extends SapphireTest {
 		$result = $accessor->editGroups($user->ID, $session->Token,1,"notNull",$updatedCategories,	$newCategories, $deletedCats  );
 		
 		$theCats = Category::get()->byID(1);
-		echo "|".$theCats->Budgeted."|";
 		
 		$this->assertEquals($expected, ((int)$theCats->Budgeted - 500) );
     }

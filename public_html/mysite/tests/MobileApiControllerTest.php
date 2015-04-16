@@ -35,85 +35,7 @@ class MobileApiControllerTest extends FunctionalTest {
 		
 		BankAccessor::create()->logout($this->userID, $this->token);
 	}
-	
-	
 
-	public function testLoginCorrectUsernameCorrectPassword() {
-		/*$username = "testUser";
-		$password = "MPs";
-		$indexes = array(0,2,5);
-		$postArray = array(
-			'username' => $username,
-			'password' => $password,
-			'indexes0' => $indexes[0],
-			'indexes1' => $indexes[1],
-			'indexes2' => $indexes[2]
-		);
-	
-		$request = new SS_HTTPRequest("post",'bankingapi/login', array(),$postArray,null);
-	
-		//$page = $this->post($request);
-		$page = $this->post('/bankapi/login',$postArray);
-		*/
-		/*$url = 'http://localhost/t14-web/public_html/bankingapi/login';
-		
-		$options = array(
-    'http' => array(
-        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method'  => 'POST',
-        'content' => http_build_query($postArray),
-    ),
-);
-$context  = stream_context_create($options);
-$result = file_get_contents($url, false, $context);*/
-		
-		
-		/*
-		echo "|".$page->getBody()."|";
-		//echo "|".$result->getBody()."|";
-	
-			
-		//$crawler =	$client->request('POST', '/bankingapi/login', $postArray);
-        
-		$expected = "testUser";
-		$this->assertEquals($expected, $page->getBody()->getUser()->Username );
-		*/
-		
-		
-		
-		
-		
-		// This works (v)?
-		
-		/*
-		$url = "bankapi/login";
-		$postData = array(
-			"username" => "robster31",
-			"password" => "pas",
-			"index1" => "0",
-			"index2" => "1",
-			"index3" => "2"
-		);
-		
-		$page = $this->post($url, $postData);
-		
-		echo $page->getBody();
-		
-		*/
-
-		
-		
-	}
-	
-	// Delete group 1
-	// Edit group 2
-	// Delete category 2
-	// Edit category 3
-	// Add category to group 2
-	// Create new group w/ categories
-	
-	
-	
 	public function testUpdateBudgetPassing() {
 		
 		// Create the url & post data
@@ -205,14 +127,14 @@ $result = file_get_contents($url, false, $context);*/
 		$g2c2 = $g2->Categories()->byId(3);
 		$this->assertEquals("Health", $g2c2->Title);
 		$this->assertEquals(120.00, $g2c2->Budgeted);
-		$this->assertEquals(120.00, $g2c2->Balance);
+		$this->assertEquals(0.00, $g2c2->Balance);
 		
 		// Test it added a category
 		$g2c3 = $g2->Categories()->byId(4);
 		$this->assertNotNull($g2c3);
 		$this->assertEquals("Going Out", $g2c3->Title);
 		$this->assertEquals(80.00, $g2c3->Budgeted);
-		$this->assertEquals(80.00, $g2c3->Balance);
+		$this->assertEquals(0.00, $g2c3->Balance);
 		
 		
 		
@@ -231,7 +153,7 @@ $result = file_get_contents($url, false, $context);*/
 		$this->assertNotNull($g3c1);
 		$this->assertEquals("Car Fund", $g3c1->Title);
 		$this->assertEquals(500.00, $g3c1->Budgeted);
-		$this->assertEquals(500.00, $g3c1->Balance);
+		$this->assertEquals(0.00, $g3c1->Balance);
 		
 		
 		

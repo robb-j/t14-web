@@ -52,7 +52,12 @@
 		
 		<!-- A button to add new categories -->
 		<div class="row">
-			<div class="col-xs-4 col-xs-offset-4">
+			
+			<div class="col-xs-3 col-xs-offset-3">
+				<a href="budgeting/" class="control-button cb-white"> Back </a>
+			</div>
+			
+			<div class="col-xs-3">
 				<a href="budgeting/edit/group/new" class="control-button cb-green"> Create Group </a>
 			</div>
 		</div>

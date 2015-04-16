@@ -51,14 +51,16 @@
 			
 			<% loop $NewProducts %>
 				
-				<div class="data-row <% if Last %>last-row<% end_if %>">
-					
-					<a href="banking/product/$ID">
+				<a href="banking/product/$ID">
+					<div class="data-row <% if Last %>last-row<% end_if %>">				
 						
-						<p> $Title </p>
-					</a>
-					
-				</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p> $Title </p>
+							</div>
+						</div>
+					</div>
+				</a>
 				
 				
 			<% end_loop %>

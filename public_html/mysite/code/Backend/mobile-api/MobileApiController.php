@@ -69,7 +69,7 @@ class MobileApiController extends Controller {
 		
 			// Get values to put into response
 			$categories = BankAccessor::create()->getUserCategories($output->GetUser()->ID, $output->getToken());
-			$newPayments = BankAccessor::create()->newPayments($output->GetUser()->ID, $output->getToken());
+			$newPayments = BankAccessor::create()->newPayments($output->GetUser()->ID, $output->getToken())->getPayments();
 			$allProducts = Product::get();
 			
 			// Just pass the ids of new products, along with the list of them all
@@ -272,11 +272,13 @@ class MobileApiController extends Controller {
 		$output = BankAccessor::create()->newPayments($userID, $token);
 		$data = null;
 		
+		
+		
 		// Decide what data to give back
-		if (sizeof($output) > 0 ) {
+		if ($output->didPass() ) {
 			$data = array(
 			
-				"transactions" => $output
+				"transactions" => $output-> getPayments()
 			);
 		}else {
 			
@@ -296,29 +298,43 @@ class MobileApiController extends Controller {
 	public function categorisePayments(SS_HTTPRequest $request){
 	
 		// Get inputs from post variables
-		$userID = $request->postVar("userID");
+		$userID = Convert::raw2sql( $request->postVar("userID") );
 		$categorises = $request->postVar("categories");
-		$token = $request->postVar("token");
-
-		// Try to categorise payments
-		$output = BankAccessor::create()->categorisePayments($userID,$token, $categorises);
-		$data = null;
+		$token = Convert::raw2sql( $request->postVar("token") );
 		
-		// Decide what data to give back
-		if ($output->didPass()) {
-			
-			$data = array(
-				"changedCategorys" => $output->getChangedCategorys(),
-				"newSpin" => $output->allowedNewSpin(),
-				"numberOfSpins" => $output->getCurrentSpins()
-			);
-		}else {
+		if ($categorises == null || count($categorises) == 0) {
 			
 			$this->response->setStatusCode(400);
 			$data = array(
-				"Error" => "Error categorising new payments",
-				"Reason" => $output->getReason()
+				"Error" => "No categorisations provided"
 			);
+		}
+		
+		else {
+	
+			// Try to categorise payments
+			$output = BankAccessor::create()->categorisePayments($userID,$token, $categorises);
+			$data = null;
+			
+			// Decide what data to give back
+			if ($output->didPass()) {
+				
+				$newPayments = BankAccessor::create()->newPayments($userID, $token)->getPayments();
+				
+				$data = array(
+					"changedCategorys" => $output->getChangedCategorys(),
+					"newSpin" => $output->allowedNewSpin(),
+					"numberOfSpins" => $output->getCurrentSpins(),
+					"numNewPayments" => $newPayments->count()
+				);
+			}else {
+				
+				$this->response->setStatusCode(400);
+				$data = array(
+					"Error" => "Error categorising new payments",
+					"Reason" => $output->getReason()
+				);
+			}
 		}
 		
 		// Put the data into the response & return it

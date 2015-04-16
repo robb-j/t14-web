@@ -7,7 +7,7 @@
 		
 		// Setup the map's properties
 		var mapProp = {
-			center: new google.maps.LatLng( 53.8024037 , -1.5580483,13),
+			center: new google.maps.LatLng( 54.979187, -1.614661),
 			zoom: 12,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};

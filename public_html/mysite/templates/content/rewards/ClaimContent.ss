@@ -62,24 +62,35 @@
 				<!-- Add a row for each reward -->
 				<% loop $Rewards %>
 					
-					<div class="data-row small-row <% if Last %>last-row<% end_if %>">
+					
+					
+					<% if $Top.ChooseID == $ID %>
 						
-						<div class="row">
+						<!-- If the chosen item, add a confirm and cancel button -->
+						<div class="data-row small-row <% if Last %>last-row<% end_if %>">
+							<div class="row">
+								<div class="col-xs-3"> <p> $Title </p></div>
+								<div class="col-xs-3"> <p> Are you sure? </p></div>
+								<div class="col-xs-3"> <a href="rewards/claim/TakeReward?choose=$ID" class="control-button cb-green cb-small cb-no-mar"> Confirm </a></div>
+								<div class="col-xs-3"> <a href="rewards/claim" class="control-button cb-white cb-small cb-no-mar"> Cancel </a></div>
+							</div>
+						</div> 
 							
-							<% if $Top.ChooseID == $ID %>
-							<div class="col-xs-3"> <p> $Title </p></div>
-							<div class="col-xs-3"> <p> Are you sure? </p></div>
-							<div class="col-xs-3"> <a href="rewards/claim/TakeReward?choose=$ID" class="control-button cb-green cb-small cb-no-mar"> Confirm </a></div>
-							<div class="col-xs-3"> <a href="rewards/claim" class="control-button cb-white cb-small cb-no-mar"> Cancel </a></div>
-							 
-							<% else %>
-							<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> <a href="rewards/claim?choose=$ID">$Title </a><% else %>$Title <% end_if %> </p></div>
-							<div class="col-xs-8"> <p> $Description </p></div>
-							<div class="col-xs-1"> <% if $Cost <= $Top.CurrentUser.Points %> <p class="currency-green"> $Cost </p> <% else %> <p> $Cost </p> <% end_if %> </div>
-							<% end_if %>
+					<% else %>
+					
+						<!-- If a normal row, add a link to it to choose it -->
+						<a href="rewards/claim?choose=$ID">
+							<div class="data-row small-row <% if Last %>last-row<% end_if %>">
+								<div class="row">
+									<div class="col-xs-3"> <p> <% if $Cost <= $Top.CurrentUser.Points %> $Title <% else %>$Title <% end_if %> </p></div>
+									<div class="col-xs-8"> <p> $Description </p></div>
+									<div class="col-xs-1"> <% if $Cost <= $Top.CurrentUser.Points %> <p class="currency-green"> $Cost </p> <% else %> <p> $Cost </p> <% end_if %> </div>
+								</div>
+							</div>
+						</a>
 							
-						</div>
-					</div>
+					<% end_if %>
+							
 				<% end_loop %>
 				
 			<% else %>

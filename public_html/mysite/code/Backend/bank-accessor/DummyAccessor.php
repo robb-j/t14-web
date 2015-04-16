@@ -1,5 +1,15 @@
 <?php
 
+/*
+	This class is no longer used, its purpose was to provide the means of basic functionality while the actual BankAccesor was being created
+	This meant that at the start of the project several tasks could be done concurrently and that the creation of the back end did not slow 
+	down the creation of the website and mobile application. 
+	
+	We have left this in to show the phase and to provide evidence that we made all necessary steps to reduce the critical path
+	
+*/
+
+
 /* 
  * Created by Martin Smith - Feb 2015
  */

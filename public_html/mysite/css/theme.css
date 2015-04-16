@@ -104,7 +104,7 @@
 }
 
 .control-button.cb-right {
-	float
+	float: right;
 }
 
 .control-button.cb-fill {
@@ -282,6 +282,16 @@
 
 .main-section .data-table .data-row.small-row p {
 	font-size: 18px;
+}
+
+.main-section .data-table .data-row.header-row {
+	padding: 10px 0px;
+	border-bottom: 3px solid #888;
+}
+
+.main-section .data-table .data-row.header-row p {
+	font-size: 16px;
+	color: #666;
 }
 
 .main-section .data-table .data-row.last-row {
