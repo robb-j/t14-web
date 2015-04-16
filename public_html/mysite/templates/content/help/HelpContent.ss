@@ -2,6 +2,7 @@
 	
 	<div class="main-section">
 		
+		<!-- Just show the help's content -->
 		$HelpContent
 		
 	</div>

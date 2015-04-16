@@ -13,6 +13,8 @@
 				
 				<div class="account-table data-table">
 					
+					
+					<!-- Show how much they've budgeted -->
 					<div class="data-row small-row">
 						<div class="row">
 							<div class="col-xs-6"> <p> Budgeted: </p> </div>
@@ -20,6 +22,8 @@
 						</div>
 					</div>
 					
+					
+					<!-- Show how much they've spent -->
 					<div class="data-row small-row">
 						<div class="row">
 							<div class="col-xs-6"> <p> Total Spent: </p> </div>
@@ -27,6 +31,8 @@
 						</div>
 					</div>
 					
+					
+					<!-- Show how much they've got left to spend -->
 					<div class="data-row last-row small-row">
 						<div class="row">
 							<div class="col-xs-6"> <p> Remaining: </p> </div>
@@ -44,10 +50,13 @@
 			<!-- The Buttons side -->
 			<div class="col-xs-4">
 				
+				<!-- Show the New Payments button, if there are any new payments -->
 				<% if $NumNewPayments %>
 					<a class="control-button cb-green cb-top" href="budgeting/categorise"> New Payments ($NumNewPayments) </a>
 				<% end_if %>
 				
+				
+				<!-- A button to the budget edit page -->
 				<a class="control-button cb-light cb-top" href="budgeting/edit"> Edit Budget </a>
 				
 			</div>
@@ -79,7 +88,7 @@
 							<!-- Add headings to the table -->
 							<div class="col-xs-6"> <p > Category </p> </div>
 							<div class="col-xs-3"> <p class="right"> Budgeted </p> </div>
-							<div class="col-xs-3"> <p class="right"> Remaining </p> </div>
+							<div class="col-xs-3"> <p class="right"> Spent </p> </div>
 							
 						</div>
 					</div>
@@ -102,7 +111,7 @@
 							
 							
 							<!-- The Balance for the Category, formatted as a currency -->
-							<div class="col-xs-3"> <p class="$Top.CurrencyClass($Remaining) right"> $Top.FormatCurrency($Remaining) </p></div>
+							<div class="col-xs-3"> <p class="$Top.CurrencyClass($Balance) right"> $Top.FormatCurrency($Balance) </p></div>
 							
 						</div>
 						

@@ -38,8 +38,9 @@
 	<div class="Rewards-section main-section">
 		
 		
-		<!-- The Offers -->
+		<!-- The offers title -->
 		<h2> Offers </h2>
+		
 		
 		<!-- Display a form error if there was one -->
 		<% if $ErrorMessage %>
@@ -48,6 +49,7 @@
 			</div>
 		<% end_if %>
 		
+		
 		<!-- Display a message if it was successfuly chosen -->
 		<% if $SuccessMessage  %>
 			<div class="form-message message-success">
@@ -55,6 +57,8 @@
 			</div>
 		<% end_if %>
 		
+		
+		<!-- A Table of the offers available -->
 		<div class="data-table">
 			
 			<% if $Rewards.Count %>
@@ -63,10 +67,9 @@
 				<% loop $Rewards %>
 					
 					
-					
+					<!-- If the chosen item, add a confirm and cancel button -->
 					<% if $Top.ChooseID == $ID %>
 						
-						<!-- If the chosen item, add a confirm and cancel button -->
 						<div class="data-row small-row <% if Last %>last-row<% end_if %>">
 							<div class="row">
 								<div class="col-xs-3"> <p> $Title </p></div>

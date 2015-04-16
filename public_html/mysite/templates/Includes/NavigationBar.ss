@@ -4,10 +4,11 @@
 		<div class="row">
 			
 			
+			<!-- Leave a bit of space on the left -->
 			<div class="col-xs-1"> </div>
 			
 			
-			<!-- try just make it 1 and 2 left-->
+			<!-- Show Lloyd's icon -->
 			<div class="col-xs-2">
 				<div class="horse-logo">
 					<p>
@@ -22,6 +23,7 @@
 				
 				<div id="nav-text">Lloyd's Banking Group</div>
 				
+				<!-- The actual links -->
 				<div class="nav-links">
 					<a href='banking' <% if $Current == banking %>id="current"<% end_if %>>Banking</a>
 					<a href='budgeting' <% if $Current == budgeting %>id="current"<% end_if %>>Budgeting</a>

@@ -6,6 +6,7 @@
 		<!-- The Title -->
 		<h2> Edit Your Budget </h2>
 		
+		
 		<!-- Display a form error if there was one -->
 		<% if $ErrorMessage %>
 			<div class="form-message message-fail">
@@ -36,12 +37,14 @@
 							<div class="col-xs-6"> <p> $Title </p> </div>
 							<div class="col-xs-3"> <a href="budgeting/edit/DeleteGroup?group=$ID" class="control-button cb-red cb-small cb-no-mar"> Confirm </a></div>
 							<div class="col-xs-3"> <a href="budgeting/edit" class="control-button cb-white cb-small cb-no-mar"> Cancel </a></div>
+							
 						<% else %>
 							
 							<!-- Otherwise, show just edit & delete buttons -->
 							<div class="col-xs-6"> <p> $Title </p> </div>
 							<div class="col-xs-3"> <a href="budgeting/edit/group/$ID" class="control-button cb-white cb-small cb-no-mar"> Edit </a></div>
 							<div class="col-xs-3"> <a href="budgeting/edit?delete=$ID" class="control-button cb-red cb-small cb-no-mar"> Delete </a></div>
+							
 						<% end_if %>
 						
 					</div>
@@ -50,13 +53,15 @@
 			
 		</div>
 		
-		<!-- A button to add new categories -->
 		<div class="row">
 			
+			<!-- A button to go back -->
 			<div class="col-xs-3 col-xs-offset-3">
 				<a href="budgeting/" class="control-button cb-white"> Back </a>
 			</div>
 			
+			
+			<!-- A button to create a group -->
 			<div class="col-xs-3">
 				<a href="budgeting/edit/group/new" class="control-button cb-green"> Create Group </a>
 			</div>
