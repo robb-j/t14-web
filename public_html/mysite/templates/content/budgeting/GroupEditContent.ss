@@ -67,7 +67,7 @@
 								<div class="col-xs-3">
 									<div class="input-group">
 										<div class="input-group-addon">£</div>
-										<input class="form-control" name="CategoryBudgets[$ID]" value="$Balance"/>
+										<input class="form-control" name="CategoryBudgets[$ID]" value="$Budgeted"/>
 									</div>
 								</div>
 								

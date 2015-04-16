@@ -5,6 +5,44 @@
 	$(document).ready(function(){
 		
 		
+		
+		/*
+			Add the clear button to date fields
+		*/
+		$(".from-date-clear").click(function(e) {
+			
+			e.preventDefault();
+			$(".from-datepicker").val("");
+		});
+		
+		$(".to-date-clear").click(function(e) {
+			
+			e.preventDefault();
+			$(".to-datepicker").val("");
+		});
+		
+		
+		
+		/*
+			Make the clear button uncheck all the accounts
+		*/
+		$(".toggle-account-selection").click(function(e) {
+			
+			e.preventDefault();
+			
+			var isOn = $(".toggle-account-selection").data("toggle") !== 'false';
+			$(".toggle-account-selection").data("toggle", isOn? "false" : "true");
+			$(".account-check input").prop("checked", isOn);
+		});
+		
+		
+		
+		
+		
+		/*
+			Setting up the Map
+		*/
+		
 		// Setup the map's properties
 		var mapProp = {
 			center: new google.maps.LatLng( 54.979187, -1.614661),

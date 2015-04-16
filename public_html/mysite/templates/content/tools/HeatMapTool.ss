@@ -1,23 +1,53 @@
-<div class="heatmap-tool-page">
+<div class="heatmap-tool">
 	
 	
 	
 	<div class="filter-form">
-		<form>
+		<form class="banking-form" method="POST" action="HeatMapController/FilterForm" enctype="application/x-www-form-urlencoded">
+			
+			
+			<!-- Show the error message is there is one -->
+			<% if $ErrorMessage %>
+				<div class="form-message message-fail">
+					<p> $ErrorMessage </p>
+				</div>
+			<% end_if %>
+			
+			
+			
 			<div class="row">
 				<div class="col-xs-5">
-					<p> Accounts </p>
+					<h3> Accounts </h3>
 					
 					<% loop $CurrentUser.Accounts %>
-						<p> <input type="checkbox" name="Accounts" value="$ID"/> $Title </p>
+						<p class="account-check"> <input type="checkbox" name="Accounts[$Pos]" value="$ID" $Top.IsChecked($ID)  /> $Title </p>
 					<% end_loop %>
+					
+					<p> <a href="#" class="toggle-account-selection" data-toggle="true"> Toggle Accounts </a></p>
 					
 				</div>
 				<div class="col-xs-4">
-					$FromField
+					
+					<h3> Dates </h3>
+					
+					<div class="input-group">
+						<div class="input-group-addon">From</div>
+						<input type="text" class="from-datepicker form-control" placeholder="01 Jan 2000" name="FromDate" value="$FromDate">
+						<div class="input-group-addon"> <a href="#" class="from-date-clear "> x </a> </div>
+					</div>
+					
+					<div class="input-group">
+						<div class="input-group-addon">To</div>
+						<input type="text" class="to-datepicker form-control" placeholder="$CurrentDate" name="ToDate" value="$ToDate">
+						<div class="input-group-addon"> <a href="#" class="to-date-clear"> x </a> </div>
+					</div>
 				</div>
 				<div class="col-xs-3">
-					<p> Submit </p>
+					
+					<div class="actions">
+						<input class="control-button cb-white cb-fill cb-small" type="submit" name="action_clearFilter" value="Clear" class="action"/>
+						<input class="control-button cb-light cb-fill cb-small" type="submit" name="action_filterHeatmap" value="Filter" class="action"/>
+					</div>
 				</div>
 			</div>
 		</form>

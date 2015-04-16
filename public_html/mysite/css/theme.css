@@ -17,7 +17,7 @@
 .page-container h2 {
 	margin-bottom: 5px;
 	font-family: 'Open Sans', 'Helvetica Neue';
-	letter-spacing: 10;
+	letter-spacing: 5px;
 	text-transform: uppercase;
 	color: #666666;
 }
@@ -89,7 +89,7 @@
 
 .control-button.cb-light {
 	background: #ECF0F2;
-	color: #5C5C5C;
+	color: black;
 }
 
 .control-button.cb-white {

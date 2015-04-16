@@ -13,10 +13,10 @@
 			<!-- Loop through the user's accounts -->
 			<% loop $CurrentUser.Accounts %>
 			
-				<div class="account-row data-row <% if Last %>last-row<% end_if %>">
+				<!-- Make this link to the account page -->
+				<a href="banking/account/$ID">
+					<div class="account-row data-row <% if Last %>last-row<% end_if %>">
 					
-					<!-- Make this link to the account page -->
-					<a href="banking/account/$ID">
 						<div class="row">
 							
 							<!-- The name of the Account -->
@@ -29,10 +29,8 @@
 								<div class="account-balance"><p class="$Top.CurrencyClass($Balance) right"> $Top.FormatCurrency($Balance) </p></div>
 							</div>
 						</div>
-					</a>
-					
-					
-				</div>
+					</div>
+				</a>
 				
 			<% end_loop %>
 		</div>
