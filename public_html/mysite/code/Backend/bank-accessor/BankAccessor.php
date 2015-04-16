@@ -1565,7 +1565,7 @@ class BankAccessor extends Object implements BankInterface {
 			return ATM::get();
 		}
 		
-		return array();
+		return new ArrayList();
 	}
 	
 	public function loadHeatMap($userID, $token, $accounts, $startDate, $endDate){
