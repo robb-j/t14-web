@@ -1645,12 +1645,12 @@ class BankAccessor extends Object implements BankInterface {
 			}
 			
 			//	If there is no specified start date use the beginning on unix time
-			if($startDate === null){
+			if($startDate === null ||$startDate === ""){
 				$startDate = '1970-01-0 00:00:00';
 			}
 			
 			//	If there is no end date specified use today
-			if($endDate === null){
+			if($endDate === null ||$endDate === "" ){
 				$endDate = date("Y-m-d",time()).' 23:59:59';
 			}
 			
