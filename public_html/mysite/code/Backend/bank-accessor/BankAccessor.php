@@ -1688,15 +1688,9 @@ class BankAccessor extends Object implements BankInterface {
 			
 				
 				$groups = new ArrayList();
-				
-				//	Add the first transaction to a hew HeatMapGroup 
-				$groups->push( new HeatMapGroup($transactions[0]->Longitude,$transactions[0]->Latitude,20));
-				
-				//	Increase the amount spent in the group 
-				$groups[0]->addAmount($transactions[0]->Amount);
-				
+
 				//	For every transaction in the array
-				for($i = 1 ; $i<sizeof($transactions) ; $i++){
+				for($i = 0 ; $i<sizeof($transactions) ; $i++){
 				
 					$hasLatitude = $transactions[$i]->Latitude != null && $transactions[$i]->Latitude != 0;
 					$hasLongitude = $transactions[$i]->Longitude != null && $transactions[$i]->Longitude != 0;
