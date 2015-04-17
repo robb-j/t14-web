@@ -106,7 +106,9 @@ class MobileApiController extends Controller {
 		}else {
 			
 			$this->response->setStatusCode(400);
-			$data = $this->formatError($output->getReason(),true);
+			$data = array(
+				"Error" => $output->getReason()
+			);
 		}
 
 		// Put the data into the response & return it
