@@ -33,8 +33,6 @@ class HeatMapController extends ToolController {
 		$this->FromDate = $fromDate;
 		$this->ToDate = $toDate;
 		
-		print_r($accounts);
-		
 		
 		// Pass the heat points to the template
 		$this->AllHeatPoints = WebApi::create()->loadHeatMap($this->CurrentUser->ID, $accounts, $fromDate, $toDate);		
