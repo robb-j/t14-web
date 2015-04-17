@@ -33,3 +33,4 @@ You can use ```../public_html/dev/tests/TestClassName``` to run a specific set o
 - jquery: https://jquery.com/
 - jquery ui: https://jqueryui.com/
 - Bootstrap: http://getbootstrap.com/
+- PHP_Crypt: https://github.com/gilfether/phpcrypt
